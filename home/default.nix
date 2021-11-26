@@ -47,26 +47,24 @@ in {
 
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    # fonts
+    (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
+    fira-code
+
     awscli
+    broot # better tree
     curl curlie httpie xh
     docker
-    lsd
-    fd
     duf # better df
+    fd
+    htop
+    lsd
     moreutils
-    tree
-    broot # better tree
-    ripgrep
-    htop bottom
     procs # ps stuff
+    ripgrep
+    tree
     watch
     wget
-
-    iterm2
-    rider
-    altair
-
-    fira-code
   ];
 
   programs.bat.enable  = true;
