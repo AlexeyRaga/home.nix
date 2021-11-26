@@ -1,0 +1,156 @@
+{ config, lib, pkgs, ... }:
+
+let
+  secrets = import ./secrets;
+in {
+  # Let Home Manager install and manage itself.
+  programs.home-manager.enable = true;
+
+  nixpkgs.overlays = [
+    (import ./overlays)
+  ];
+
+  imports = [
+    ./modules/tools/dotnet.nix
+    ./modules/tools/haskell.nix
+    ./modules/tools/git.nix
+
+    ./modules/launchd
+
+    ./modules/ep
+
+    ./modules/services/noop.nix
+  ];
+
+  # services.noop.enable = false;
+  # ep.watchAwsCredentials.enable = true;
+
+  # Home Manager needs a bit of information about you and the
+  # paths it should manage.
+  home = {
+    username = "alexey";
+    homeDirectory = "/Users/alexey";
+
+    sessionVariables = {
+      EDITOR = "vim";
+    };
+
+    sessionPath = [
+    ];
+
+    keyboard = {
+      enableKeyMapping = true;
+      remapCapsLockToControl = true;
+    };
+  };
+
+
+  fonts.fontconfig.enable = true;
+  home.packages = with pkgs; [
+    awscli
+    curl curlie httpie xh
+    docker
+    lsd
+    fd
+    duf # better df
+    moreutils
+    tree
+    broot # better tree
+    ripgrep
+    htop bottom
+    procs # ps stuff
+    watch
+    wget
+
+    iterm2
+    rider
+    altair
+
+    fira-code
+  ];
+
+  programs.bat.enable  = true;
+  programs.exa.enable  = true;
+  programs.jq.enable   = true;
+  programs.htop.enable = true;
+  programs.vim.enable  = true;
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+  };
+
+  tools.aws = {
+    enable = true;
+    samlProfile = {
+      name = "default";
+      credentialsPath = "~/Downloads/credentials";
+    };
+    profiles = secrets.aws.profiles;
+  };
+
+  tools.dotnet = {
+    enable = true;
+    nugetSources = [];
+  };
+
+
+  tools.git = {
+    enable = true;
+    userName = "Alexey Raga";
+    userEmail = "alexey.raga@gmail.com";
+    githubUser = secrets.github.userName;
+  };
+
+  ### ZSH (TODO: Move to a module)
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+  };
+
+  programs.zsh = {
+    enable = true;
+    enableCompletion = true;
+    enableAutosuggestions = true;
+    enableSyntaxHighlighting = true;
+    # history.extended = true;
+
+    # this is to workaround zsh syntax highlighting slowness on copy/paste
+    # https://github.com/zsh-users/zsh-syntax-highlighting/issues/295#issuecomment-214581607
+    initExtra = ''
+      zstyle ':bracketed-paste-magic' active-widgets '.self-*'
+    '';
+
+    plugins = [
+      {
+        name = "fast-syntax-highlighting";
+        src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
+      }
+    ];
+
+    oh-my-zsh = {
+      enable = true;
+      plugins = [
+        "git-extras"
+        "git"
+        "gitfast"
+        "github"
+        "z"
+      ];
+      #theme = "frozencow";
+      theme = "robbyrussell";
+    };
+  };
+
+  # This value determines the Home Manager release that your
+  # configuration is compatible with. This helps avoid breakage
+  # when a new Home Manager release introduces backwards
+  # incompatible changes.
+  #
+  # You can update Home Manager without changing this value. See
+  # the Home Manager release notes for a list of state version
+  # changes in each release.
+  home.stateVersion = "21.05";
+}
