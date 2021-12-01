@@ -10,13 +10,13 @@ let
     '';
   chromeExtension = pkgs.stdenv.mkDerivation rec {
     pname = "chrome-saml-to-aws";
-    version = "main";
+    version = "56c2dc40a05fee5b7cda80ca72d4165e7669552f";
 
     src = pkgs.fetchFromGitHub {
       owner = "EducationPerfect";
       repo = "samltoawsstskeys";
       rev = "${version}";
-      sha256 = "0crw49s2y2bhqadzl73mkfrbymbad1xs9yx8fl5mp6r70i0lflz1";
+      sha256 = "sha256-4VNHQQQnm1sLdaj7pHtoalW/spt1HPqbwnAJL3QiPDM=";
     };
 
     buildInputs = with pkgs; [ awscli tree ];
