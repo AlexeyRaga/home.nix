@@ -2,7 +2,8 @@
 
 let
   secrets = import ./secrets;
-in {
+in
+{
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -14,16 +15,8 @@ in {
     ./modules/tools/dotnet.nix
     ./modules/tools/haskell.nix
     ./modules/tools/git.nix
-
-    ./modules/launchd
-
     ./modules/ep
-
-    ./modules/services/noop.nix
   ];
-
-  # services.noop.enable = false;
-  # ep.watchAwsCredentials.enable = true;
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -47,31 +40,40 @@ in {
 
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    nixpkgs-fmt
+
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
     fira-code
 
     awscli
     broot # better tree
-    curl curlie httpie xh
+    curl
+    curlie
+    httpie
+    xh
     docker
     duf # better df
-    fd
-    htop
-    lsd
+    fd # better find
     moreutils
-    procs # ps stuff
-    ripgrep
+    procs # better ps
+    ripgrep # better grep
     tree
     watch
     wget
   ];
 
-  programs.bat.enable  = true;
-  programs.exa.enable  = true;
-  programs.jq.enable   = true;
+  programs.bat.enable = true;
+  programs.exa.enable = true;
+  programs.jq.enable = true;
   programs.htop.enable = true;
-  programs.vim.enable  = true;
+  programs.bottom.enable = true;
+  programs.vim.enable = true;
+
+  programs.lsd = {
+    enable = true;
+    enableAliases = true;
+  };
 
   programs.direnv = {
     enable = true;
@@ -90,7 +92,7 @@ in {
 
   tools.dotnet = {
     enable = true;
-    nugetSources = [];
+    nugetSources = [ ];
   };
 
 

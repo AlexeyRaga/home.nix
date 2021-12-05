@@ -7,9 +7,10 @@ let
   watchCreds = pkgs.writeShellScript "fswatch-credentials" ''
     ls -al ~/Downloads
     ${pkgs.fswatch}/bin/fswatch -e ".*" -i ".*/credentials$" --event Created --event Updated --event Removed -x $HOME/Downloads -v
-    '';
+  '';
 
-in {
+in
+{
   options.ep.watchAwsCredentials = {
     enable = mkEnableOption "Watch AWS Credentials in Download folder and move them to ~/.aws";
   };

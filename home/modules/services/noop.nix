@@ -5,7 +5,8 @@ with lib;
 let
   cfg = config.services.noop;
 
-in {
+in
+{
   options.services.noop = {
     enable = mkEnableOption "Enable noop service";
   };

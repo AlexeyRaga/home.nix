@@ -7,7 +7,7 @@ let
 
   readCredentials = pkgs.writeShellScriptBin "awsReadSamlCredentials" ''
     cat <&0 | tr -d ' ' | jo | jq '. | {Version:1, AccessKeyId:.aws_access_key_id, SecretAccessKey:.aws_secret_access_key, SessionToken:.aws_session_token}'
-    '';
+  '';
   chromeExtension = pkgs.stdenv.mkDerivation rec {
     pname = "chrome-saml-to-aws";
     version = "56c2dc40a05fee5b7cda80ca72d4165e7669552f";
@@ -28,7 +28,8 @@ let
     '';
   };
 
-in {
+in
+{
   options.tools.aws = {
     enable = mkEnableOption "Enable AWS CLI and profiles";
     profiles = mkOption {
@@ -39,7 +40,7 @@ in {
           accessSecretKey = mkOption { type = types.str; };
         };
       });
-      default = [];
+      default = [ ];
     };
 
     samlProfile = mkOption {
@@ -58,7 +59,7 @@ in {
       home.packages = [ pkgs.awscli ];
     }
 
-    (mkIf ( cfg.profiles != [] ) {
+    (mkIf (cfg.profiles != [ ]) {
       home.file.".aws/credentials".text =
         let toAwsCred = cred: {
           "${cred.name}" = {
@@ -66,7 +67,7 @@ in {
             aws_secret_access_key = cred.accessSecretKey;
           };
         };
-        in concatMapStringsSep "\n" (x: lib.generators.toINI {} (toAwsCred x)) cfg.profiles;
+        in concatMapStringsSep "\n" (x: lib.generators.toINI { } (toAwsCred x)) cfg.profiles;
     })
 
     (mkIf (cfg.samlProfile != null) {
@@ -82,7 +83,7 @@ in {
       home.file.".aws/config".text = ''
         [${cfg.samlProfile.name}]
         credential_process = sh -c "cat ~/Downloads/credentials | awsReadSamlCredentials"
-        '';
+      '';
     })
 
   ]);

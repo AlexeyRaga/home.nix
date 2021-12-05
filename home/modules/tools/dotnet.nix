@@ -9,27 +9,29 @@ let
     rev = "6c64820ffa95db07878b0f4750f4d933d06b52b1";
     sha256 = "14v3mp48rg7zrhqlivar4pgj029ncmigc95sfz43a791q67gdm8c";
   };
-  pinnedPkgs = import nixpkgs_dotnet {};
+  pinnedPkgs = import nixpkgs_dotnet { };
 
   cfg = config.tools.dotnet;
 
   buildNugetConfig = nugetSources:
     pkgs.stdenv.mkDerivation {
       name = "nugetConfig";
-      phases = ["installPhase"];
-      buildInputs = with pkgs; [dotnet-sdk_5 jq tree];
+      phases = [ "installPhase" ];
+      buildInputs = with pkgs; [ dotnet-sdk_5 jq tree ];
       installPhase =
         let
           toLine = line: ''dotnet nuget add source ${line.url} --name ${line.name} --username ${line.userName} --password ${line.password} --store-password-in-clear-text'';
           commands = lib.concatMapStringsSep "\n" toLine cfg.nugetSources;
-        in ''
+        in
+        ''
           mkdir -p $out
           export HOME=$TMPDIR
           ${commands}
           cp -r $TMPDIR/.nuget $out/
         '';
     };
-in {
+in
+{
   options.tools.dotnet = {
     enable = mkEnableOption "Enable dotnet";
 
@@ -42,7 +44,7 @@ in {
           password = mkOption { type = types.str; };
         };
       });
-      default = [];
+      default = [ ];
     };
   };
 

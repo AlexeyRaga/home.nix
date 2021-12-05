@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.tools.git;
-in {
+in
+{
 
   options.tools.git = {
     enable = mkEnableOption "Enable GIT";
@@ -15,12 +16,12 @@ in {
 
     workspaces = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
     };
   };
 
   config = mkIf cfg.enable {
-    home.file = lib.mapAttrs' (k: v: lib.nameValuePair "${k}/.gitconfig" {text = lib.generators.toINI {} v;}) cfg.workspaces;
+    home.file = lib.mapAttrs' (k: v: lib.nameValuePair "${k}/.gitconfig" { text = lib.generators.toINI { } v; }) cfg.workspaces;
 
     programs.git = {
       enable = true;
@@ -31,8 +32,8 @@ in {
         github.user = cfg.githubUser;
       };
 
-      includes = map (x: {condition = "gitdir:~/${x}/"; path = "~/${x}/.gitconfig";})
-                     (lib.attrNames cfg.workspaces);
+      includes = map (x: { condition = "gitdir:~/${x}/"; path = "~/${x}/.gitconfig"; })
+        (lib.attrNames cfg.workspaces);
     };
 
     home.packages = with pkgs; [

@@ -27,8 +27,8 @@
   # };
 
   users.users.alexey = {
-   name = "alexey";
-   home = "/Users/alexey";
+    name = "alexey";
+    home = "/Users/alexey";
   };
 
   home-manager.useUserPackages = true;

@@ -31,9 +31,6 @@ pkgs.stdenv.mkDerivation {
   meta = {
     description = description;
     homepage = homepage;
-    maintainers = [
-      lib.maintainers.akoppela
-    ];
     platforms = lib.platforms.darwin;
   };
 }
