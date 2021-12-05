@@ -16,17 +16,17 @@ in
     };
   };
 
-  iterm2 = installZipApp rec {
-    pname = "iTerm";
-    version = "3_4_6";
-    description = "The best terminall client ever";
+  # iterm2 = installZipApp rec {
+  #   pname = "iTerm";
+  #   version = "3_4_6";
+  #   description = "The best terminall client ever";
 
-    homepage = "https://iterm2.com";
-    src = {
-      url = "https://iterm2.com/downloads/stable/iTerm2-${version}.zip";
-      sha256 = "0myb9dz9fnif5w4f2348m6r6ppbxygfjnmzfvcn4mbhpm78jb1h0";
-    };
-  };
+  #   homepage = "https://iterm2.com";
+  #   src = {
+  #     url = "https://iterm2.com/downloads/stable/iTerm2-${version}.zip";
+  #     sha256 = "0myb9dz9fnif5w4f2348m6r6ppbxygfjnmzfvcn4mbhpm78jb1h0";
+  #   };
+  # };
 
   altair = installDmgApp rec {
     pname = "Altair";
@@ -34,7 +34,7 @@ in
     description = "Altair GraphQL Client";
     version = "4.0.11";
 
-    homepage =  "https://altair.sirmuel.design/";
+    homepage = "https://altair.sirmuel.design/";
     src = {
       url = "https://github.com/altair-graphql/altair/releases/download/v${version}/altair_${version}_x64_mac.dmg";
       sha256 = "02xym3jxjc90yiws3w3rp5b8hcsh0xlwh44dqdbjcy1d8b0v72yq";
