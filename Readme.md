@@ -14,11 +14,16 @@ Currently MacOS-centric
    ```
 ### Integration with Homebrew
 
+This step is optional, but recommended. If `Homebrew` is installed, this configuration will manage `Homebrew` packages
+via [homebrew.nix](./homebrew.nix) file.
+
 Install `homebrew`:
 
 ```
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
+
+and then use [homebrew.nix](./homebrew.nix) to specify packages to have installed.
 
 ## Usage
 
