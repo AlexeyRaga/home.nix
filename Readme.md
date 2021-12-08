@@ -12,6 +12,13 @@ Currently MacOS-centric
 
     $ nix-channel --update
    ```
+### Integration with Homebrew
+
+Install `homebrew`:
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
 ## Usage
 

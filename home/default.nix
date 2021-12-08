@@ -8,7 +8,7 @@ in
   programs.home-manager.enable = true;
 
   nixpkgs.overlays = [
-    (import ./overlays)
+    # (import ./overlays)
   ];
 
   imports = [
@@ -36,7 +36,6 @@ in
       remapCapsLockToControl = true;
     };
   };
-
 
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [

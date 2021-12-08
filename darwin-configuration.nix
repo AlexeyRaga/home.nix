@@ -1,13 +1,18 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ <home-manager/nix-darwin> ];
+  imports = [
+    <home-manager/nix-darwin>
+    ./homebrew.nix
+  ];
 
   # Fonts
   # fonts = {
   #   enableFontDir = true;
   #   fonts = [ pkgs.fira-code ];
   # };
+
+  # homebrew.enable = true;
 
   programs.zsh.enable = true;
 
