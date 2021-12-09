@@ -17,8 +17,20 @@ in
     ];
 
     casks = [
+      "1password"
+      "brave-browser" # better chrome
       "discord"
+      "docker"
+      "dropbox"
+      "licecap" # animated screenshots
+      "postman"
+      "raycast" # better spotlight
+      "skype"
+      "slack"
+      "sublime-text"
+      "visual-studio-code"
       "vlc"
+      "zoom"
     ];
 
     brews = [
