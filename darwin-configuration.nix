@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
-
+{ config, pkgs, lib, ... }:
+let
+  username = builtins.getEnv "USER";
+  homeDir = "/Users/${username}";
+in
 {
   imports = [
     <home-manager/nix-darwin>
@@ -17,8 +20,8 @@
   programs.zsh.enable = true;
 
   environment.systemPackages = with pkgs; [
-    # docker
-    # docker-machine
+    nixUnstable
+    nixpkgs-fmt
   ];
 
   # Used for backwards compatibility, please read the changelog before changing.
@@ -31,16 +34,21 @@
   #   remapCapsLockToControl = true;
   # };
 
-  users.users.alexey = {
-    name = "alexey";
-    home = "/Users/alexey";
+  users.users.${username} = {
+    name = username;
+    home = homeDir;
   };
 
   home-manager.useUserPackages = true;
-  home-manager.users.alexey = { pkgs, ... }: { imports = [ ./home ]; };
+  home-manager.users.${username} = import ./home {
+    inherit config;
+    inherit pkgs;
+    inherit lib;
+    inherit username;
+    inherit homeDir;
+  };
 
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = false;
+  services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
   nix.package = pkgs.nixUnstable;
 
@@ -57,6 +65,14 @@
 
   nix.binaryCaches = [
     "https://cache.nixos.org/"
+    "https://nix-tools.cachix.org"
+    "https://nix-community.cachix.org"
+  ];
+
+  nix.binaryCachePublicKeys = [
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
+    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
   ];
 }
 

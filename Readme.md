@@ -1,55 +1,54 @@
 # Home Manager Nix configuration
 
-Currently MacOS-centric
+Currently MacOS-centric.
 
-## Requirements
+It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
+
+## Installation
+
+0. Clone this repository as your local `~/.nixpkgs` </br>
+    You should have `~/.nixpkgs/darwin-configuration.nix` available.
+
+1. Set up your secrets:
+   ```bash
+    $ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
+    $ cp ~/.nixpkgs/home/modules/ep/secrets/default.nix.example ~/.nixpkgs/home/modules/ep/secrets/default.nix
+   ```
+   Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
 
 1. Install [Nix](https://nixos.org/download.html)
-2. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
-3. Add `home-manager` channel:
+   ```bash
+    $ sh <(curl -L https://nixos.org/nix/install) --daemon
+   ```
+
+2. Add `home-manager` channel:
    ```bash
     $ nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-
     $ nix-channel --update
    ```
-### Integration with Homebrew
+3. (Optionaly) Install [Homebrew](https://brew.sh/)
+   ```
+   $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent. com/Homebrew/install/HEAD/install.sh)"
+   ```
 
-This step is optional, but recommended. If `Homebrew` is installed, this configuration will manage `Homebrew` packages
-via [homebrew.nix](./homebrew.nix) file.
+3. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
+   ```
+    $ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
+    $ ./result/bin/darwin-installer
+   ```
 
-Install `homebrew`:
+At this point everything should be installed and the environment should be ready to rock.
+Restart the shell if you haven't paid attention to the prompt :)
 
-```
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+## Updating the configuration
 
-and then use [homebrew.nix](./homebrew.nix) to specify packages to have installed.
+Make changes to the configuration files and run `darwin-rebuild switch` to update the configuration.
 
-## Usage
+## Note on integration with Homebrew
 
-1. Clone this repository as your (`~/.nixpkgs`).
-   You should have `~/.nixpkgs/darwin-configuration.nix` and `~/.nixpkgs/home/` in place
+If `Homebrew` is installed, this configuration will manage `Homebrew` packages via [homebrew.nix](./homebrew.nix) file.
+Use [homebrew.nix](./homebrew.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
 
-2. Create a secret file `secrets/default.nix` in the root of this repository. It should have the following structure:
-
-    ```nix
-    {
-      github = {
-        userName = "<github-user-name>";
-        token = "<github-api-token>";
-      };
-
-      aws = {
-        profiles = [];
-      };
-    }
-    ```
-
-    When modifying the configuration and adding more stuff, this file could be a good starting point, alternatively more files can be added to `secrets` directory (which is git ignored for obvious reasons).
-
-3. Modify as you wish.
-
-4. Ussue `darwin-rebuild switch` and enjoy your life.
 
 ## Modules overview
 

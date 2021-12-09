@@ -27,7 +27,7 @@ in
 
   tools.git = {
     workspaces."src/ep" = {
-      user = { email = "alexey.raga@educationperfect.com"; };
+      user = { email = secrets.github.userEmail; };
       core = { autocrlf = true; };
     };
   };

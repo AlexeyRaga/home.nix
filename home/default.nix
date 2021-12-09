@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, homeDir, ... }:
 
 let
   secrets = import ./secrets;
@@ -23,8 +23,8 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
-    username = "alexey";
-    homeDirectory = "/Users/alexey";
+    username = username;
+    homeDirectory = homeDir;
 
     sessionVariables = {
       EDITOR = "vim";
@@ -41,8 +41,6 @@ in
 
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
-    nixpkgs-fmt
-
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
     fira-code
@@ -101,8 +99,8 @@ in
 
   tools.git = {
     enable = true;
-    userName = "Alexey Raga";
-    userEmail = "alexey.raga@gmail.com";
+    userName = secrets.github.fullName;
+    userEmail = secrets.github.userEmail;
     githubUser = secrets.github.userName;
   };
 
