@@ -12,10 +12,12 @@ in
   ];
 
   imports = [
-    ./modules/tools/dotnet.nix
-    ./modules/tools/haskell.nix
-    ./modules/tools/git.nix
+    # everything for work
     ./modules/ep
+
+    ./modules/tools/haskell.nix
+    ./modules/tools/dotnet.nix
+    ./modules/tools/git.nix
   ];
 
   # Home Manager needs a bit of information about you and the
@@ -45,12 +47,14 @@ in
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
     fira-code
 
-    awscli
     broot # better tree
+
+    clang
     curl
     curlie
     httpie
     xh
+
     docker
     duf # better df
     fd # better find

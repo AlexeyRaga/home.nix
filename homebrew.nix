@@ -22,8 +22,10 @@ in
       "discord"
       "docker"
       "dropbox"
+      "iterm2" # best terminal ever
       "licecap" # animated screenshots
       "postman"
+      "rider"
       "raycast" # better spotlight
       "skype"
       "slack"
