@@ -41,6 +41,8 @@ in
 
   fonts.fontconfig.enable = true;
   home.packages = with pkgs; [
+    _1password
+
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
     fira-code
@@ -122,6 +124,8 @@ in
     # https://github.com/zsh-users/zsh-syntax-highlighting/issues/295#issuecomment-214581607
     initExtra = ''
       zstyle ':bracketed-paste-magic' active-widgets '.self-*'
+
+      export DT=''${DT:-''${date}}
     '';
 
     plugins = [

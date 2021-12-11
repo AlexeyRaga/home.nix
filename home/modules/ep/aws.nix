@@ -23,8 +23,8 @@ let
     phases = [ "unpackPhase" "installPhase" ];
 
     installPhase = ''
-      mkdir -p $out
-      cp -r * $out/
+      mkdir -p $out/extension
+      cp -r * $out/extension
     '';
   };
 
@@ -78,7 +78,7 @@ in
         chromeExtension
       ];
 
-      home.file.".chrome/saml-to-aws".source = "${chromeExtension}";
+      home.file.".chrome/saml-to-aws".source = "${chromeExtension}/extension";
 
       home.file.".aws/config".text = ''
         [${cfg.samlProfile.name}]

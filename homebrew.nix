@@ -33,6 +33,7 @@ in
       "visual-studio-code"
       "vlc"
       "zoom"
+      "balenaetcher"
     ];
 
     brews = [
