@@ -12,12 +12,11 @@ in
   ];
 
   imports = [
-    # everything for work
-    ./modules/ep
+    ./modules/tools
 
-    ./modules/tools/haskell.nix
-    ./modules/tools/dotnet.nix
-    ./modules/tools/git.nix
+    # everything for work
+    ./work
+
   ];
 
   # Home Manager needs a bit of information about you and the
@@ -86,10 +85,6 @@ in
 
   tools.aws = {
     enable = true;
-    samlProfile = {
-      name = "default";
-      credentialsPath = "~/Downloads/credentials";
-    };
     profiles = secrets.aws.profiles;
   };
 

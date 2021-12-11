@@ -12,7 +12,7 @@ It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](http
 1. Set up your secrets:
    ```bash
     $ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
-    $ cp ~/.nixpkgs/home/modules/ep/secrets/default.nix.example ~/.nixpkgs/home/modules/ep/secrets/default.nix
+    $ cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix
    ```
    Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
 
