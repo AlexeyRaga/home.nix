@@ -12,12 +12,11 @@ Example:
   };
 
   aws = {
-    profiles = [
-      {
-        name = "super-puper";
+    profiles = {
+      default = {
         accessKeyId = "AKI...";
         accessSecretKey = "345..."; }
-    ];
+    };
   };
 }
 ```
