@@ -1,10 +1,11 @@
 # Home Manager Nix configuration
 
-Currently MacOS-centric.
-
-It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
+This Readme is currently MacOS-centric.
+However, the configuration itself has been tried on Ubuntu and NixOS and it turns out to be working (not using `darwin-configuration.nix`, obviously, but using the whole `Home Manager` config.).
 
 ## Installation
+
+It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
 
 0. Clone this repository as your local `~/.nixpkgs` </br>
     You should have `~/.nixpkgs/darwin-configuration.nix` available.
