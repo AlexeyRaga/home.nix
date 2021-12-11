@@ -90,7 +90,6 @@ in
 
   tools.dotnet = {
     enable = true;
-    nugetSources = [ ];
   };
 
 

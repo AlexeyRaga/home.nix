@@ -9,11 +9,11 @@ let
     pkgs.stdenv.mkDerivation {
       name = "nugetConfig";
       phases = [ "installPhase" ];
-      buildInputs = with pkgs; [ dotnet-sdk jq tree ];
+      buildInputs = with pkgs; [ dotnet-sdk ];
       installPhase =
         let
-          toLine = line: ''dotnet nuget add source ${line.url} --name ${line.name} --username ${line.userName} --password ${line.password} --store-password-in-clear-text'';
-          commands = lib.concatMapStringsSep "\n" toLine cfg.nugetSources;
+          toCommand = name: params: ''dotnet nuget add source ${params.url} --name ${name} --username ${params.userName} --password ${params.password} --store-password-in-clear-text'';
+          commands = lib.concatStringsSep "\n" (lib.mapAttrsToList toCommand nugetSources);
         in
         ''
           mkdir -p $out
@@ -28,15 +28,14 @@ in
     enable = mkEnableOption "Enable dotnet";
 
     nugetSources = mkOption {
-      type = types.listOf (types.submodule {
+      type = types.attrsOf (types.submodule {
         options = {
           url = mkOption { type = types.str; };
-          name = mkOption { type = types.str; };
           userName = mkOption { type = types.str; };
           password = mkOption { type = types.str; };
         };
       });
-      default = [ ];
+      default = {};
     };
   };
 

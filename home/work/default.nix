@@ -1,7 +1,6 @@
 let
   secrets = import ./secrets;
   epNugetSource = {
-    name = "github.com";
     url = "https://nuget.pkg.github.com/EducationPerfect/index.json";
     userName = secrets.github.userName;
     password = secrets.github.token;
@@ -22,7 +21,9 @@ in
   };
 
   tools.dotnet = {
-    nugetSources = [ epNugetSource ];
+    nugetSources = {
+      "ep-github" = epNugetSource;
+    };
   };
 
   tools.git = {
