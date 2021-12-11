@@ -94,12 +94,12 @@ Example:
 ```nix
   tools.dotnet = {
     enable = true;
-    nugetSources = [
-      { name = "github.com";
+    nugetSources = {
+      bigBankGithub = {
         url = "https://nuget.pkg.github.com/BigBank/index.json";
         userName = secrets.github.userName;
         password = secrets.github.token;
-      }
-    ];
+      };
+    };
   };
 ```
