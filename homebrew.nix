@@ -24,6 +24,7 @@ in
       "dropbox"
       "iterm2" # best terminal ever
       "licecap" # animated screenshots
+      "openvpn-connect"
       "postman"
       "rider"
       "raycast" # better spotlight
@@ -34,6 +35,8 @@ in
       "vlc"
       "zoom"
       "balenaetcher"
+
+      "google-chrome"
     ];
 
     brews = [
