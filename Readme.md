@@ -102,7 +102,6 @@ Example:
         # Optionaly: Expose the token as an env variable which value will be read from Keychain
         exportEnvVariable = "GITHUB_TOKEN";
       };
-      };
     };
   };
 
