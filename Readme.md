@@ -83,6 +83,31 @@ Example:
   };
 ```
 
+### Keychain
+
+`Keychain` allows to store passwords in Keychain populating it from `1Password`.
+
+Example:
+
+```nix
+  keychain = {
+    enable = true;
+
+    from1Password = {
+      # an item "myGmail" in Keychain will be populated with the password for "Gmail" in 1Password
+      myGmail = {
+        vault = "Private";
+        item = "GMail";
+        field = "password";
+      };
+
+      myGithub = ... # other entries
+    };
+  };
+
+```
+
+**NOTE**: `Keychain` module will _not_ remove any passwords from Keychain. It will only populate it with passwords from 1Password and update existing ones.
 
 ### .NET
 
