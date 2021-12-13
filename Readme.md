@@ -94,14 +94,15 @@ Example:
     enable = true;
 
     from1Password = {
-      # an item "myGmail" in Keychain will be populated with the password for "Gmail" in 1Password
-      myGmail = {
+      githubToken = {
         vault = "Private";
-        item = "GMail";
-        field = "password";
-      };
+        item = "GitHub";
+        field = "token";
 
-      myGithub = ... # other entries
+        # Optionaly: Expose the token as an env variable which value will be read from Keychain
+        exportEnvVariable = "GITHUB_TOKEN";
+      };
+      };
     };
   };
 

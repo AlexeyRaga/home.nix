@@ -29,6 +29,7 @@ in
   #       vault = "Private";
   #       item = "GMail";
   #       field = "password";
+  #       # exportEnvVariable = "TEST_VAR";
   #     };
   #   };
   # };

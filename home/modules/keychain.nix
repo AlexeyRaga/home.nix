@@ -41,6 +41,7 @@ in
           vault = mkOption { type = types.str; };
           item = mkOption { type = types.str; };
           field = mkOption { type = types.str; };
+          exportEnvVariable = mkOption { type = types.str; default = ""; };
         };
       });
       default = { };
@@ -52,5 +53,12 @@ in
       noteEcho "Populating keychain from 1Password";
       $DRY_RUN_CMD ${darwinPopulateKeychain cfg.namespace cfg.from1Password}
     '';
+
+    home.sessionVariables =
+      let
+        toExport = lib.filterAttrs (k: v: v.exportEnvVariable != "") cfg.from1Password;
+        buildEnvVar = k: v: { name = v.exportEnvVariable; value = ''$(security find-generic-password -w -s '${k}' -a '${cfg.namespace}')''; };
+      in lib.mapAttrs' buildEnvVar toExport;
+
   };
 }
