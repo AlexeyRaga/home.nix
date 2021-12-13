@@ -6,20 +6,23 @@ let
   homeDir = config.home.homeDirectory;
   cfg = config.keychain;
 
-  toOpGetCommand = namespace: key: item: ''
-    echo >&2 "  Setting ${key} <- ${item.vault}.${item.item}.${item.field}"
-    password=$(${pkgs._1password}/bin/op get item --session $token --vault ${item.vault} --fields ${item.field} ${item.item})
-    security add-generic-password -U -a ${namespace} -s ${key} -w $password -j "Value from 1Password: ${item.vault}.${item.item}.${item.field}"
-  '';
 
-  allCommands = namespace: items:
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (toOpGetCommand namespace) items);
+  # TODO: Implement one for Linux
+  darwinPopulateKeychain = namespace: values:
+    let
+      syncOne = key: item: ''
+        echo >&2 "  Setting ${key} <- ${item.vault}.${item.item}.${item.field}"
+        password=$(${pkgs._1password}/bin/op get item --session $token --vault ${item.vault} --fields ${item.field} ${item.item})
+        security add-generic-password -U -a ${namespace} -s ${key} -w $password -j "Value from 1Password: ${item.vault}.${item.item}.${item.field}"
+      '';
 
-  script = namespace: keys: pkgs.writeShellScript "populateKeys" ''
-    set -e
-    token=$(${pkgs._1password}/bin/op signin --raw)
-    ${allCommands namespace keys}
-  '';
+      syncAll = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOne items);
+    in
+    pkgs.writeShellScript "populateKeys2" ''
+      set -e
+      token=$(${pkgs._1password}/bin/op signin --raw)
+      ${syncAll values}
+    '';
 
 in
 {
@@ -40,14 +43,14 @@ in
           field = mkOption { type = types.str; };
         };
       });
-      default = {};
+      default = { };
     };
   };
 
-  config = mkIf  (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin && cfg.from1Password != {}) {
-    home.activation.passwordsToKeychain = hm.dag.entryAfter ["writeBoundaty"] ''
-        noteEcho "Populating keychain from 1Password";
-        $DRY_RUN_CMD ${script cfg.namespace cfg.from1Password}
-      '';
+  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin && cfg.from1Password != { }) {
+    home.activation.passwordsToKeychain = hm.dag.entryAfter [ "writeBoundaty" ] ''
+      noteEcho "Populating keychain from 1Password";
+      $DRY_RUN_CMD ${darwinPopulateKeychain cfg.namespace cfg.from1Password}
+    '';
   };
 }
