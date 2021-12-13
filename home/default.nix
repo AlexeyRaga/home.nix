@@ -7,17 +7,31 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
+  nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
     # (import ./overlays)
   ];
 
   imports = [
+    ./common-packages.nix
     ./modules/tools
+    ./modules/keychain.nix
 
     # everything for work
     ./work
 
   ];
+
+  # keychain = {
+  #   enable = true;
+  #   from1Password = {
+  #     test = {
+  #       vault = "Private";
+  #       item = "GMail";
+  #       field = "password";
+  #     };
+  #   };
+  # };
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
@@ -45,24 +59,6 @@ in
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
     fira-code
-
-    broot # better tree
-
-    clang
-    curl
-    curlie
-    httpie
-    xh
-
-    docker
-    duf # better df
-    fd # better find
-    moreutils
-    procs # better ps
-    ripgrep # better grep
-    tree
-    watch
-    wget
   ];
 
   programs.bat.enable = true;
