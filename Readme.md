@@ -83,14 +83,21 @@ Example:
   };
 ```
 
-### Keychain
+### Secret Store
 
-`Keychain` allows to store passwords in Keychain populating it from `1Password`.
+`Secret Store` allows to store secrets securely populating them from `1Password` with an ability to export
+these secrets as environment variables.
+
+The reason for not exporting them from `1Password` directly is that `1Password` only keeps a session open for 30 minutes,
+which means that users will be asked to re-authenticate to 1Password often.
+
+Instead, secrets from `1Password` are copied to `Keychain` (on MacOS) or `Keyring` (on Linux) and then used to source env variables.
+This way secrets are never stored on disk unencrypted but can still be made conveniently available to the user as environment variables.
 
 Example:
 
 ```nix
-  keychain = {
+  secretStore = {
     enable = true;
 
     from1Password = {
@@ -107,7 +114,7 @@ Example:
 
 ```
 
-**NOTE**: `Keychain` module will _not_ remove any passwords from Keychain. It will only populate it with passwords from 1Password and update existing ones.
+**NOTE**: `Secret Store` module will _not_ remove any passwords from `Keychain`/`Keyring`. It will only сopy passwords from `1Password` and update existing ones.
 
 ### .NET
 
