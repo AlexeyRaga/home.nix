@@ -10,7 +10,7 @@ let
     if pkgs.stdenv.hostPlatform.isDarwin then
       ''security add-generic-password -U -a ${namespace} -s ${key} -w "${value}" -j "${comment}"''
     else
-      ''echo "${value}" | ${pkgs.libsecret}/bin/secret-tool store --label='${comment}' namespace '${namespace} key '${key}' '';
+      ''echo "${value}" | ${pkgs.libsecret}/bin/secret-tool store --label='${comment}' namespace '${namespace}' key '${key}' '';
 
   lookupPasswordCmd = namespace: key:
     if pkgs.stdenv.hostPlatform.isDarwin then
