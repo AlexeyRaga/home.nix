@@ -15,21 +15,20 @@ in
   imports = [
     ./common-packages.nix
     ./modules/tools
-    ./modules/secret-store.nix
+    ./modules/secureEnv
 
     # everything for work
     ./work
 
   ];
 
-  # secretStore = {
+  # secureEnv.onePassword = {
   #   enable = true;
-  #   from1Password = {
-  #     githubToken = {
+  #   sessionVariables = {
+  #     GITHUB_TOKEN = {
   #       vault = "Private";
-  #       item = "GMail";
+  #       item = "Github Token";
   #       field = "password";
-  #       exportEnvVariable = "GITHUB_TOKEN";
   #     };
   #   };
   # };
