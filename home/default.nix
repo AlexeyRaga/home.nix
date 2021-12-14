@@ -15,21 +15,21 @@ in
   imports = [
     ./common-packages.nix
     ./modules/tools
-    ./modules/keychain.nix
+    ./modules/secret-store.nix
 
     # everything for work
     ./work
 
   ];
 
-  # keychain = {
+  # secretStore = {
   #   enable = true;
   #   from1Password = {
-  #     test = {
+  #     githubToken = {
   #       vault = "Private";
   #       item = "GMail";
   #       field = "password";
-  #       # exportEnvVariable = "TEST_VAR";
+  #       exportEnvVariable = "GITHUB_TOKEN";
   #     };
   #   };
   # };

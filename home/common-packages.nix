@@ -23,5 +23,7 @@
     tree
     watch
     wget
+
+    spacevim
   ];
 }

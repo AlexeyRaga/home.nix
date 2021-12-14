@@ -4,29 +4,39 @@ with lib;
 
 let
   homeDir = config.home.homeDirectory;
-  cfg = config.keychain;
+  cfg = config.secretStore;
+
+  storePasswordCmd = namespace: key: value: comment:
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      ''security add-generic-password -U -a ${namespace} -s ${key} -w "${value}" -j "${comment}"''
+    else
+      ''echo "${value}" | secret-tool store --label='${comment}' namespace '${namespace} key '${key}' '';
+
+  lookupPasswordCmd = namespace: key:
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      ''security find-generic-password -w -s '${key}' -a '${namespace}' ''
+    else
+      ''secret-tool lookup namespace '${namespace}' key '${key}' '';
 
 
-  # TODO: Implement one for Linux
-  darwinPopulateKeychain = namespace: values:
+  populateSecrets = namespace: values:
     let
       syncOne = key: item: ''
         echo >&2 "  Setting ${key} <- ${item.vault}.${item.item}.${item.field}"
         password=$(${pkgs._1password}/bin/op get item --session $token --vault ${item.vault} --fields ${item.field} ${item.item})
-        security add-generic-password -U -a ${namespace} -s ${key} -w $password -j "Value from 1Password: ${item.vault}.${item.item}.${item.field}"
+        ${storePasswordCmd namespace key "$password" "Password from ${item.vault}.${item.item}.${item.field}"}
       '';
 
       syncAll = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOne items);
     in
-    pkgs.writeShellScript "populateKeys2" ''
+    pkgs.writeShellScript "populateKeys" ''
       set -e
       token=$(${pkgs._1password}/bin/op signin --raw)
       ${syncAll values}
     '';
-
 in
 {
-  options.keychain = {
+  options.secretStore = {
     enable = mkEnableOption "Enable populating keychain";
 
     namespace = mkOption {
@@ -48,16 +58,16 @@ in
     };
   };
 
-  config = mkIf (cfg.enable && pkgs.stdenv.hostPlatform.isDarwin && cfg.from1Password != { }) {
+  config = mkIf (cfg.enable && cfg.from1Password != { }) {
     home.activation.passwordsToKeychain = hm.dag.entryAfter [ "writeBoundaty" ] ''
       noteEcho "Populating keychain from 1Password";
-      $DRY_RUN_CMD ${darwinPopulateKeychain cfg.namespace cfg.from1Password}
+      $DRY_RUN_CMD ${populateSecrets cfg.namespace cfg.from1Password}
     '';
 
     home.sessionVariables =
       let
         toExport = lib.filterAttrs (k: v: v.exportEnvVariable != "") cfg.from1Password;
-        buildEnvVar = k: v: { name = v.exportEnvVariable; value = ''$(security find-generic-password -w -s '${k}' -a '${cfg.namespace}')''; };
+        buildEnvVar = k: v: { name = v.exportEnvVariable; value = ''$(${lookupPasswordCmd cfg.namespace k})''; };
       in lib.mapAttrs' buildEnvVar toExport;
 
   };
