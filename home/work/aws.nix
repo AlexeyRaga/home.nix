@@ -29,8 +29,30 @@ let
 in
 {
   tools.aws = {
-    externalCredentials = {
-      default = "~/Downloads/credentials";
+    googleStsProfile = {
+      name = "default";
+      accounts = {
+        build = {
+          accountId = "198994478268";
+          roles = [ "admin" "read-only" ];
+        };
+        test = {
+          accountId = "327162508743";
+          roles = [ "admin" "read-only" "unsafe-terraform" ];
+        };
+        staging = {
+          accountId = "495236377314";
+          roles = [ "admin" "read-only" "unsafe-terraform" ];
+        };
+        live = {
+          accountId = "125159634937";
+          roles = [ "admin" "read-only" "unsafe-terraform" ];
+        };
+        reporting = {
+          accountId = "112836601556";
+          roles = [ "admin" "read-only" ];
+        };
+      };
     };
   };
 
