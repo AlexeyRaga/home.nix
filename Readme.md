@@ -7,35 +7,43 @@ However, the configuration itself has been tried on Ubuntu and NixOS and it turn
 
 It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
 
-0. Clone this repository as your local `~/.nixpkgs` </br>
-    You should have `~/.nixpkgs/darwin-configuration.nix` available.
+0. Install [Nix](https://nixos.org/download.html)
+   ```bash
+    $ sh <(curl -L https://nixos.org/nix/install) --daemon
+   ```
 
-1. Set up your secrets:
+1. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
+   ```
+    $ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
+    $ ./result/bin/darwin-installer
+   ```
+   Keep `darwin-configuration.nix` default (we are going to replace it later),
+   but `darwin-rebuild switch` command should be now working (reload your shell).
+
+3. Add `home-manager` channel:
+   ```bash
+    $ nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+    $ nix-channel --update
+   ```
+
+4. (Optionaly, MacOS only) Install [Homebrew](https://brew.sh/)
+   ```
+   $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+4. Clone this repository as your local `~/.nixpkgs` </br>
+    You should have `~/.nixpkgs/darwin-configuration.nix` from this repository, replacing the default one.
+
+5. Set up your secrets:
    ```bash
     $ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
     $ cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix
    ```
    Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
 
-1. Install [Nix](https://nixos.org/download.html)
+6. Switch the profile:
    ```bash
-    $ sh <(curl -L https://nixos.org/nix/install) --daemon
-   ```
-
-2. Add `home-manager` channel:
-   ```bash
-    $ nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-    $ nix-channel --update
-   ```
-3. (Optionaly) Install [Homebrew](https://brew.sh/)
-   ```
-   $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent. com/Homebrew/install/HEAD/install.sh)"
-   ```
-
-3. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
-   ```
-    $ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-    $ ./result/bin/darwin-installer
+    $ darwin-rebuild switch
    ```
 
 At this point everything should be installed and the environment should be ready to rock.
@@ -132,3 +140,44 @@ Example:
     };
   };
 ```
+
+### AWS
+
+AWS can be configured via `tools.aws` module.
+
+AWS can have statically defined profiles, and SAML profiles (using Google as ID Provider) such as:
+
+```nix
+  tools.aws = {
+    enable = true;
+
+    profiles = {
+      default = {
+        accessKeyId = "AKIAIOSFODNN7EXAMPLE";
+        secretAccessKey = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY";
+      };
+    };
+
+    googleStsProfile = {
+      name = "default";
+      accounts = {
+        test = {
+          accountId = "123456789012";
+          roles = [ "admin" "read-only" ];
+        };
+        prod = {
+          accountId = "210987654321";
+          roles = [ "admin" "read-only" "terraform" ];
+        };
+      };
+    };
+  };
+```
+
+When `tools.aws.googleStsProfile` is defined, `aws-switch` command becomes available and it allows to switch between accounts in the configured profile via CLI:
+
+```bash
+$ aws-switch test admin
+```
+
+`aws-switch` has `Zsh` completion module, so `<TAB>` should help with the command line parameters.
