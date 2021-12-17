@@ -31,6 +31,8 @@ in
   tools.aws = {
     googleStsProfile = {
       name = "default";
+      spId = "1050940722099";
+      idpId = "C02t7lm2d";
       accounts = {
         build = {
           accountId = "198994478268";

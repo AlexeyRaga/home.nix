@@ -160,6 +160,8 @@ AWS can have statically defined profiles, and SAML profiles (using Google as ID 
 
     googleStsProfile = {
       name = "default";
+      spId = "1111111111111";
+      idpId = "A11a1aa1a";
       accounts = {
         test = {
           accountId = "123456789012";

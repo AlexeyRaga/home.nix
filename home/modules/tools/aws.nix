@@ -69,7 +69,7 @@ let
       _aws-switch "$@"
     '';
 
-  awsSwicth = name: accounts:
+  awsSwicth = name: spid: idpid: accounts:
     pkgs.writeShellScriptBin "aws-switch" ''
       set -e
       declare -A AWS_ACCOUNTS
@@ -84,8 +84,8 @@ let
       echo "Switching profile '$PROFILE_NAME' to account $ACCOUNT_NAME ($ACCOUNT_ID) with role '$ROLE_NAME'"
       ${gsts}/bin/google-sts \
         --aws-role-arn "arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME" \
-        --sp-id "1050940722099" \
-        --idp-id "C02t7lm2d" \
+        --sp-id "${spid}" \
+        --idp-id "${idpid}" \
         --aws-profile "$PROFILE_NAME"
     '';
 
@@ -113,6 +113,8 @@ in
       type = types.submodule {
         options = {
           name = mkOption { type = types.str; description = "Name of the AWS profile"; };
+          spId = mkOption { type = types.str; description = "Google Service Provider ID (SP ID)"; };
+          idpId = mkOption { type = types.str; description = "Google Identity Provider ID (IDP ID)"; };
           accounts = mkOption {
             type = types.attrsOf (
               types.submodule {
@@ -134,7 +136,7 @@ in
         let
           accounts = lib.mapAttrsToList (name: value: ''[${name}]="${value.accountId}"'') cfg.googleStsProfile.accounts;
           roles = lib.mapAttrsToList (name: value: ''[${name}]="${toString value.roles}"'') cfg.googleStsProfile.accounts;
-          awsSwitchBin = awsSwicth cfg.googleStsProfile.name accounts;
+          awsSwitchBin = awsSwicth cfg.googleStsProfile.name cfg.googleStsProfile.spId cfg.googleStsProfile.idpId accounts;
           awsSwitchZsh = awsSwitchZshComplete accounts roles;
         in
         [ pkgs.awscli gsts ] ++ (if (cfg.googleStsProfile.name != { }) then [ awsSwitchBin awsSwitchZsh ] else [ ]);
