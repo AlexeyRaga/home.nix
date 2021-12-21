@@ -4,9 +4,8 @@ let
 in
 {
   imports = [
-    <home-manager/nix-darwin>
     ./users.nix
-
+    <home-manager/nix-darwin>
   ] ++ (modules.importAllModules ./darwin);
 
   programs.zsh.enable = true;

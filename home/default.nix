@@ -2,6 +2,7 @@
 
 let
   secrets = import ./secrets;
+  modules = import ../lib/modules.nix {inherit lib;};
 in
 {
   # Let Home Manager install and manage itself.
@@ -14,13 +15,10 @@ in
 
   imports = [
     ./packages.nix
-    ./modules/tools
-    ./modules/secureEnv
 
     # everything for work
     ./work
-
-  ];
+  ] ++ (modules.importAllModules ./modules);
 
   # modules.desktop.apps.raycast
 
