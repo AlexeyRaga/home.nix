@@ -10,9 +10,10 @@ in
 
   programs.zsh.enable = true;
 
-  environment.systemPackages = with pkgs; [
-    nixpkgs-fmt
-  ];
+  environment = {
+    shells = [ pkgs.zsh ];
+    systemPackages = with pkgs; [ nixpkgs-fmt ];
+  };
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
@@ -23,39 +24,46 @@ in
     home = config.user.home;
   };
 
-  home-manager.useUserPackages = true;
-  home-manager.users.${config.user.name} = import ./home {
-    inherit config;
-    inherit pkgs;
-    inherit lib;
+  home-manager = {
+    useUserPackages = true;
+    users.${config.user.name} = import ./home {
+      inherit config;
+      inherit pkgs;
+      inherit lib;
+    };
   };
 
-  services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
-  nix.package = pkgs.nixUnstable;
-
-  # You should generally set this to the total number of logical cores in your system.
-  # $ sysctl -n hw.ncpu
-  nix.maxJobs = 12;
-  nix.buildCores = 12;
+  services = {
+    nix-daemon.enable = true;
+    # Recreate /run/current-system symlink after boot.
+    activate-system.enable = true;
+  };
 
   # nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfree = true;
 
-  # Recreate /run/current-system symlink after boot.
-  services.activate-system.enable = true;
+  nix = {
+    # package = pkgs.nix;
+    package = pkgs.nixUnstable;
 
-  nix.binaryCaches = [
-    "https://cache.nixos.org/"
-    "https://nix-tools.cachix.org"
-    "https://nix-community.cachix.org"
-  ];
+    # You should generally set this to the total number of logical cores in your system.
+    # $ sysctl -n hw.ncpu
+    maxJobs = 12;
+    buildCores = 12;
 
-  nix.binaryCachePublicKeys = [
-    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-    "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
-    "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-  ];
+    binaryCaches = [
+      "https://cache.nixos.org/"
+      "https://nix-tools.cachix.org"
+      "https://nix-community.cachix.org"
+    ];
+
+    binaryCachePublicKeys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+    ];
+
+  };
 }
 
 
