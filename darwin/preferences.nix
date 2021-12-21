@@ -6,6 +6,9 @@
 
     # See https://github.com/LnL7/nix-darwin/blob/master/modules/system/defaults/NSGlobalDomain.nix
     NSGlobalDomain = {
+      AppleInterfaceStyle = "Dark";
+      AppleShowAllExtensions = true;
+
       # Configures the trackpad tab behavior. Mode 1 enables tap to click.
       "com.apple.mouse.tapBehavior" = 1;
     };
@@ -37,5 +40,11 @@
     #   # The filesystem path to which screenshots should be written
     #   location = "~/Screenshots";
     # };
+
+    # system.activationScripts.extraUserActivation.text = ''
+    #   defaults write com.knollsoft.Rectangle gapSize -int 10
+    #   osascript -e 'tell application "Finder" to set desktop picture to POSIX file "/Users/builditluc/wallpaper.png"'
+    #   ln -sf ${pkgs.callPackage ./custom-pkgs/firefox { } }/Applications/Firefox.app /Applications
+    # '';
   };
 }

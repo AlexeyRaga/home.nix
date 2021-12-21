@@ -1,14 +1,13 @@
 { config, pkgs, lib, ... }:
+let
+  modules = import ./lib/modules.nix {inherit lib;};
+in
 {
   imports = [
     <home-manager/nix-darwin>
     ./users.nix
-    ./darwin/options
-    ./darwin/preferences.nix
-    ./darwin/apps/raycast.nix
-    ./darwin/dock.nix
-    ./darwin/apps.nix
-  ];
+
+  ] ++ (modules.importAllModules ./darwin);
 
   programs.zsh.enable = true;
 
