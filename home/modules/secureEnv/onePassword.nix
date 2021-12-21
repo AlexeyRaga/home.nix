@@ -57,7 +57,7 @@ in
   };
 
   config = mkIf (cfg.enable && cfg.sessionVariables != { }) {
-    home.activation.passwordsToKeychain = hm.dag.entryAfter [ "writeBoundaty" ] ''
+    home.activation.passwordsToKeychain = hm.dag.entryAfter [ "writeBoundary" ] ''
       noteEcho "Populating keychain from 1Password";
       $DRY_RUN_CMD ${populateSecrets cfg.namespace cfg.sessionVariables}
     '';
