@@ -1,21 +1,14 @@
 { config, pkgs, lib, ... }:
-let
-  username = builtins.getEnv "USER";
-  homeDir = "/Users/${username}";
-in
 {
   imports = [
     <home-manager/nix-darwin>
-    ./homebrew.nix
+    ./users.nix
+    ./darwin/options
+    ./darwin/preferences.nix
+    ./darwin/apps/raycast.nix
+    ./darwin/dock.nix
+    ./darwin/apps.nix
   ];
-
-  # Fonts
-  # fonts = {
-  #   enableFontDir = true;
-  #   fonts = [ pkgs.fira-code ];
-  # };
-
-  # homebrew.enable = true;
 
   programs.zsh.enable = true;
 
@@ -27,24 +20,16 @@ in
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
-  # Keyboard
-  # system.keyboard = {
-  #   enableKeyMapping = true;
-  #   remapCapsLockToControl = true;
-  # };
-
-  users.users.${username} = {
-    name = username;
-    home = homeDir;
+  users.users.${config.user.name} = {
+    name = config.user.name;
+    home = config.user.home;
   };
 
   home-manager.useUserPackages = true;
-  home-manager.users.${username} = import ./home {
+  home-manager.users.${config.user.name} = import ./home {
     inherit config;
     inherit pkgs;
     inherit lib;
-    inherit username;
-    inherit homeDir;
   };
 
   services.nix-daemon.enable = true;

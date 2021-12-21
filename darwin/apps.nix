@@ -1,15 +1,16 @@
-{ inputs, config, pkgs, ... }:
-let
-  brewBinPrefix = if pkgs.system == "aarch64-darwin" then "/opt/homebrew/bin" else "/usr/local/bin";
-in
+{ config, lib, pkgs, ... }:
 {
+
+  darwin.apps = {
+    raycast.enable = true;
+  };
+
+  home-manager.users."${config.user.name}".home = {
+    packages = with pkgs; [ m-cli ];
+  };
+
   homebrew = {
     enable = true;
-    brewPrefix = brewBinPrefix;
-    autoUpdate = true;
-    cleanup = "zap";
-    global.brewfile = true;
-    global.noLock = true;
 
     taps = [
       "homebrew/cask"
@@ -27,7 +28,6 @@ in
       "openvpn-connect"
       "postman"
       "rider"
-      "raycast" # better spotlight
       "skype"
       "slack"
       "sublime-text"
