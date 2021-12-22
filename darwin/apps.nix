@@ -3,6 +3,7 @@
 
   darwin.apps = {
     raycast.enable = true;
+    virtualbox.enable = true;
   };
 
   home-manager.users."${config.user.name}".home = {
