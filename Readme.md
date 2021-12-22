@@ -1,11 +1,23 @@
 # Home Manager Nix configuration
 
+It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
+
 This Readme is currently MacOS-centric.
 However, the configuration itself has been tried on Ubuntu and NixOS and it turns out to be working (not using `darwin-configuration.nix`, obviously, but using the whole `Home Manager` config.).
 
 ## Installation
 
-It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
+### Automated installation
+
+Currently MacOS-specific
+
+```bash
+$ sh <(curl -fsSL https://https://raw.githubusercontent.com/AlexeyRaga/home.nix/main/install.sh)
+```
+
+
+### Manual installation
+
 
 0. Install [Nix](https://nixos.org/download.html)
    ```bash

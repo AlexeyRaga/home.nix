@@ -1,7 +1,8 @@
-{ config, lib, pkgs, username, homeDir, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   secrets = import ./secrets;
+  modules = import ../lib/modules.nix {inherit lib;};
 in
 {
   # Let Home Manager install and manage itself.
@@ -13,14 +14,18 @@ in
   ];
 
   imports = [
-    ./common-packages.nix
-    ./modules/tools
-    ./modules/secureEnv
+    ./packages.nix
 
     # everything for work
     ./work
+  ] ++ (modules.importAllModules ./modules);
 
-  ];
+  # modules.desktop.apps.raycast
+
+  # targets.darwin.defaults = {
+  #   com.apple.dock.tilesize = 36;
+  #   com.apple.dock.size-immutable = true;
+  # };
 
   # secureEnv.onePassword = {
   #   enable = true;
@@ -36,8 +41,8 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
-    username = username;
-    homeDirectory = homeDir;
+    username = config.user.name;
+    homeDirectory = config.user.home;
 
     sessionVariables = {
       EDITOR = "vim";
@@ -61,22 +66,33 @@ in
     fira-code
   ];
 
-  programs.bat.enable = true;
-  programs.exa.enable = true;
-  programs.jq.enable = true;
-  programs.htop.enable = true;
-  programs.bottom.enable = true;
-  programs.vim.enable = true;
+  programs = {
+    lazygit.enable = true;
+    bat.enable = true;
+    exa.enable = true;
+    jq.enable = true;
+    htop.enable = true;
+    bottom.enable = true;
+    vim.enable = true;
 
-  programs.lsd = {
-    enable = true;
-    enableAliases = true;
-  };
+    lsd = {
+      enable = true;
+      enableAliases = true;
+    };
 
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+
+    fzf = {
+      enable = true;
+      enableZshIntegration = true;
+      enableBashIntegration = true;
+    };
+
+    lf.enable = true;
   };
 
   tools.aws = {
@@ -97,12 +113,6 @@ in
   };
 
   ### ZSH (TODO: Move to a module)
-  programs.fzf = {
-    enable = true;
-    enableZshIntegration = true;
-    enableBashIntegration = true;
-  };
-
   programs.zsh = {
     enable = true;
     enableCompletion = true;
