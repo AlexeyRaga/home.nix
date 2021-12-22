@@ -12,7 +12,7 @@ However, the configuration itself has been tried on Ubuntu and NixOS and it turn
 Currently MacOS-specific
 
 ```bash
-$ sh <(curl -fsSL https://https://raw.githubusercontent.com/AlexeyRaga/home.nix/main/install.sh)
+$ sh <(curl -fsSL https://raw.githubusercontent.com/AlexeyRaga/home.nix/main/install.sh)
 ```
 
 
