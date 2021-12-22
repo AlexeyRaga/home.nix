@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 { # Prevent script running if partially downloaded
 
