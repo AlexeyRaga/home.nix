@@ -132,7 +132,9 @@ darwin_build() {
 
   echo
   info "All done and ready"
-  echo "Please re-enter your shell and call:"
+  echo "Now you can edit the configuration in '$HOME/.nixpkgs'".
+  echo
+  echo "When you finish tuning the configuration, please re-enter your shell and call:"
   echo
   echo "> darwin-rebuild switch"
   echo

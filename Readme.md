@@ -15,9 +15,24 @@ Currently MacOS-specific
 $ sh <(curl -fsSL https://raw.githubusercontent.com/AlexeyRaga/home.nix/main/install.sh)
 ```
 
+At the end of the successful installation the installer will ask to tune the configuration
+in your `~/.nixpkgs`, re-enter the shell and switch into the new configuration.
+
+Before switching, consider to populate your secrets:
+
+```bash
+$ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
+$ cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix
+```
+Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
+
+Now issuing the `switch` command should have your system set up:
+
+```bash
+$ darwin-rebuild switch
+```
 
 ### Manual installation
-
 
 0. Install [Nix](https://nixos.org/download.html)
    ```bash
