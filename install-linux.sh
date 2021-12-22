@@ -64,6 +64,7 @@ install_home_manager() {
 
   command -v home-manager >/dev/null || {
     warn "Installing Home Manager..."
+    export NIX_PATH=$HOME/.nix-defexpr/channels${NIX_PATH:+:}$NIX_PATH
     nix-shell '<home-manager>' -A install
   }
 
