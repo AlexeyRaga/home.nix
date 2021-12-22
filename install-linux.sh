@@ -10,9 +10,6 @@ GREEN='\033[0;32m'
 ORANGE='\033[0;33m'
 CYAN='\033[0;36m'
 
-OS=$(uname -s)
-ARCH=$(uname -m)
-
 header() {
   printf "${CYAN}%s${NOCOLOR}\n" "$@"
 }
@@ -64,7 +61,13 @@ install_home_manager() {
     nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
     nix-channel --update
   fi
-  info "Home Manager channel is installed. Here are available channels:"
+
+  command -v home-manager >/dev/null || {
+    warn "Installing Home Manager..."
+    nix-shell '<home-manager>' -A install
+  }
+
+  info "Home Manager is installed. Here are available channels:"
   nix-channel --list
 }
 
@@ -92,7 +95,6 @@ clone_repository() {
 sudo_prompt
 install_nix
 install_home_manager
-
 # clone_repository
 
 # # Clean dock settings of applications
