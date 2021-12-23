@@ -2,7 +2,7 @@
 
 { # Prevent script running if partially downloaded
 
-set -euo pipefail
+set -eo pipefail
 
 NOCOLOR='\033[0m'
 RED='\033[0;31m'
@@ -45,9 +45,8 @@ install_nix() {
     #    - Would you like to see a more detailed list of what we will do? n
     #    - Can we use sudo? y
     #    - Ready to continue? y
-    printf "n\ny\ny" | sh <(curl -kL https://nixos.org/nix/install) --daemon
-    # Update local shell
-    source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    printf "n\ny\ny" | bash -i <(curl -kL https://nixos.org/nix/install) --daemon
+    source /etc/bashrc
   }
   info "'Nix' is installed! Here is what we have:"
   nix-shell -p nix-info --run "nix-info -m"
@@ -101,13 +100,14 @@ install_homebrew() {
 
 clone_repository() {
   echo
-  repository="AlexeyRaga/home.nix"
+  local repository="AlexeyRaga/home.nix"
+  local clone_target="${HOME}/.nixpkgs"
   header "Setting up the configuration from github.com:${repository}..."
-  clone_target="${HOME}/.nixpkgs"
+
   if [[ ! $( cat "${clone_target}/.git/config" | grep "github.com" | grep "${repository}" ) ]]; then
     if [ -d "${clone_target}" ]; then
       warn "Looks like '${clone_target}' exists and it is not what we want. Backing up as '${clone_target}.backup-before-clone'..."
-      echo mv "${clone_target}" "${clone_target}.backup-before-clone"
+      mv "${clone_target}" "${clone_target}.backup-before-clone"
     fi
     warn "Cloning 'github.com:${repository}' into '${clone_target}'..."
     git clone "https://github.com/${repository}.git" "${clone_target}"
@@ -131,27 +131,30 @@ darwin_build() {
   done
 
   echo
+  info "==========================================================="
   info "All done and ready"
+  echo
   echo "Now you can edit the configuration in '$HOME/.nixpkgs'".
   echo
-  echo "When you finish tuning the configuration, please re-enter your shell and call:"
+  echo "You may want to fill in the secrets that are required for this configuration:"
+  echo
+  warn "  cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix"
+  warn "  cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix"
+  echo
+  echo "Then edit both secrets files."
+  echo
+  echo "When you finish tuning the configuration, please **RE-ENTER YOUR SHELL** and call:"
   echo
   echo "> darwin-rebuild switch"
   echo
 }
 
-# Run the installation workflow
 sudo_prompt
+install_homebrew
 install_nix
 install_home_manager
-install_homebrew
 install_nix_darwin
 clone_repository
 darwin_build
-
-# # Clean dock settings of applications
-# defaults write com.apple.dock persistent-apps -array
-# defaults write com.apple.dock recent-apps -array
-# killall Dock
 
 } # Prevent script running if partially downloaded
