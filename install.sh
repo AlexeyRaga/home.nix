@@ -45,7 +45,7 @@ install_nix() {
     #    - Would you like to see a more detailed list of what we will do? n
     #    - Can we use sudo? y
     #    - Ready to continue? y
-    printf "n\ny\ny" | sh <(curl -fsSL https://nixos.org/nix/install) --daemon
+    printf "n\ny\ny" | sh <(curl -kL https://nixos.org/nix/install) --daemon
     # Update local shell
     source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
   }
