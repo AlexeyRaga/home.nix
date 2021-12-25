@@ -119,6 +119,32 @@ clone_repository() {
   cd - >/dev/null
 }
 
+set_up_secrets() {
+  echo
+  header "Setting up secrets"
+  local full_name=$(id -F)
+  local user_name=$(id -F | tr -d ' ')
+  local email_name=$(id -F | tr -s ' ' | tr "[:upper:]" "[:lower:]" | tr ' ' '.')
+  un_example() {
+    local src="$1"
+    local dst="${1%.*}"
+
+    if [ ! -f "$dst" ]; then
+      warn "Creating '${dst}'..."
+      sed -e "s/<full-name>/${full_name}/g" \
+          -e "s/<user-name>/${user_name}/g" \
+          -e "s/<email-name>/${email_name}/g" \
+          "${src}" > "${dst}"
+      warn "Auto-created '${dst}'. Don't forget to check it out as some default values may need to be changed."
+    else
+      info "Skipping '${dst}' since it already exists."
+    fi
+  }
+
+  un_example "${HOME}/.nixpkgs/home/secrets/default.nix.example"
+  un_example "${HOME}/.nixpkgs/home/work/secrets/default.nix.example"
+}
+
 darwin_build() {
   echo
   header "Setting up 'darwin' configuration..."
@@ -138,10 +164,10 @@ darwin_build() {
   echo
   echo "You may want to fill in the secrets that are required for this configuration:"
   echo
-  warn "  cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix"
-  warn "  cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix"
+  warn "  ~/.nixpkgs/home/secrets/default.nix"
+  warn "  ~/.nixpkgs/home/work/secrets/default.nix"
   echo
-  echo "Then edit both secrets files."
+  echo "Review and edit both secrets files."
   echo
   echo "When you finish tuning the configuration, please **RE-ENTER YOUR SHELL** and call:"
   echo
@@ -155,6 +181,7 @@ install_nix
 install_home_manager
 install_nix_darwin
 clone_repository
+set_up_secrets
 darwin_build
 
 } # Prevent script running if partially downloaded
