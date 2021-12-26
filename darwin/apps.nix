@@ -3,6 +3,7 @@
 
   darwin.apps = {
     raycast.enable = true;
+    iterm2.enable = true; # best terminal ever
   };
 
   home-manager.users."${config.user.name}".home = {
@@ -23,7 +24,6 @@
       "discord"
       "docker"
       "dropbox"
-      "iterm2" # best terminal ever
       "licecap" # animated screenshots
       "openvpn-connect"
       "postman"
