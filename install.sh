@@ -131,9 +131,9 @@ set_up_secrets() {
 
     if [ ! -f "$dst" ]; then
       warn "Creating '${dst}'..."
-      sed -e "s/<full-name>/${full_name}/g" \
-          -e "s/<user-name>/${user_name}/g" \
-          -e "s/<email-name>/${email_name}/g" \
+      sed -e "s/{full-name}/${full_name}/g" \
+          -e "s/{user-name}/${user_name}/g" \
+          -e "s/{email-name}/${email_name}/g" \
           "${src}" > "${dst}"
       warn "Auto-created '${dst}'. Don't forget to check it out as some default values may need to be changed."
     else
