@@ -82,8 +82,8 @@ Make changes to the configuration files and run `darwin-rebuild switch` to updat
 
 ## Note on integration with Homebrew
 
-If `Homebrew` is installed, this configuration will manage `Homebrew` packages via [homebrew.nix](./homebrew.nix) file.
-Use [homebrew.nix](./homebrew.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
+If `Homebrew` is installed, this configuration will manage `Homebrew` packages via [darwin/apps.nix](./darwin/apps.nix) file.
+Use [darwin/apps.nix](./darwin/apps.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
 
 
 ## Modules overview
