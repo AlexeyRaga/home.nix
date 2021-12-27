@@ -5,6 +5,11 @@ with lib;
 let
   cfg = config.tools.dotnet;
 
+  dotnet-env = with pkgs; with dotnetCorePackages; combinePackages [
+    sdk_6_0
+    sdk_5_0
+  ];
+
   buildNugetConfig = nugetSources:
     pkgs.stdenv.mkDerivation {
       name = "nugetConfig";
@@ -12,7 +17,7 @@ let
       buildInputs = with pkgs; [ dotnet-sdk ];
       installPhase =
         let
-          toCommand = name: params: ''${pkgs.dotnet-sdk}/bin/dotnet nuget add source ${params.url} --name ${name} --username ${params.userName} --password ${params.password} --store-password-in-clear-text'';
+          toCommand = name: params: ''${dotnet-env}/bin/dotnet nuget add source ${params.url} --name ${name} --username ${params.userName} --password ${params.password} --store-password-in-clear-text'';
           commands = lib.concatStringsSep "\n" (lib.mapAttrsToList toCommand nugetSources);
         in
         ''
@@ -35,16 +40,14 @@ in
           password = mkOption { type = types.str; };
         };
       });
-      default = {};
+      default = { };
     };
   };
 
   # 6c64820ffa95db07878b0f4750f4d933d06b52b1
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [
-      dotnet-sdk
-    ];
+    home.packages = [ dotnet-env ];
 
     home.file.".nuget/NuGet/NuGet.Config".source =
       let nugetConfig = buildNugetConfig cfg.nugetSources;
