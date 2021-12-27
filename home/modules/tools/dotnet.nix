@@ -49,6 +49,10 @@ in
   config = mkIf cfg.enable {
     home.packages = [ dotnet-env ];
 
+    home.sessionVariables = {
+      DOTNET_ROOT="${dotnet-env}";
+    };
+
     home.file.".nuget/NuGet/NuGet.Config".source =
       let nugetConfig = buildNugetConfig cfg.nugetSources;
       in "${nugetConfig}/.nuget/NuGet/NuGet.Config";
