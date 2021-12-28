@@ -3,6 +3,8 @@ let
   modules = import ./lib/modules.nix {inherit lib;};
 in
 {
+  documentation.enable = false;
+
   imports = [
     ./users.nix
     <home-manager/nix-darwin>
