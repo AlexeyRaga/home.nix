@@ -13,6 +13,10 @@ in
     # (import ./overlays)
   ];
 
+  xdg.configFile."nix/nix.conf".text = ''
+      experimental-features = nix-command flakes
+  '';
+
   imports = [
     ./packages.nix
 

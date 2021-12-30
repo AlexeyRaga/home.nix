@@ -11,6 +11,13 @@
 
       # Configures the trackpad tab behavior. Mode 1 enables tap to click.
       "com.apple.mouse.tapBehavior" = 1;
+
+      # Trackpad: map tap with two fingers to secondary click
+      "com.apple.trackpad.trackpadCornerClickBehavior" = 1;
+      "com.apple.trackpad.enableSecondaryClick" = true;
+
+      # Disable “natural” scrolling
+      "com.apple.swipescrolldirection" = false;
     };
 
     # See https://github.com/LnL7/nix-darwin/blob/master/modules/system/defaults/loginwindow.nix
