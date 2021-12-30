@@ -30,7 +30,7 @@ in
     # Initialise Shell Integration
     programs.bash.interactiveShellInit = ''
       # Initialise iTerm2 integration
-      source "${shell_integration}/shell_integration/bash"; or true
+      source "${shell_integration}/shell_integration/bash" || true
       ${aliases}
     '';
     programs.fish.interactiveShellInit = ''
