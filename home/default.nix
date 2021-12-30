@@ -20,13 +20,6 @@ in
     ./work
   ] ++ (modules.importAllModules ./modules);
 
-  # modules.desktop.apps.raycast
-
-  # targets.darwin.defaults = {
-  #   com.apple.dock.tilesize = 36;
-  #   com.apple.dock.size-immutable = true;
-  # };
-
   # secureEnv.onePassword = {
   #   enable = true;
   #   sessionVariables = {
