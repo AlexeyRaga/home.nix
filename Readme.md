@@ -21,8 +21,8 @@ in your `~/.nixpkgs`, re-enter the shell and switch into the new configuration.
 Before switching, consider to populate your secrets:
 
 ```bash
-$ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
-$ cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix
+~/.nixpkgs/home/secrets/default.nix
+~/.nixpkgs/home/work/secrets/default.nix
 ```
 Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
 
