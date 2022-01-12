@@ -29,7 +29,9 @@ let
       TMP=`mktemp -d`
       cd $TMP
 
-      yarn --no-default-rc --no-lockfile --non-interactive --no-progress add gsts@${version}
+      HOME=$TMP
+
+      yarn --no-default-rc --frozen-lockfile --no-lockfile --non-interactive --no-progress add gsts@${version}
 
       mkdir -p $out/bin
       cp -r * $out/
