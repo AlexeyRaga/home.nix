@@ -31,7 +31,9 @@ let
 
       HOME=$TMP
 
-      yarn --no-default-rc --frozen-lockfile --no-lockfile --non-interactive --no-progress add gsts@${version}
+      export PLAYWRIGHT_BROWSERS_PATH=0
+
+      ${pkgs.yarn}/bin/yarn --no-default-rc --frozen-lockfile --no-lockfile --non-interactive --no-progress add gsts@${version}
 
       mkdir -p $out/bin
       cp -r * $out/
@@ -84,7 +86,7 @@ let
       PROFILE_NAME="''${3:-${name}}"
 
       echo "Switching profile '$PROFILE_NAME' to account $ACCOUNT_NAME ($ACCOUNT_ID) with role '$ROLE_NAME'"
-      ${gsts}/bin/google-sts \
+      PLAYWRIGHT_BROWSERS_PATH=0 ${gsts}/bin/google-sts \
         --aws-role-arn "arn:aws:iam::$ACCOUNT_ID:role/$ROLE_NAME" \
         --sp-id "${spid}" \
         --idp-id "${idpid}" \
