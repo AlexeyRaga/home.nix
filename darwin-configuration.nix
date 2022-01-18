@@ -6,6 +6,7 @@ in
   documentation.enable = false;
 
   imports = [
+    ./certificates.nix
     ./users.nix
     <home-manager/nix-darwin>
   ] ++ (modules.importAllModules ./darwin);
