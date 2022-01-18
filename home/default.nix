@@ -10,7 +10,7 @@ in
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
-    # (import ./overlays)
+    (import ./overlays/pinned.nix)
   ];
 
   xdg.configFile."nix/nix.conf".text = ''
