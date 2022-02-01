@@ -17,5 +17,6 @@ let
 in
 {
   # pinned to this version because the latest one is broken: its unit tests fail.
-  awscli = (pinned "awscli" "89f196fe781c53cb50fef61d3063fa5e8d61b6e5").awscli;
+  # awscli = (pinned "awscli" "89f196fe781c53cb50fef61d3063fa5e8d61b6e5").awscli;
+  nix26 = (pinned "nix" "fd7729c1451e66c48d3cef89fc8106d6ca2bb978").nixUnstable;
 }

@@ -9,9 +9,9 @@ in
   programs.home-manager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    (import ./overlays/pinned.nix)
-  ];
+  # nixpkgs.overlays = [
+  #   (import ./overlays/pinned.nix)
+  # ];
 
   xdg.configFile."nix/nix.conf".text = ''
       experimental-features = nix-command flakes

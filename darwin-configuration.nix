@@ -5,6 +5,11 @@ in
 {
   documentation.enable = false;
 
+  nixpkgs.overlays = [
+    (import ./overlays/pinned.nix)
+  ];
+
+
   imports = [
     ./certificates.nix
     ./users.nix
@@ -47,7 +52,8 @@ in
 
   nix = {
     # package = pkgs.nix;
-    package = pkgs.nixUnstable;
+    # package = pkgs.nixUnstable;
+    package = pkgs.nix26;
 
     # You should generally set this to the total number of logical cores in your system.
     # $ sysctl -n hw.ncpu

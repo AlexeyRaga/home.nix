@@ -23,5 +23,9 @@
     tree
     watch
     wget
+
+    mediainfo
+    libmediainfo
+    # difftastic
   ];
 }

@@ -22,7 +22,7 @@
       "1password"
       "brave-browser" # better chrome
       "discord"
-      "docker"
+      # "docker"
       "dropbox"
       "licecap" # animated screenshots
       "openvpn-connect"
@@ -34,7 +34,7 @@
       "visual-studio-code"
       "vlc"
       "zoom"
-      "balenaetcher"
+      # "balenaetcher"
 
       "google-chrome"
     ];
