@@ -37,6 +37,7 @@
       # "balenaetcher"
 
       "google-chrome"
+      "firefox"
     ];
 
     brews = [
