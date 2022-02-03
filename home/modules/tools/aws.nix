@@ -143,7 +143,7 @@ in
           awsSwitchBin = awsSwicth cfg.googleStsProfile.name cfg.googleStsProfile.spId cfg.googleStsProfile.idpId accounts;
           awsSwitchZsh = awsSwitchZshComplete accounts roles;
         in
-        [ pkgs.awscli gsts ] ++ (if (cfg.googleStsProfile.name != { }) then [ awsSwitchBin awsSwitchZsh ] else [ ]);
+        [ pkgs.awscli2 gsts ] ++ (if (cfg.googleStsProfile.name != { }) then [ awsSwitchBin awsSwitchZsh ] else [ ]);
     }
 
     (mkIf (cfg.externalCredentials != { }) {
