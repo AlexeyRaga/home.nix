@@ -121,9 +121,9 @@ Example:
 ### SecureEnv
 
 `SecureEnv` allows to store secrets securely populating them from password managers (currently only `1Password`) with an ability to export
-these secrets as environment variables.
+these secrets as environment variables and ssh keys in ssh-agent.
 
-The reason for not exporting them from password managers directly is that they only keeps a session open for a short periof of time,
+The reason for not exporting them from password managers directly is that they only keeps a session open for a short period of time,
 which means that users will be asked to re-authenticate often.
 
 Instead, secrets are copied to `Keychain` (on MacOS) or `Keyring` (on Linux) and then used to source env variables.
@@ -139,6 +139,24 @@ Example:
         vault = "Private";
         item = "Github";
         field = "token";
+      };
+    };
+    sshKeys = {
+      # the IDs may be found from `op list items`
+      test_ec2_keypair = {
+        vault = "Dev - Shared DevOps";
+        item = "wrmpodmfm2k6rijjj5dimhrnwq";
+        field = "notes";
+      };
+      staging_pem = {
+        vault = "Dev - Shared DevOps";
+        item = "uhpvoujfk2wgu7kpqrdc2heaby";
+        field = "notes";
+      };
+      loadtest01_pem = {
+        vault = "Dev - Shared DevOps";
+        item = "nztr4zuyig4jhac47tfgbo6vn4";
+        field = "notes";
       };
     };
   };
