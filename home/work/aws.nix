@@ -59,4 +59,23 @@ in
   };
 
   home.file.".chrome/saml-to-aws".source = "${chromeExtension}/extension";
+
+  # ssh config for EC2 tools instances
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "test-linux-tools" = {
+        user = "centos";
+        hostname = "10.0.5.73";
+      };
+      "staging-linux-tools" = {
+        user = "centos";
+        hostname = "10.0.2.175";
+      };
+      "live-linux-tools" = {
+        user = "centos";
+        hostname = "10.0.3.254";
+      };
+    };
+  };
 }
