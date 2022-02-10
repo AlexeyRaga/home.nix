@@ -17,18 +17,19 @@ let
     else
       ''${pkgs.libsecret}/bin/secret-tool lookup namespace '${namespace}' key '${key}' '';
 
-  storeSshKeyCmd = keyfile: value:
-    ''echo "${value}" | ${pkgs.openssl}/bin/openssl pkcs8 -topk8 -nocrypt >${keyfile} && \
-      chmod 600 ${keyfile} && \
-      ssh-add ${keyfile} && \
-      rm -f ${keyfile}
-    '';
+  storeSshKeyCmd = value: ''
+    echo "${value}" | ${pkgs.openssl}/bin/openssl pkcs8 -topk8 -nocrypt | ssh-add -
+  '';
 
   populateSecrets = namespace: variables: sshKeys:
     let
+      opGetItem = vault: field: item: ''
+        ${pkgs._1password}/bin/op get item --session $token --vault '${vault}' --fields '${field}' '${item}'
+      '';
+
       syncOneVariable = key: item: ''
         echo >&2 "  Setting ${key} <- ${item.vault}.${item.item}.${item.field}"
-        password=$(${pkgs._1password}/bin/op get item --session $token --vault '${item.vault}' --fields '${item.field}' '${item.item}')
+        password=$(${opGetItem item.vault item.field item.item})
         ${storePasswordCmd namespace key "$password" "Password from ${item.vault}.${item.item}.${item.field}"}
       '';
 
@@ -36,8 +37,8 @@ let
 
       syncOneKey = key: item: ''
         echo >&2 "  Adding ssh-key ${key} <- ${item.vault}.${item.item}.${item.field}"
-        sshKey=$(${pkgs._1password}/bin/op get item --session $token --vault '${item.vault}' --fields '${item.field}' '${item.item}')
-        ${storeSshKeyCmd key "$sshKey"}
+        sshKey=$(${opGetItem item.vault item.field item.item})
+        ${storeSshKeyCmd "$sshKey"}
       '';
 
       syncAllKeys = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOneKey items);
@@ -45,15 +46,6 @@ let
     pkgs.writeShellScript "populateKeys" ''
       set -e
       token=$(${pkgs._1password}/bin/op signin --raw)
-
-      # Alas we need to create files, but we do this transiently, and under
-      # the home directory, which is likely encrypted, rather than in /tmp
-      tmpdir="$HOME/populateKeys.$$"
-      trap "cd; rm -rf $tmpdir" EXIT
-      mkdir $tmpdir
-      chmod 700 $tmpdir
-      cd $tmpdir
-
       ${syncAllVariables variables}
       ${syncAllKeys sshKeys}
     '';
