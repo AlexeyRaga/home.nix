@@ -17,7 +17,7 @@ let
       sha256 = "sha256-4VNHQQQnm1sLdaj7pHtoalW/spt1HPqbwnAJL3QiPDM=";
     };
 
-    buildInputs = with pkgs; [ awscli tree ];
+    buildInputs = with pkgs; [ awscli2 tree ];
     phases = [ "unpackPhase" "installPhase" ];
 
     installPhase = ''
