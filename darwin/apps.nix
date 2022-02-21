@@ -22,7 +22,7 @@
       "1password"
       "brave-browser" # better chrome
       "discord"
-      # "docker"
+      "docker"
       "dropbox"
       "licecap" # animated screenshots
       "openvpn-connect"
@@ -38,6 +38,8 @@
 
       "google-chrome"
       "firefox"
+      "nosql-workbench"
+      "altair-graphql-client"
     ];
 
     brews = [

@@ -92,6 +92,16 @@ in
     lf.enable = true;
   };
 
+  programs.ssh = {
+    enable = true;
+    matchBlocks = {
+      "remarkable" = {
+        user = "root";
+        hostname = "10.11.99.1";
+      };
+    };
+  };
+
   tools.aws = {
     enable = true;
     profiles = secrets.aws.profiles;

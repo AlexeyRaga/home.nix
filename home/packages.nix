@@ -11,7 +11,8 @@
     clang
     curl
     curlie
-    httpie
+    delta
+    # httpie
     xh
 
     docker
