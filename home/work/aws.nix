@@ -65,16 +65,16 @@ in
     enable = true;
     matchBlocks = {
       "test-linux-tools" = {
-        user = "centos";
-        hostname = "10.0.5.73";
+        user = "ubuntu";
+        hostname = "10.0.5.60";
       };
       "staging-linux-tools" = {
-        user = "centos";
-        hostname = "10.0.2.175";
+        user = "ubuntu";
+        hostname = "10.0.2.101";
       };
       "live-linux-tools" = {
-        user = "centos";
-        hostname = "10.0.3.254";
+        user = "ubuntu";
+        hostname = "10.0.3.87";
       };
     };
   };
