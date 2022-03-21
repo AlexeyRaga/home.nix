@@ -22,12 +22,14 @@
       "1password"
       "brave-browser" # better chrome
       "discord"
+      "telegram"
       "docker"
       "dropbox"
       "licecap" # animated screenshots
       "openvpn-connect"
       "postman"
       "rider"
+      "webstorm"
       "skype"
       "slack"
       "sublime-text"

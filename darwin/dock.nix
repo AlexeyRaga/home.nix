@@ -27,6 +27,7 @@
       "Visual Studio Code"
       "iTerm"
       "Slack"
+      "Telegram"
     ];
 
     # "Others" section in Dock (the one after the bar, where the Bin sits).
