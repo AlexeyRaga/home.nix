@@ -16,6 +16,7 @@
     xh
 
     docker
+    docker-credential-helpers
     duf # better df
     fd # better find
     moreutils

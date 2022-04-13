@@ -30,6 +30,7 @@ in
 
       extraConfig = {
         github.user = cfg.githubUser;
+        init.defaultBranch = "main";
       };
 
       includes = map (x: { condition = "gitdir:~/${x}/"; path = "~/${x}/.gitconfig"; })

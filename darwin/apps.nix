@@ -23,7 +23,8 @@
       "brave-browser" # better chrome
       "discord"
       "telegram"
-      "docker"
+      # "docker"
+      "rancher"
       "dropbox"
       "licecap" # animated screenshots
       "openvpn-connect"
@@ -36,7 +37,6 @@
       "visual-studio-code"
       "vlc"
       "zoom"
-      # "balenaetcher"
 
       "google-chrome"
       "firefox"
