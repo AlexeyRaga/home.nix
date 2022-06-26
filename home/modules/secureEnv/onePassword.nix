@@ -24,7 +24,7 @@ let
   populateSecrets = namespace: variables: sshKeys:
     let
       opGetItem = vault: field: item: ''
-        ${pkgs._1password}/bin/op get item --session $token --vault '${vault}' --fields '${field}' '${item}'
+        ${pkgs._1password}/bin/op read --session $token 'op://${vault}/${item}/${field}'
       '';
 
       syncOneVariable = key: item: ''
