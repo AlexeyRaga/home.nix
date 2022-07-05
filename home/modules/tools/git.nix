@@ -30,6 +30,7 @@ in
       userEmail = cfg.userEmail;
 
       extraConfig = {
+        core = { autocrlf = "input"; };
         github.user = cfg.githubUser;
         init.defaultBranch = "main";
       };

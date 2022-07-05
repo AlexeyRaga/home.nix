@@ -20,7 +20,7 @@
     duf # better df
     fd # better find
     moreutils
-    procs # better ps
+    # procs # better ps
     ripgrep # better grep
     tree
     watch
@@ -29,5 +29,6 @@
     mediainfo
     libmediainfo
     # difftastic
+
   ];
 }

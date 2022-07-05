@@ -30,6 +30,7 @@
       "openvpn-connect"
       "postman"
       "rider"
+      "intellij-idea"
       "webstorm"
       "skype"
       "slack"
@@ -40,6 +41,7 @@
 
       "google-chrome"
       "firefox"
+      "opera"
       "nosql-workbench"
       "altair-graphql-client"
     ];
