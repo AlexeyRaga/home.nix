@@ -10,9 +10,9 @@
 
     clang
     curl
-    curlie
+    # curlie
     delta
-    # httpie
+    httpie
     xh
 
     docker

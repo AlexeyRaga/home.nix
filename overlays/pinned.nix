@@ -18,5 +18,5 @@ in
 {
 
   # pin nix itself to 2.6 because 2.7 fails to build on MacOS.
-  nix26 = (pinned "nix" "fd7729c1451e66c48d3cef89fc8106d6ca2bb978").nixUnstable;
+  # nix26 = (pinned "nix" "fd7729c1451e66c48d3cef89fc8106d6ca2bb978").nixUnstable;
 }
