@@ -28,7 +28,7 @@
 
     mediainfo
     libmediainfo
-    # difftastic
+    difftastic
 
   ];
 }
