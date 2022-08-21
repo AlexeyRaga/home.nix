@@ -29,7 +29,7 @@ in
   tools.git = {
     workspaces."src/ep" = {
       user = { email = secrets.github.userEmail; };
-      core = { autocrlf = true; };
+      core = { autocrlf = "input"; };
     };
   };
 }

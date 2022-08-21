@@ -43,7 +43,8 @@
       "firefox"
       "opera"
       "nosql-workbench"
-      "altair-graphql-client"
+      # "altair-graphql-client"
+      "cloudflare-warp"
     ];
 
     brews = [
