@@ -55,22 +55,27 @@ in
     package = pkgs.nixUnstable;
     # package = pkgs.nix26;
 
+    settings = {
+      max-jobs = 12;
+
+      # $ sysctl -n hw.ncpu
+      cores = 12;
+      substituters = [
+        "https://cache.nixos.org/"
+        "https://nix-tools.cachix.org"
+        "https://nix-community.cachix.org"
+      ];
+
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+    };
+
     # You should generally set this to the total number of logical cores in your system.
-    # $ sysctl -n hw.ncpu
-    maxJobs = 12;
-    buildCores = 12;
 
-    binaryCaches = [
-      "https://cache.nixos.org/"
-      "https://nix-tools.cachix.org"
-      "https://nix-community.cachix.org"
-    ];
 
-    binaryCachePublicKeys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-      "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
-      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-    ];
 
   };
 }

@@ -4,9 +4,9 @@
     # Whether to automatically hide and show the Dock. Default is false.
     autohide = false;
     # Sets the speed of the autohide delay. Default is "0.24".
-    autohide-delay = "0.0";
+    autohide-delay = 0.0;
     # Sets the speed of animation when hiding/showing the Dock. Default is "1.0".
-    autohide-time-modifier = "1.0";
+    autohide-time-modifier = 1.0;
     # Position of dock. Default is "bottom"; alternatives are "left" and "right".
     orientation = "bottom";
     # Whether to make icons of hidden applications translucent. Default is false.
