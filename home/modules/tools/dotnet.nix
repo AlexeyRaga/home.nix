@@ -7,7 +7,6 @@ let
 
   dotnet-env = with pkgs; with dotnetCorePackages; combinePackages [
     sdk_6_0
-    sdk_5_0
   ];
 
   buildNugetConfig = nugetSources:
