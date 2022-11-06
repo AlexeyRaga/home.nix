@@ -111,6 +111,9 @@ in
     enable = true;
   };
 
+  tools.spacevim = {
+    enable = true;
+  };
 
   tools.git = {
     enable = true;
