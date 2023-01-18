@@ -17,6 +17,42 @@ let
       destination = "/${path}";
     };
 
+  plainCredentialsType = types.submodule {
+    options = {
+      access_key_id = mkOption { type = types.str; };
+      access_secret_key = mkOption { type = types.str; };
+    };
+  };
+
+  ssoSessionProfileType = types.submodule {
+    options = {
+      sso_account_id = mkOption { type = types.str; description = "AWS Account ID"; };
+      sso_role_name = mkOption { type = types.str; description = "Role name"; };
+      region = mkOption { type = types.str; description = "AWS Region to use for this profile"; };
+      output = mkOption { type = types.str; default = "json"; };
+    };
+  };
+
+  ssoSessionType = types.submodule {
+    options = {
+      sso_startUrl = mkOption { type = types.str; description = "SSO Start URL: https://xxxx.awsapps.com/start"; };
+      sso_region = mkOption { type = types.str; description = "AWS Region to use for SSO"; };
+      sso_registration_scopes = mkOption { type = types.str; default = "sso:account:access"; };
+      profiles = mkOption { type = types.attrsOf ssoSessionProfileType; default = {}; };
+    };
+  };
+
+  ssoProfileType = types.submodule {
+    options = {
+      sso_start_url = mkOption { type = types.str; description = "SSO Start URL"; };
+      sso_account_id = mkOption { type = types.str; description = "AWS Account ID"; };
+      sso_role_name = mkOption { type = types.str; description = "Role name"; };
+      sso_region = mkOption { type = types.str; description = "AWS Region to use for SSO"; };
+      region = mkOption { type = types.str; description = "AWS Region to use for this profile"; };
+      output = mkOption { type = types.str; default = "json"; };
+    };
+  };
+
   gsts = pkgs.stdenv.mkDerivation rec {
     pname = "gsts";
     version = "4.0.1";
@@ -98,14 +134,21 @@ in
   options.tools.aws = {
     enable = mkEnableOption "Enable AWS CLI and profiles";
 
-    profiles = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          accessKeyId = mkOption { type = types.str; };
-          accessSecretKey = mkOption { type = types.str; };
-        };
-      });
+    credentials = mkOption {
+      # type = types.attrsOf (types.oneOf [ plainCredentialsType ssoProfileType] );
+      type = types.attrsOf plainCredentialsType;
+      # type = types.attrsOf (ssoProfileType);
       default = { };
+    };
+
+    sessions = mkOption {
+      type = types.attrsOf ssoSessionType;
+      default = {};
+    };
+
+    ssoProfiles = mkOption {
+      type = types.attrsOf ssoProfileType;
+      default = {};
     };
 
     externalCredentials = mkOption {
@@ -134,7 +177,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = mkIf cfg.enable
     {
       home.packages =
         let
@@ -144,18 +187,28 @@ in
           awsSwitchZsh = awsSwitchZshComplete accounts roles;
         in
         [ pkgs.awscli2 pkgs.ssm-session-manager-plugin gsts ] ++ (if (cfg.googleStsProfile.name != { }) then [ awsSwitchBin awsSwitchZsh ] else [ ]);
-    }
 
-    (mkIf (cfg.externalCredentials != { }) {
       home.file.".aws/config".text =
         let
-          toCredProcess = file: { credential_process = ''sh -c "cat ${file} | ${readCredentials}"''; };
-          toAwsCred = cred: { aws_access_key_id = cred.accessKeyId; aws_secret_access_key = cred.accessSecretKey; };
+          rmAttr = name: attrs: lib.attrsets.filterAttrs (n: v: n != name) attrs;
+          mkProfile = extra: profile:
+            lib.mapAttrs' (name: value: { name = "profile ${name}"; value = extra // value; }) profile;
 
-          credentials = lib.mapAttrs' (name: value: { name = "profile ${name}"; value = toAwsCred value; }) cfg.profiles;
+          toCredProcess = file: { credential_process = ''sh -c "cat ${file} | ${readCredentials}"''; };
+
+          credentials = mkProfile {} cfg.credentials;
+          ssoProfiles = mkProfile {} cfg.ssoProfiles;
+
+          sessions = lib.concatMapAttrs (name: value:
+            let
+              header = "sso-session ${name}";
+              session = (rmAttr "profiles" value);
+              profiles = mkProfile { sso_session = name; } value.profiles;
+            in
+              { ${header} = session; } // profiles ) cfg.sessions;
+
           external = lib.mapAttrs' (name: value: { name = "profile ${name}"; value = toCredProcess value; }) cfg.externalCredentials;
         in
-        lib.generators.toINI { } (credentials // external);
-    })
-  ]);
+          lib.generators.toINI { } (credentials // ssoProfiles // sessions // external);
+    };
 }

@@ -31,6 +31,7 @@
       "postman"
       "rider"
       "intellij-idea"
+      "jetbrains-toolbox"
       "webstorm"
       "skype"
       "slack"
@@ -38,10 +39,9 @@
       "visual-studio-code"
       "vlc"
       "zoom"
+      "warp" # new terminal
 
       "google-chrome"
-      "firefox"
-      "opera"
       "nosql-workbench"
       # "altair-graphql-client"
       "cloudflare-warp"

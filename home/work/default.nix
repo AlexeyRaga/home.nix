@@ -17,6 +17,7 @@ in
       EP_NUGET_SOURCE_URL = epNugetSource.url;
       EP_NUGET_SOURCE_USER = epNugetSource.userName;
       EP_NUGET_SOURCE_PASS = epNugetSource.password;
+      EP_NPM_TOKEN = secrets.npmToken;
     };
   };
 

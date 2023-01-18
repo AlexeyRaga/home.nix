@@ -12,7 +12,7 @@ Example:
   };
 
   aws = {
-    profiles = {
+    credentials = {
       default = {
         accessKeyId = "AKI...";
         accessSecretKey = "345..."; }

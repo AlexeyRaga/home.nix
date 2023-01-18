@@ -104,7 +104,7 @@ in
 
   tools.aws = {
     enable = true;
-    profiles = secrets.aws.profiles;
+    credentials = secrets.aws.credentials;
   };
 
   tools.dotnet = {
@@ -112,7 +112,7 @@ in
   };
 
   tools.spacevim = {
-    enable = true;
+    enable = false;
   };
 
   tools.git = {
