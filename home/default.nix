@@ -146,6 +146,8 @@ in
     oh-my-zsh = {
       enable = true;
       plugins = [
+        "aws"
+        "dirhistory"
         "git-extras"
         "git"
         "gitfast"
