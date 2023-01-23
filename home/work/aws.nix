@@ -38,6 +38,14 @@ in
         region = "ap-southeast-2";
       };
 
+      test-unsafe = {
+        sso_start_url = "https://educationperfect.awsapps.com/start";
+        sso_account_id = "327162508743";
+        sso_role_name = "unsafeterraform";
+        sso_region = "ap-southeast-2";
+        region = "ap-southeast-2";
+      };
+
       staging = {
         sso_start_url = "https://educationperfect.awsapps.com/start";
         sso_account_id = "495236377314";
