@@ -60,7 +60,6 @@ in
 
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
-    fira-code
   ];
 
   programs = {

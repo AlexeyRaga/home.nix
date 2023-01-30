@@ -20,7 +20,10 @@ in
 
   environment = {
     shells = [ pkgs.zsh ];
-    systemPackages = with pkgs; [ nixpkgs-fmt ];
+    systemPackages = [
+      pkgs.nixpkgs-fmt
+      # (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
+    ];
   };
 
   # Used for backwards compatibility, please read the changelog before changing.
