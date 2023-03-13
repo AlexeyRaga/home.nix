@@ -43,7 +43,8 @@
 
       "google-chrome"
       "nosql-workbench"
-      # "altair-graphql-client"
+      "altair-graphql-client"
+      "graphql-playground"
       "cloudflare-warp"
     ];
 

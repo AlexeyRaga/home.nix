@@ -91,6 +91,15 @@ in
     lf.enable = true;
   };
 
+  # services.colima = {
+  #   enable = false;
+
+  #   config = {
+  #     cpu = 1;
+  #   };
+  # };
+
+
   programs.ssh = {
     enable = true;
     matchBlocks = {
