@@ -6,9 +6,37 @@ let
   cfg = config.services.colima;
   requiredPackages = with pkgs; [ colima docker ];
 
-  # myColima = cfg: pkgs.writeShellScript "colima" ''
+  colimaWatcher = cfg:
+    let
+      colimaBin = "${pkgs.colima}/bin/colima";
+      extraDns = lib.concatMapStringsSep " " (x: "--dns='${x}'") cfg.config.network.dns;
+      extraDnsHosts = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "--dns-host='${k}=${v}'") cfg.config.network.dnsHosts);
+    in
+      pkgs.writeShellScript "colima-watcher" ''
+        function cleanup {
+          echo "stopping Colima"
+          ${colimaBin} stop --force
+        }
 
-  # ''
+        trap cleanup EXIT
+
+        ${colimaBin} start \
+        --activate=${boolToString cfg.config.autoActivate} \
+        --cpu=${toString cfg.config.cpu} \
+        --memory=${toString cfg.config.memory} \
+        --network-address=${boolToString cfg.config.network.address} \
+        ${extraDns} \
+        ${extraDnsHosts} \
+        --ssh-agent=${boolToString cfg.config.forwardAgent} \
+        --ssh-config=${boolToString cfg.config.sshConfig} \
+        --verbose
+
+        set -e
+        while true; do
+          ${colimaBin} status > /dev/null 2>&1
+          sleep 5
+        done
+      '';
 
   networkOpts = types.submodule {
     options = {
@@ -111,8 +139,7 @@ in
           StandardOutPath = "/tmp/colima.stdout";
           StandardErrorPath = "/tmp/colima.stderr";
           ProgramArguments = [
-            "${pkgs.colima}/bin/colima"
-            "start"
+            "${colimaWatcher cfg}"
             "--cpu" "${toString cfg.config.cpu}"
           ];
           EnvironmentVariables = {

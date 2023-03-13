@@ -91,13 +91,14 @@ in
     lf.enable = true;
   };
 
-  # services.colima = {
-  #   enable = false;
+  services.colima = {
+    enable = true;
 
-  #   config = {
-  #     cpu = 1;
-  #   };
-  # };
+    config = {
+      cpu = 2;
+      memory = 4;
+    };
+  };
 
 
   programs.ssh = {
