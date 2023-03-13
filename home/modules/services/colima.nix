@@ -132,12 +132,9 @@ in
         enable = true;
 
         config = {
-          KeepAlive = false;
+          KeepAlive = true;
           RunAtLoad = true;
-          LaunchOnlyOnce = true;
           WorkingDirectory = (builtins.getEnv "HOME");
-          StandardOutPath = "/tmp/colima.stdout";
-          StandardErrorPath = "/tmp/colima.stderr";
           ProgramArguments = [
             "${colimaWatcher cfg}"
             "--cpu" "${toString cfg.config.cpu}"
