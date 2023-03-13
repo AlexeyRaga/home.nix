@@ -137,7 +137,6 @@ in
           WorkingDirectory = (builtins.getEnv "HOME");
           ProgramArguments = [
             "${colimaWatcher cfg}"
-            "--cpu" "${toString cfg.config.cpu}"
           ];
           EnvironmentVariables = {
             PATH =
