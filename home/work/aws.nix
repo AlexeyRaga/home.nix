@@ -62,6 +62,14 @@ in
         region = "ap-southeast-2";
       };
 
+      staging-unsafe = {
+        sso_start_url = "https://educationperfect.awsapps.com/start";
+        sso_account_id = "495236377314";
+        sso_role_name = "unsafeterraform";
+        sso_region = "ap-southeast-2";
+        region = "ap-southeast-2";
+      };
+
       live = {
         sso_start_url = "https://educationperfect.awsapps.com/start";
         sso_account_id = "125159634937";
