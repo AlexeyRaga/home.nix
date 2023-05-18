@@ -33,4 +33,15 @@ in
       core = { autocrlf = "input"; };
     };
   };
+
+  secureEnv.onePassword = {
+    enable = true;
+    sessionVariables = {
+      FUSIONAUTH_LICENCE = {
+        vault = "Dev - Shared DevOps";
+        item = "FusionAuth Licences";
+        field = "Non-Production";
+      };
+    };
+  };
 }

@@ -44,6 +44,8 @@
       "altair-graphql-client"
       "graphql-playground"
       "cloudflare-warp"
+
+      "rancher"
     ];
 
     brews = [
