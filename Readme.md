@@ -135,6 +135,7 @@ Example:
   secureEnv.onePassword = {
     enable = true;
     sessionVariables = {
+      # This env variable will be set up for user's session
       GITHUB_TOKEN = {
         vault = "Private";
         item = "Github";
@@ -142,20 +143,15 @@ Example:
       };
     };
     sshKeys = {
-      # the IDs may be found from `op list items`
-      test_ec2_keypair = {
-        vault = "Dev - Shared DevOps";
-        item = "wrmpodmfm2k6rijjj5dimhrnwq";
-        field = "notes";
-      };
+      # These keys will be set up for SSH
       staging_pem = {
         vault = "Dev - Shared DevOps";
-        item = "uhpvoujfk2wgu7kpqrdc2heaby";
+        item = "staging-ssh-key";
         field = "notes";
       };
-      loadtest01_pem = {
+      test_pem = {
         vault = "Dev - Shared DevOps";
-        item = "nztr4zuyig4jhac47tfgbo6vn4";
+        item = "test-ssh-key";
         field = "notes";
       };
     };
@@ -203,28 +199,24 @@ AWS can have statically defined profiles, and SAML profiles (using Google as ID 
       };
     };
 
-    googleStsProfile = {
-      name = "default";
-      spId = "1111111111111";
-      idpId = "A11a1aa1a";
-      accounts = {
-        test = {
-          accountId = "123456789012";
-          roles = [ "admin" "read-only" ];
-        };
-        prod = {
-          accountId = "210987654321";
-          roles = [ "admin" "read-only" "terraform" ];
-        };
+    ssoProfiles = {
+      test = {
+        sso_start_url = "https://my-company.awsapps.com/start";
+        sso_account_id = "123456789012";
+        sso_role_name = "admin";
+        sso_region = "ap-southeast-2";
+        region = "ap-southeast-2";
+      };
+
+      prod = {
+        sso_start_url = "https://my-company.awsapps.com/start";
+        sso_account_id = "210987654321";
+        sso_role_name = "admin";
+        sso_region = "ap-southeast-2";
+        region = "ap-southeast-2";
       };
     };
   };
 ```
 
-When `tools.aws.googleStsProfile` is defined, `aws-switch` command becomes available and it allows to switch between accounts in the configured profile via CLI:
-
-```bash
-$ aws-switch test admin
-```
-
-`aws-switch` has `Zsh` completion module, so `<TAB>` should help with the command line parameters.
+When `ssoProfiles` are defined, an AWS SDK `aws sso login --profile <name>` command can be used to log in to AWS.
