@@ -28,7 +28,6 @@
       "openvpn-connect"
       "postman"
       "rider"
-      "intellij-idea"
       "jetbrains-toolbox"
       "webstorm"
       "skype"
@@ -40,9 +39,6 @@
       "warp" # new terminal
 
       "google-chrome"
-      "nosql-workbench"
-      "altair-graphql-client"
-      "graphql-playground"
       "cloudflare-warp"
 
       "rancher"
