@@ -18,6 +18,7 @@
     docker
     docker-credential-helpers
     duf # better df
+    gdu # better du
     fd # better find
     moreutils
     # procs # better ps
