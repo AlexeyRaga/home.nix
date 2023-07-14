@@ -85,6 +85,18 @@ Make changes to the configuration files and run `darwin-rebuild switch` to updat
 If `Homebrew` is installed, this configuration will manage `Homebrew` packages via [darwin/apps.nix](./darwin/apps.nix) file.
 Use [darwin/apps.nix](./darwin/apps.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
 
+## Your system configuration
+
+A couple of entry points to tune your config:
+
+- [home/packages.nix](./home/packages.nix) - Packages to install
+- [home/default.nix](./home/default.nix) - Your main home "configuration": what programs and services are enabled, how shell is set up, etc.
+
+MacOS specific:
+
+- [darwin/preferences.nix](./darwin/preferences.nix) - Global MacOS preferences and settings
+- [darwin/apps.nix](./darwin/apps.nix) - Applications to install via Homebrew
+- [darwin/dock.nix](./darwin/dock.nix) - Configure your dock
 
 ## Modules overview
 

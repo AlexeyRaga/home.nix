@@ -120,10 +120,6 @@ in
     enable = true;
   };
 
-  tools.spacevim = {
-    enable = false;
-  };
-
   tools.git = {
     enable = true;
     userName = secrets.github.fullName;
