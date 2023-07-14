@@ -29,7 +29,6 @@
       "postman"
       "rider"
       "jetbrains-toolbox"
-      "webstorm"
       "skype"
       "slack"
       "sublime-text"

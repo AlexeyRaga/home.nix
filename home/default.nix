@@ -136,7 +136,7 @@ in
     enable = true;
     enableCompletion = true;
     enableAutosuggestions = true;
-    enableSyntaxHighlighting = true;
+    syntaxHighlighting.enable = true;
     # history.extended = true;
 
     # this is to workaround zsh syntax highlighting slowness on copy/paste
@@ -149,6 +149,16 @@ in
       {
         name = "fast-syntax-highlighting";
         src = "${pkgs.zsh-fast-syntax-highlighting}/share/zsh/site-functions";
+      }
+      {
+        name = "powerlevel10k";
+        src = pkgs.zsh-powerlevel10k;
+        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+      }
+      {
+        name = "powerlevel10k-config";
+        src = lib.cleanSource ./config/p10k;
+        file = "p10k.zsh";
       }
     ];
 
@@ -163,8 +173,7 @@ in
         "github"
         "z"
       ];
-      #theme = "frozencow";
-      theme = "robbyrussell";
+      # theme = "robbyrussell";
     };
   };
 

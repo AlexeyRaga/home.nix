@@ -27,6 +27,12 @@ in
       casks = [ "iterm2" ];
     };
 
+    targets.darwin.plists = {
+      "Library/Preferences/com.googlecode.iterm2.plist" = {
+        "'New Bookmarks':0:'Normal Font'" = "FiraCodeNFM-Reg 12";
+      };
+    };
+
     # Initialise Shell Integration
     programs.bash.interactiveShellInit = ''
       # Initialise iTerm2 integration
