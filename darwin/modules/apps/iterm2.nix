@@ -18,7 +18,26 @@ let
 
 in
 {
-  options.darwin.apps.iterm2 = { enable = mkEnableOption "Enable iTerm2 - the best terminal for MacOS"; };
+  options.darwin.apps.iterm2 = {
+    enable = mkEnableOption "Enable iTerm2 - the best terminal for MacOS";
+
+    font = mkOption {
+      type = types.str;
+      default = "FiraCodeNFM-Reg 12";
+    };
+
+    columns = mkOption {
+      type = types.ints.positive;
+      default = 150;
+      description = "Terminal window size (horizontal)";
+    };
+
+    rows = mkOption {
+      type = types.ints.positive;
+      default = 40;
+      description = "Terminal window size (vertical)";
+    };
+  };
 
   config = mkIf enabled {
     # Install iTerm2 from Homebrew
@@ -29,7 +48,9 @@ in
 
     targets.darwin.plists = {
       "Library/Preferences/com.googlecode.iterm2.plist" = {
-        "'New Bookmarks':0:'Normal Font'" = "FiraCodeNFM-Reg 12";
+        "New Bookmarks:0:Normal Font" = cfg.font;
+        "New Bookmarks:0:Columns" = toString cfg.columns;
+        "New Bookmarks:0:Rows" = toString cfg.rows;
       };
     };
 
