@@ -27,6 +27,11 @@
     watch
     wget
 
+    scc # better cloc - code stats
+    diff-so-fancy # better diff
+    hyperfine # benchmark command
+
+
     mediainfo
     libmediainfo
     difftastic
