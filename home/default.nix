@@ -154,7 +154,7 @@ in
       {
         name = "powerlevel10k-config";
         src = lib.cleanSource ./config/p10k;
-        file = "p10k.zsh";
+        file = "p10k-classic.zsh";
       }
     ];
 
