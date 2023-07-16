@@ -21,30 +21,33 @@
     casks = [
       "1password"
       "brave-browser" # better chrome
+      "cheatsheet"
+      "cloudflare-warp"
       "discord"
-      "telegram"
       "dropbox"
+      "google-chrome"
+      "jetbrains-toolbox"
       "licecap" # animated screenshots
       "openvpn-connect"
       "postman"
+      "rancher"
       "rider"
-      "jetbrains-toolbox"
       "skype"
       "slack"
       "sublime-text"
+      "telegram"
       "visual-studio-code"
       "vlc"
-      "zoom"
       "warp" # new terminal
-
-      "google-chrome"
-      "cloudflare-warp"
-
-      "rancher"
+      "zoom"
     ];
 
     brews = [
 
     ];
+
+    masApps = {
+      Magnet = 441258766;
+    };
   };
 }
