@@ -23,7 +23,6 @@ in
   config = mkIf enabled {
     # Install VSCode from Homebrew
     homebrew = {
-      taps = [ "homebrew/cask" ];
       casks = [ "visual-studio-code" ];
     };
 

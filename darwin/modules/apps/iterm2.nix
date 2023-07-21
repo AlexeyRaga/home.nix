@@ -42,7 +42,6 @@ in
   config = mkIf enabled {
     # Install iTerm2 from Homebrew
     homebrew = {
-      taps = [ "homebrew/cask" ];
       casks = [ "iterm2" ];
     };
 

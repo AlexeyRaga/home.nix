@@ -11,7 +11,6 @@ in
 
   config = mkIf enabled {
     homebrew = {
-      taps = [ "homebrew/cask" ];
       casks = [ "raycast" ];
     };
 
