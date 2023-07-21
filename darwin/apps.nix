@@ -48,14 +48,6 @@
   homebrew = {
     enable = true;
 
-    global.brewfile = true;
-    onActivation.cleanup = "zap";
-
-    taps = [
-      "homebrew/cask"
-      "homebrew/core"
-    ];
-
     casks = [
       "1password"
       "brave-browser" # better chrome
@@ -86,5 +78,13 @@
     masApps = {
       Magnet = 441258766;
     };
+
+    global.brewfile = true;
+    onActivation.cleanup = "zap";
+
+    taps = [
+      "homebrew/cask"
+      "homebrew/core"
+    ];
   };
 }
