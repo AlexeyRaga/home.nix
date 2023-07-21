@@ -5,6 +5,14 @@ with lib;
 {
   tools.aws = {
     ssoProfiles = {
+      ecr = {
+        sso_start_url = "https://educationperfect.awsapps.com/start";
+        sso_account_id = "058337015204 ";
+        sso_role_name = "readonly";
+        sso_region = "ap-southeast-2";
+        region = "ap-southeast-2";
+      };
+
       test = {
         sso_start_url = "https://educationperfect.awsapps.com/start";
         sso_account_id = "327162508743";
@@ -67,6 +75,14 @@ with lib;
         sso_role_name = "admin";
         sso_region = "ap-southeast-2";
         region = "ap-southeast-2";
+      };
+
+      canada = {
+        sso_start_url = "https://educationperfect.awsapps.com/start";
+        sso_account_id = "176806616083";
+        sso_role_name = "admin";
+        sso_region = "ap-southeast-2";
+        region = "ca-central-1";
       };
     };
 
