@@ -1,3 +1,4 @@
+/* Main user-level configuration */
 { config, lib, pkgs, ... }:
 
 let
@@ -9,15 +10,20 @@ in
   programs.home-manager.enable = true;
 
   nixpkgs.config.allowUnfree = true;
+
   nixpkgs.overlays = [
+    # sometimes it is useful to pin a version of some tool or program.
+    # this can be done in "overlays/pinned.nix"
     (import ../overlays/pinned.nix)
   ];
 
+  # Flakes are not standard yet, but widely used, enable them.
   xdg.configFile."nix/nix.conf".text = ''
       experimental-features = nix-command flakes
   '';
 
   imports = [
+    # Programs to install
     ./packages.nix
 
     # everything for work
@@ -104,12 +110,6 @@ in
 
   programs.ssh = {
     enable = true;
-    matchBlocks = {
-      "remarkable" = {
-        user = "root";
-        hostname = "10.11.99.1";
-      };
-    };
   };
 
   tools.aws = {
@@ -128,7 +128,7 @@ in
     githubUser = secrets.github.userName;
   };
 
-  ### ZSH (TODO: Move to a module)
+  ### ZSH (TODO: Maybe Mmve to a module?)
   programs.zsh = {
     enable = true;
     enableCompletion = true;

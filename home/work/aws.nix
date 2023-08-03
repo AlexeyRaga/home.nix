@@ -101,23 +101,4 @@ with lib;
     #   };
     # };
   };
-
-  # ssh config for EC2 tools instances
-  programs.ssh = {
-    enable = true;
-    matchBlocks = {
-      "test-linux-tools" = {
-        user = "ubuntu";
-        hostname = "10.0.5.60";
-      };
-      "staging-linux-tools" = {
-        user = "ubuntu";
-        hostname = "10.0.2.101";
-      };
-      "live-linux-tools" = {
-        user = "ubuntu";
-        hostname = "10.0.3.87";
-      };
-    };
-  };
 }

@@ -6,35 +6,44 @@
   ];
 
   home.packages = with pkgs; [
+    tree
     broot # better tree
 
     clang
+
+    delta # diff stuff, https://github.com/dandavison/delta
+    difftastic # A structural diff that understands syntax.
+    diff-so-fancy # better diff
+
     curl
+    wget
     # curlie
-    delta
-    httpie
-    xh
+    httpie # HTTP requests tool, Python
+    xh # Friendly and fast tool for sending HTTP requests, written in Rust
 
     docker
     docker-credential-helpers
+    dive # docker images exploration, https://github.com/wagoodman/dive
+
     duf # better df
     gdu # better du
     fd # better find
+
     moreutils
     # procs # better ps
     ripgrep # better grep
-    tree
+    ack # find in files, grep-ish, https://linux.die.net/man/1/ack
+
     watch
-    wget
+
+    jq
+    jqp #jq playground, https://github.com/noahgorstein/jqp
 
     scc # better cloc - code stats
-    diff-so-fancy # better diff
-    hyperfine # benchmark command
 
+    hyperfine # benchmark command
 
     mediainfo
     libmediainfo
-    difftastic
-
   ];
 }

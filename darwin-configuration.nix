@@ -1,3 +1,11 @@
+/* Global MacOS configuration using nix-darwin (https://github.com/LnL7/nix-darwin).
+ * Sets up minimal required system-level configuration, such as
+ * Darwin-specific modules, certificates, etc.
+ *
+ * Also enables Home Manager.
+ * Home Manager is used for the rest of user-level configuration.
+ * Home Manager configuratio is located in ./home folder.
+ */
 { config, pkgs, lib, ... }:
 let
   modules = import ./lib/modules.nix {inherit lib;};
@@ -6,6 +14,8 @@ in
   documentation.enable = false;
 
   nixpkgs.overlays = [
+    # sometimes it is useful to pin a version of some tool or program.
+    # this can be done in "overlays/pinned.nix"
     (import ./overlays/pinned.nix)
   ];
 
@@ -30,11 +40,13 @@ in
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  # set up current user
   users.users.${config.user.name} = {
     name = config.user.name;
     home = config.user.home;
   };
 
+  # and enable home manager for the current user
   home-manager = {
     useUserPackages = true;
     users.${config.user.name} = import ./home {
@@ -56,7 +68,6 @@ in
   nix = {
     # package = pkgs.nix;
     package = pkgs.nixUnstable;
-    # package = pkgs.nix26;
 
     settings = {
       max-jobs = 12;
@@ -75,11 +86,6 @@ in
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
-
-    # You should generally set this to the total number of logical cores in your system.
-
-
-
   };
 }
 
