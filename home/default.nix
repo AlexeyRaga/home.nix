@@ -114,7 +114,6 @@ in
 
   tools.aws = {
     enable = true;
-    credentials = secrets.aws.credentials;
   };
 
   tools.dotnet = {
