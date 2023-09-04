@@ -40,6 +40,7 @@
         "redhat.vscode-yaml"
         "streetsidesoftware.avro"
         "vscode-icons-team.vscode-icons"
+        "yzhang.markdown-all-in-one"
         "zxh404.vscode-proto3"
       ];
     };
@@ -53,11 +54,13 @@
       "brave-browser" # better chrome
       "cheatsheet"
       "cloudflare-warp"
+      "cursor"
       "discord"
       "dropbox"
       "google-chrome"
       "jetbrains-toolbox"
       "licecap" # animated screenshots
+      "notion"
       "openvpn-connect"
       "postman"
       "rancher"
