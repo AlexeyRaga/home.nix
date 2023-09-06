@@ -48,6 +48,10 @@ in
   config = mkIf cfg.enable {
     home.packages = [ dotnet-env ];
 
+    home.sessionPath = [
+      "$HOME/.dotnet/tools"
+    ];
+
     home.sessionVariables = {
       DOTNET_ROOT="${dotnet-env}";
     };
