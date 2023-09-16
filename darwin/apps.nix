@@ -4,6 +4,7 @@
   darwin.apps = {
     raycast.enable = true;
     iterm2.enable = true;
+    rancher.enable = true;
 
     vscode = {
       enable = true;
@@ -63,7 +64,6 @@
       "notion"
       "openvpn-connect"
       "postman"
-      "rancher"
       "rider"
       "skype"
       "slack"
