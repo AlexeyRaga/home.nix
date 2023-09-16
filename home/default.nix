@@ -77,10 +77,16 @@ in
     bottom.enable = true;
     vim.enable = true;
 
-    lsd = {
+    eza = {
       enable = true;
       enableAliases = true;
+      extraOptions = [
+        "--group-directories-first"
+        "--header"
+      ];
     };
+
+    lsd.enable = true;
 
     direnv = {
       enable = true;

@@ -29,6 +29,11 @@ in
       userName = cfg.userName;
       userEmail = cfg.userEmail;
 
+      difftastic = {
+        enable = true;
+        display = "side-by-side"; # one of "side-by-side", "side-by-side-show-both", "inline"
+      };
+
       extraConfig = {
         # core = { autocrlf = false; };
         github.user = cfg.githubUser;
