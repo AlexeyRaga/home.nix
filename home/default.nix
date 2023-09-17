@@ -146,6 +146,10 @@ in
       zstyle ':bracketed-paste-magic' active-widgets '.self-*'
     '';
 
+    shellAliases = {
+      whereis = "function _whereis() { which \"$1\" | xargs realpath; }; _whereis";
+    };
+
     plugins = [
       {
         name = "fast-syntax-highlighting";
