@@ -72,10 +72,15 @@ in
   programs = {
     lazygit.enable = true;
     bat.enable = true;
+    navi.enable = true;
     jq.enable = true;
     htop.enable = true;
     bottom.enable = true;
     vim.enable = true;
+
+    skim = {
+      enable = true;
+    };
 
     eza = {
       enable = true;
@@ -112,24 +117,17 @@ in
     };
   };
 
+  tools = {
+    aws.enable = true;
+    dotnet.enable = true;
+    skim.enable = true;
 
-  programs.ssh = {
-    enable = true;
-  };
-
-  tools.aws = {
-    enable = true;
-  };
-
-  tools.dotnet = {
-    enable = true;
-  };
-
-  tools.git = {
-    enable = true;
-    userName = secrets.github.fullName;
-    userEmail = secrets.github.userEmail;
-    githubUser = secrets.github.userName;
+    git = {
+      enable = true;
+      userName = secrets.github.fullName;
+      userEmail = secrets.github.userEmail;
+      githubUser = secrets.github.userName;
+    };
   };
 
   ### ZSH (TODO: Maybe Mmve to a module?)
