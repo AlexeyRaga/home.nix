@@ -32,6 +32,7 @@ in
     shells = [ pkgs.zsh ];
     systemPackages = [
       pkgs.nixpkgs-fmt
+      # (import (fetchTarball https://install.devenv.sh/latest)).default
       # (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
     ];
   };

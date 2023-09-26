@@ -62,7 +62,6 @@
       "jetbrains-toolbox"
       "licecap" # animated screenshots
       "notion"
-      "openvpn-connect"
       "postman"
       "rider"
       "skype"
