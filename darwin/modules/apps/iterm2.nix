@@ -50,6 +50,7 @@ in
         "New Bookmarks:0:Normal Font" = cfg.font;
         "New Bookmarks:0:Columns" = toString cfg.columns;
         "New Bookmarks:0:Rows" = toString cfg.rows;
+        "New Bookmarks:0:Silence Bell" = "1";
       };
     };
 

@@ -5,6 +5,7 @@
     raycast.enable = true;
     iterm2.enable = true;
     rancher.enable = true;
+    cloudflare-warp.enable = true;
 
     vscode = {
       enable = true;
@@ -54,7 +55,7 @@
       "1password"
       "brave-browser" # better chrome
       "cheatsheet"
-      "cloudflare-warp"
+      # "cloudflare-warp"
       "cursor"
       "discord"
       "dropbox"
