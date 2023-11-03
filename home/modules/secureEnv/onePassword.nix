@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.secureEnv.onePassword;
+  requiredPackages = with pkgs; [ _1password ];
 
   storePasswordCmd = namespace: key: value: comment:
     if pkgs.stdenv.hostPlatform.isDarwin then
@@ -84,6 +85,8 @@ in
   };
 
   config = mkIf (cfg.enable && (cfg.sessionVariables != { } || cfg.sshKeys != { })) {
+    home.packages = requiredPackages;
+
     home.activation.passwordsToKeychain = hm.dag.entryAfter [ "writeBoundary" ] ''
       noteEcho "Populating keychain from 1Password";
       $DRY_RUN_CMD ${populateSecrets cfg.namespace cfg.sessionVariables cfg.sshKeys}

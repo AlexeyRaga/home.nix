@@ -7,7 +7,6 @@
 
   home.packages = with pkgs; [
     tree
-    broot # better tree
 
     clang
 
@@ -36,7 +35,6 @@
 
     watch
 
-    jq
     jqp #jq playground, https://github.com/noahgorstein/jqp
 
     scc # better cloc - code stats

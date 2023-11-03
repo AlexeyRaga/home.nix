@@ -56,7 +56,6 @@
       "1password"
       "brave-browser" # better chrome
       "cheatsheet"
-      # "cloudflare-warp"
       "cursor"
       "discord"
       "dropbox"
@@ -71,7 +70,6 @@
       "sublime-text"
       "telegram"
       "vlc"
-      "warp" # new terminal
       "zoom"
     ];
 

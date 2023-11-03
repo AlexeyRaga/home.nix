@@ -62,9 +62,8 @@ in
   };
 
   fonts.fontconfig.enable = true;
-  home.packages = with pkgs; [
-    _1password
 
+  home.packages = with pkgs; [
     # fonts
     (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
   ];
@@ -78,6 +77,8 @@ in
     bottom.enable = true;
     vim.enable = true;
 
+    broot.enable = true; # better tree
+
     skim = {
       enable = true;
     };
@@ -90,8 +91,6 @@ in
         "--header"
       ];
     };
-
-    lsd.enable = true;
 
     direnv = {
       enable = true;
