@@ -11,6 +11,7 @@
       enable = true;
       extensions = [
         "AdamCaviness.theme-monokai-dark-soda"
+        "GitHub.copilot"
         "GraphQL.vscode-graphql"
         "GraphQL.vscode-graphql-syntax"
         "Intility.vscode-backstage"
