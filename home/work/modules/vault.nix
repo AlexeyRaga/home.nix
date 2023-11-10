@@ -15,8 +15,6 @@ CURRENT_NETWORK_NAME=$(echo "$NETWORKS" | grep -A 1 "ID: $CURRENT_NETWORK" | gre
 
 echo "Currently connected to: $CURRENT_NETWORK_NAME ($CURRENT_NETWORK)"
 
-[[ $CURRENT_NETWORK_NAME =~ ^([^-]+)(-?([^-]+).*)?-vnet$ ]]
-
 if [[ $CURRENT_NETWORK_NAME =~ ^([^-]+)(-?([^-]+).*)?-vnet$ ]]; then
     if [ "''${BASH_REMATCH[1]}" == "live" ]; then
         BASE_DOMAIN="educationperfect.com"
