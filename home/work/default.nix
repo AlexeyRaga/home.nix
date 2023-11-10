@@ -1,3 +1,5 @@
+{ config, lib, pkgs, ... }:
+
 let
   secrets = import ./secrets;
   epNugetSource = {
@@ -6,11 +8,12 @@ let
     password = secrets.github.token;
   };
 
+  modules = import ../../lib/modules.nix {inherit lib;};
 in
 {
   imports = [
     ./aws.nix
-  ];
+  ] ++ (modules.importAllModules ./modules);
 
   home = {
     sessionVariables = {

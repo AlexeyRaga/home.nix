@@ -34,7 +34,7 @@ EOF
         warp-cli disconnect > /dev/null
         ;;
       *)
-        warp-cli get-virtual-networks | grep -B1 "Name: $1" | head -n 1 | cut -d' ' -f2 | xargs warp-cli set-virtual-network
+        warp-cli vnet | grep -B1 "Name: $1" | head -n 1 | cut -d' ' -f2 | xargs warp-cli set-virtual-network
         warp-cli connect > /dev/null
         ;;
     esac
@@ -44,7 +44,7 @@ EOF
     #compdef warp-switch
     _warp_cli_get_virtual_networks() {
       local -a subnet_names
-      subnet_names=($(warp-cli get-virtual-networks | grep 'Name: ' | cut -d' ' -f2 | grep -v "default"))
+      subnet_names=($(warp-cli vnet | grep 'Name: ' | cut -d' ' -f2 | grep -v "default"))
       compadd $subnet_names
     }
 
