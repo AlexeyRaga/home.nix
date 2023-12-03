@@ -17,7 +17,7 @@
     curl
     wget
     # curlie
-    httpie # HTTP requests tool, Python
+    # httpie # HTTP requests tool, Python
     xh # Friendly and fast tool for sending HTTP requests, written in Rust
 
     docker
