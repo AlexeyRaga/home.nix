@@ -51,7 +51,7 @@ EOF
         warp-cli disconnect > /dev/null
         ;;
       *)
-        warp-cli vnet | grep -B1 "Name: $1" | head -n 1 | cut -d' ' -f2 | xargs warp-cli set-virtual-network
+        warp-cli vnet | grep -B1 "Name: $1" | head -n 1 | cut -d' ' -f2 | xargs warp-cli vnet
         warp-cli connect > /dev/null
         ;;
     esac
