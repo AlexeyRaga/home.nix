@@ -6,6 +6,7 @@ let
   cfg = config.tools.dotnet;
 
   dotnet-env = with pkgs; with dotnetCorePackages; combinePackages [
+    sdk_8_0
     sdk_7_0
   ];
 
