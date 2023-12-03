@@ -14,6 +14,23 @@ let
       destination = "${path}";
     };
 
+  warpVnetShow = pkgs.writeShellScriptBin "warp-show" ''
+warp-cli status | grep -q "Disconnected" && exit 0 || true
+
+NETWORKS=$(warp-cli vnet)
+
+CURRENT_NETWORK=$(echo "$NETWORKS" | grep 'Currently selected' | awk '{print $NF}')
+
+if [ -z "$CURRENT_NETWORK" ]; then
+    echo "You are currently not connected to any VPN"
+    exit 1
+fi
+
+CURRENT_NETWORK_NAME=$(echo "$NETWORKS" | grep -A 1 "ID: $CURRENT_NETWORK" | grep 'Name:' | awk '{print $NF}')
+
+echo $CURRENT_NETWORK_NAME
+  '';
+
   warpSwitch = pkgs.writeShellScriptBin "warp-switch" ''
     case "''${1,,}" in
       "" | "help" | "--help" | "-h" | "-help" | "/?" | "/help")
@@ -61,6 +78,7 @@ in
 
     environment.systemPackages = [
       warpSwitch
+      warpVnetShow
       warpSwitchCompletion
       ];
 
