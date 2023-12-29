@@ -24,21 +24,21 @@ let
 
   populateSecrets = namespace: variables: sshKeys:
     let
-      opGetItem = vault: field: item: ''
-        ${pkgs._1password}/bin/op read --session $token 'op://${vault}/${item}/${field}'
+      opGetItem = account: vault: field: item: ''
+        ${pkgs._1password}/bin/op read --account '${account}' 'op://${vault}/${item}/${field}'
       '';
 
       syncOneVariable = key: item: ''
-        echo >&2 "  Setting ${key} <- ${item.vault}.${item.item}.${item.field}"
-        password=$(${opGetItem item.vault item.field item.item})
+        echo >&2 "  Setting ${key} <- ${item.account}/${item.vault}/${item.item}/${item.field}"
+        password=$(${opGetItem item.account item.vault item.field item.item})
         ${storePasswordCmd namespace key "$password" "Password from ${item.vault}.${item.item}.${item.field}"}
       '';
 
       syncAllVariables = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOneVariable items);
 
       syncOneKey = key: item: ''
-        echo >&2 "  Adding ssh-key ${key} <- ${item.vault}.${item.item}.${item.field}"
-        sshKey=$(${opGetItem item.vault item.field item.item})
+        echo >&2 "  Adding ssh-key ${key} <- ${item.account}/${item.vault}/${item.item}/${item.field}"
+        sshKey=$(${opGetItem item.account item.vault item.field item.item})
         ${storeSshKeyCmd "$sshKey"}
       '';
 
@@ -46,9 +46,9 @@ let
     in
     pkgs.writeShellScript "populateKeys" ''
       set -e
-      token=$(${pkgs._1password}/bin/op signin --raw)
       ${syncAllVariables variables}
       ${syncAllKeys sshKeys}
+      ${pkgs._1password}/bin/op signout --all
     '';
 in
 {
@@ -64,6 +64,7 @@ in
     sessionVariables = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
+          account = mkOption { type = types.str; };
           vault = mkOption { type = types.str; };
           item = mkOption { type = types.str; };
           field = mkOption { type = types.str; };
@@ -75,6 +76,7 @@ in
     sshKeys = mkOption {
       type = types.attrsOf (types.submodule {
         options = {
+          account = mkOption { type = types.str; };
           vault = mkOption { type = types.str; };
           item = mkOption { type = types.str; };
           field = mkOption { type = types.str; };

@@ -149,6 +149,7 @@ Example:
     sessionVariables = {
       # This env variable will be set up for user's session
       GITHUB_TOKEN = {
+        account = "my.1password.com";
         vault = "Private";
         item = "Github";
         field = "token";
@@ -157,11 +158,13 @@ Example:
     sshKeys = {
       # These keys will be set up for SSH
       staging_pem = {
+        account = "mycompany.1password.com";
         vault = "Dev - Shared DevOps";
         item = "staging-ssh-key";
         field = "notes";
       };
       test_pem = {
+        account = "mycompany.1password.com";
         vault = "Dev - Shared DevOps";
         item = "test-ssh-key";
         field = "notes";

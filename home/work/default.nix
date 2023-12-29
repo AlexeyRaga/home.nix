@@ -41,6 +41,7 @@ in
     enable = true;
     sessionVariables = {
       FUSIONAUTH_LICENCE = {
+        account = "educationperfect.1password.com";
         vault = "Dev - Shared DevOps";
         item = "FusionAuth Licences";
         field = "Non-Production";
