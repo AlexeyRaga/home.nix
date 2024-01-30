@@ -14,11 +14,16 @@ in
       casks = [ "raycast" ];
     };
 
+    system.keyboard.shortcuts = {
+      enable = true;
+      spotlight.search.enable = false;
+    };
+
     targets.darwin.plists = {
       # Disable Spotlight hotkey
-      # "Library/Preferences/com.apple.symbolichotkeys.plist" = {
-      #   "AppleSymbolicHotKeys:64:enabled" = false;
-      # };
+      "Library/Preferences/com.raycast.macos.plist" = {
+        "raycastGlobalHotkey" = "Command-49";
+      };
     };
   };
 }

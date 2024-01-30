@@ -29,7 +29,6 @@
         "hashicorp.terraform"
         "haskell.haskell"
         "jnoortheen.nix-ide"
-        "joaompinto.vscode-graphviz"
         "justusadam.language-haskell"
         "kmoritak.vscode-mermaid-snippets"
         "ms-azuretools.vscode-docker"
@@ -39,7 +38,6 @@
         "ms-dotnettools.vscodeintellicode-csharp"
         "ms-vscode-remote.remote-containers"
         "ms-vscode.makefile-tools"
-        "ms-vsliveshare.vsliveshare-pack"
         "redhat.vscode-yaml"
         "streetsidesoftware.avro"
         "vscode-icons-team.vscode-icons"
@@ -85,8 +83,6 @@
     onActivation.cleanup = "zap";
 
     taps = [
-      "homebrew/cask"
-      "homebrew/core"
     ];
   };
 }

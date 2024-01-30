@@ -9,6 +9,9 @@
       AppleInterfaceStyle = "Dark";
       AppleShowAllExtensions = true;
 
+      InitialKeyRepeat = 20;
+      KeyRepeat = 2;
+
       # Configures the trackpad tab behavior. Mode 1 enables tap to click.
       "com.apple.mouse.tapBehavior" = 1;
 
