@@ -28,6 +28,11 @@ in
 
   programs.zsh.enable = true;
 
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
+
   environment = {
     shells = [ pkgs.zsh ];
     systemPackages = [

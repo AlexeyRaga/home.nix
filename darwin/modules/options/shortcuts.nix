@@ -280,8 +280,6 @@ in
         with open(sys.argv[1], 'rb') as f:
           updates = json.load(f)
 
-        print(json.dumps(updates, indent=2))
-
         plist['AppleSymbolicHotKeys'].update(updates)
 
         with open(path, 'wb') as f:

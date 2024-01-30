@@ -173,6 +173,8 @@ darwin_build() {
   echo
   echo "> darwin-rebuild switch"
   echo
+  warn "It is highly recommended to restart the computer after the first 'darwin-rebuild switch'"
+  warn "to make sure that all the system changes are applied correctly."
 }
 
 sudo_prompt
