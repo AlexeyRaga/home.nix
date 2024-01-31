@@ -107,14 +107,14 @@ in
     lf.enable = true;
   };
 
-  services.colima = {
-    enable = false;
+  # services.colima = {
+  #   enable = false;
 
-    config = {
-      cpu = 4;
-      memory = 4;
-    };
-  };
+  #   config = {
+  #     cpu = 4;
+  #     memory = 4;
+  #   };
+  # };
 
   tools = {
     aws.enable = true;
@@ -186,9 +186,20 @@ in
   home.stateVersion = "21.05";
 
   targets.darwin.defaults = {
+    NSGlobalDomain = {
+      AppleShowAllExtensions = true;
+
+      InitialKeyRepeat = 20;
+      KeyRepeat = 2;
+    };
+
     "com.apple.desktopservices" = {
         DSDontWriteNetworkStores = true;
         DSDontWriteUSBStores = true;
       };
+
+    "com.apple.driver.AppleBluetoothMultitouch.mouse" = {
+      MouseButtonMode = "TwoButton";
+    };
   };
 }

@@ -7,10 +7,6 @@
     # See https://github.com/LnL7/nix-darwin/blob/master/modules/system/defaults/NSGlobalDomain.nix
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
-      AppleShowAllExtensions = true;
-
-      InitialKeyRepeat = 20;
-      KeyRepeat = 2;
 
       # Configures the trackpad tab behavior. Mode 1 enables tap to click.
       "com.apple.mouse.tapBehavior" = 1;
@@ -34,6 +30,10 @@
       Clicking = true;
       # Whether to enable trackpad right click. Default is false.
       TrackpadRightClick = true;
+    };
+
+    magicmouse = {
+      MouseButtonMode = "TwoButton";
     };
 
     # See https://github.com/LnL7/nix-darwin/blob/master/modules/system/defaults/finder.nix
