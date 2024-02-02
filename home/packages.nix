@@ -22,6 +22,7 @@
 
     docker
     docker-credential-helpers
+    lazydocker
     dive # docker images exploration, https://github.com/wagoodman/dive
 
     duf # better df
