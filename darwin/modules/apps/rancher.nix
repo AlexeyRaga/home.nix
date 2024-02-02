@@ -15,8 +15,21 @@ let
     application = {
       adminAccess = false;
       pathManagementStrategy = "manual";
+      autoStart = true;
+      startInBackground = true;
+      
       window = {
         quitOnClose = false;
+      };
+
+      telemetry = {
+        enabled = false;
+      };
+
+      extensions = {
+        installed = {
+          "julianb90/tachometer" = "0.0.3";
+        };
       };
     };
 
