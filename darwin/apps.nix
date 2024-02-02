@@ -61,6 +61,7 @@
       "jetbrains-toolbox"
       "licecap" # animated screenshots
       "notion"
+      "notion-calendar"
       "postman"
       "rider"
       "skype"
