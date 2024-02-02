@@ -28,7 +28,7 @@ let
 
       extensions = {
         installed = {
-          "docker/resource-usage-extension" = "1.0.3"
+          "docker/resource-usage-extension" = "1.0.3";
         };
       };
     };
