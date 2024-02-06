@@ -69,6 +69,7 @@
       "sublime-text"
       "telegram"
       "vlc"
+      "warp" # AI-enabled terminal
       "zoom"
     ];
 
