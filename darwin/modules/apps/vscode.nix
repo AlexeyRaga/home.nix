@@ -7,16 +7,26 @@ let
   cfg = config.darwin.apps.vscode;
 
   codeBin = ''/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'';
+  settingsFile = ''${config.user.home}/Library/Application Support/Code/User/settings.json'';
 
-in
+  defaultSettings = {
+    workbench.colorTheme = "Default Dark Modern";
+    workbench.iconTheme = "vscode-icons";
+    git.autofetch = true;
+    editor.fontFamily = "'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace";
+    editor.fontLigatures = true;
+    editor.fontSize = 12;
+  };
+
+in 
 {
   options.darwin.apps.vscode = {
     enable = mkEnableOption "Enable VSCode";
 
-    extensions =  mkOption {
-       type = types.listOf types.str;
-       default = [];
-       description = "List of required extensions";
+    extensions = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = "List of required extensions";
     };
   };
 
@@ -29,33 +39,38 @@ in
     system.activationScripts.postUserActivation.text =
       let currentBundleContent = builtins.concatStringsSep "\n" (lib.lists.unique (lib.lists.sort (a: b: a < b) cfg.extensions));
       in ''
-      normalColor="$(tput sgr0)"
-      noteColor="$(tput bold)$(tput setaf 6)"
+        normalColor="$(tput sgr0)"
+        noteColor="$(tput bold)$(tput setaf 6)"
 
-      bundle_file="$HOME/.vscode/extensions/extensions.nix.bundle"
+        if [ ! -e "${settingsFile}" ]; then
+          echo "''${noteColor}VSCode: Writing default settings.json''${normalColor}"
+          $DRY_RUN_CMD echo '${builtins.toJSON defaultSettings}' > "${settingsFile}"
+        fi
 
-      # Sort the arrays and remove duplicates
-      installed_exts=$(${codeBin} --list-extensions | sort -u)
-      wanted_exts="${currentBundleContent}"
+        bundle_file="$HOME/.vscode/extensions/extensions.nix.bundle"
 
-      [ -f "$bundle_file" ] && bundled_exts=$(cat $bundle_file | sort -u) || bundled_exts=""
+        # Sort the arrays and remove duplicates
+        installed_exts=$(${codeBin} --list-extensions | sort -u)
+        wanted_exts="${currentBundleContent}"
 
-      to_install=( $(comm -23 <(echo "$wanted_exts") <(echo "$installed_exts")) )
+        [ -f "$bundle_file" ] && bundled_exts=$(cat $bundle_file | sort -u) || bundled_exts=""
 
-      # Find elements that are in both stored_exts and installed_exts but not in wanted_exts
-      to_remove=($(comm -23 <(echo "$bundled_exts") <(echo "$wanted_exts") | comm -12 <(echo "$installed_exts") -))
+        to_install=( $(comm -23 <(echo "$wanted_exts") <(echo "$installed_exts")) )
 
-      echo "''${noteColor}Setting VSCode extensions''${normalColor}"
+        # Find elements that are in both stored_exts and installed_exts but not in wanted_exts
+        to_remove=($(comm -23 <(echo "$bundled_exts") <(echo "$wanted_exts") | comm -12 <(echo "$installed_exts") -))
 
-      if [ ''${#to_install[@]} -gt 0 ]; then
-        $DRY_RUN_CMD ${codeBin} ''${to_install[*]/#/--install-extension }
-      fi
+        echo "''${noteColor}VSCode: Setting extensions''${normalColor}"
 
-      if [ ''${#to_remove[@]} -gt 0 ]; then
-        $DRY_RUN_CMD ${codeBin} ''${to_remove[*]/#/--uninstall-extension }
-      fi
+        if [ ''${#to_install[@]} -gt 0 ]; then
+          $DRY_RUN_CMD ${codeBin} ''${to_install[*]/#/--install-extension }
+        fi
 
-      echo "${currentBundleContent}" > $bundle_file
-    '';
+        if [ ''${#to_remove[@]} -gt 0 ]; then
+          $DRY_RUN_CMD ${codeBin} ''${to_remove[*]/#/--uninstall-extension }
+        fi
+
+        echo "${currentBundleContent}" > $bundle_file
+      '';
   };
 }
