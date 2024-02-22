@@ -10,13 +10,13 @@ let
   rancherConfigPath = "${config.user.home}/Library/Preferences/rancher-desktop";
 
   # Rancher desktop properties that we care about
-  rancherInitConfig = {
+  rancherInitConfig = cfg: {
     version = 10;
     application = {
       adminAccess = false;
       pathManagementStrategy = "manual";
-      autoStart = true;
-      startInBackground = true;
+      autoStart = cfg.autoStart;
+      startInBackground = cfg.startInBackground;
       
       window = {
         quitOnClose = false;
@@ -38,29 +38,109 @@ let
     };
 
     virtualMachine = {
-      memoryInGB = 6;
-      numberCPUs = 2;
-      hostResolver =  true;
+      memoryInGB = cfg.memoryInGb;
+      numberCPUs = cfg.numberCPUs;
+      hostResolver =  cfg.hostResolver;
     };
 
     experimental = {
       virtualMachine = {
-        type = "vz";
-        useRosetta = true;
+        type = cfg.virtualMachine.type;
+        useRosetta = cfg.virtualMachine.useRosetta;
+        mount = {
+          type = cfg.virtualMachine.mountType;
+        };
       };
     };
 
     kubernetes = {
-      enabled = false;
+      enabled = cfg.kubernetes.enabled;
       options = {
-        traefik = false;
+        traefik = cfg.kubernetes.traefik;
       };
     };
   };
 
+  virtualMachineOptions = types.submodule {
+    options = {
+      type = mkOption {
+        type = types.enum [ "vz" "qemu" ];
+        default = "vz";
+        description = "Type of virtual machine to use";
+      };
+      useRosetta = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Use Rosetta for the virtual machine";
+      };
+
+      mountType = mkOption {
+        type = types.enum [ "reverse-sshfs" "virtiofs" "9p" ];
+        default = "virtiofs";
+        description = "Type of mount to use";
+      };
+    };
+  };
+
+  kubernetesOptions = types.submodule {
+    options = {
+      enabled = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable Kubernetes support";
+      };
+      traefik = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable Traefik";
+      };
+    };
+  };
 in
 {
-  options.darwin.apps.rancher = { enable = mkEnableOption "Enable Rancher Desktop (replaces Docker Desktop)"; };
+  options.darwin.apps.rancher = { 
+    enable = mkEnableOption "Enable Rancher Desktop (replaces Docker Desktop)"; 
+
+    autoStart = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Automatically start Rancher Desktop when the user logs in";
+    };
+
+    startInBackground = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Start Rancher Desktop in the background";
+    };
+    
+    memoryInGb = mkOption {
+      type = types.int;
+      default = 6;
+      description = "Amount of memory in Gb to allocate to the virtual machine";
+    };
+
+    numberCPUs = mkOption {
+      type = types.int;
+      default = 2;
+      description = "Number of CPUs to allocate to the virtual machine";
+    };
+
+    hostResolver = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Enable host resolver for the virtual machine";
+    };
+
+    virtualMachine = mkOption {
+      type = virtualMachineOptions;
+      default = {};
+    };
+
+    kubernetes = mkOption {
+      type = kubernetesOptions;
+      default = {};
+    };
+  };
 
   config = mkIf enabled {
     homebrew = {
@@ -78,7 +158,7 @@ in
       settingsFile="${rancherConfigPath}/settings.json"
       if [ ! -e "$settingsFile" ]; then
         # File does not exist, create it
-        $DRY_RUN_CMD echo '${builtins.toJSON rancherInitConfig}' > "$settingsFile"
+        $DRY_RUN_CMD echo '${builtins.toJSON (rancherInitConfig cfg)}' > "$settingsFile"
       fi
     '';
   };

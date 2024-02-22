@@ -4,7 +4,10 @@
   darwin.apps = {
     raycast.enable = true;
     iterm2.enable = true;
-    rancher.enable = true;
+    rancher = {
+      enable = true;
+      hostResolver = false;
+    };
     cloudflare-warp.enable = true;
 
     vscode = {
