@@ -20,7 +20,6 @@ in
       EP_NUGET_SOURCE_URL = epNugetSource.url;
       EP_NUGET_SOURCE_USER = epNugetSource.userName;
       EP_NUGET_SOURCE_PASS = epNugetSource.password;
-      EP_NPM_TOKEN = secrets.npmToken;
     };
   };
 
@@ -45,6 +44,13 @@ in
         vault = "Dev - Shared DevOps";
         item = "FusionAuth Licences";
         field = "Non-Production";
+      };
+
+      EP_NPM_TOKEN = {
+        account = "educationperfect.1password.com";
+        vault = "Dev - Shared";
+        item = "EP_NPM_TOKEN read";
+        field = "token";
       };
     };
   };
