@@ -62,12 +62,14 @@
       "discord"
       "dropbox"
       "google-chrome"
+      "iina" # modern video player
       "jetbrains-toolbox"
       "licecap" # animated screenshots
       "notion"
       "notion-calendar"
       "postman"
       "rider"
+      "shottr" # screenshot tool
       "skype"
       "slack"
       "sublime-text"
