@@ -72,7 +72,7 @@ in
     lazygit.enable = true;
     bat.enable = true;
     navi.enable = true;
-    jq.enable = true;
+jq.enable = true;
     htop.enable = true;
     bottom.enable = true;
     vim.enable = true;
@@ -119,6 +119,13 @@ in
     aws.enable = true;
     dotnet.enable = true;
     skim.enable = true;
+
+    # Comparable to jq / yq, but supports JSON, YAML, TOML, XML and CSV with zero runtime dependencies.
+    dasel = {
+      enable = true;
+      enableBashIntegration = true;
+      enableZshIntegration = true;
+    };
 
     git = {
       enable = true;

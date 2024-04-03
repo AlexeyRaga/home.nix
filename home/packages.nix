@@ -36,7 +36,8 @@
 
     watch
 
-    jqp #jq playground, https://github.com/noahgorstein/jqp
+    jqp # jq playground, https://github.com/noahgorstein/jqp
+    fx # Terminal JSON viewer & processor, https://fx.wtf/
 
     scc # better cloc - code stats
 
@@ -44,5 +45,8 @@
 
     mediainfo
     libmediainfo
+
+    youtube-dl
+    youtube-tui
   ];
 }
