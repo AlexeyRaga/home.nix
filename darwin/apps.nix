@@ -77,6 +77,7 @@
       "vlc"
       "warp" # AI-enabled terminal
       "zoom"
+      "mitmproxy"
     ];
 
     brews = [
