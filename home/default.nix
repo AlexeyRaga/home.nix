@@ -171,6 +171,7 @@ jq.enable = true;
       plugins = [
         "aws"
         "dirhistory"
+        "docker-compose"
         "git-extras"
         "git"
         "gitfast"
