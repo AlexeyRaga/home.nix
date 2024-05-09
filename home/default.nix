@@ -72,7 +72,7 @@ in
     lazygit.enable = true;
     bat.enable = true;
     navi.enable = true;
-jq.enable = true;
+    jq.enable = true;
     htop.enable = true;
     bottom.enable = true;
     vim.enable = true;

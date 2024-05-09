@@ -6,6 +6,8 @@
   ];
 
   home.packages = with pkgs; [
+    devenv
+    
     tree
 
     clang
