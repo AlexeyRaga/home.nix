@@ -73,7 +73,7 @@ in
 
   nix = {
     # package = pkgs.nix;
-    package = pkgs.git;
+    # package = pkgs.nixUnstable;
 
     settings = {
       max-jobs = 12;
