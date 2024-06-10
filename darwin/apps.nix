@@ -68,6 +68,7 @@
       "notion"
       "notion-calendar"
       "postman"
+      "hoppscotch" # postman alternative
       "rider"
       "shottr" # screenshot tool
       "skype"
