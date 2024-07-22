@@ -16,6 +16,7 @@
     difftastic # A structural diff that understands syntax.
     diff-so-fancy # better diff
 
+    aria2 # multiprotocol downloader: HTTP/HTTPS/FTP/SFTP/BitTorrent/Metalink
     curl
     wget
     # curlie
