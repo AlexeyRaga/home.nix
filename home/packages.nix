@@ -48,7 +48,6 @@
     mediainfo
     libmediainfo
 
-    youtube-dl
-    youtube-tui
+    yt-dlp
   ];
 }

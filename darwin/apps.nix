@@ -64,6 +64,7 @@
       "google-chrome"
       "iina" # modern video player
       "jetbrains-toolbox"
+      "intellij-idea"
       "licecap" # animated screenshots
       "notion"
       "notion-calendar"
