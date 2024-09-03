@@ -41,6 +41,7 @@
 
     jqp # jq playground, https://github.com/noahgorstein/jqp
     fx # Terminal JSON viewer & processor, https://fx.wtf/
+    duckdb # https://duckdb.org/ SQL to CSV, TSV and many APIs
 
     scc # better cloc - code stats
 
