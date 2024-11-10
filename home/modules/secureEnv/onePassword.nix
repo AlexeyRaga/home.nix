@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.secureEnv.onePassword;
-  requiredPackages = with pkgs; [ _1password ];
+  requiredPackages = with pkgs; [ _1password-cli ];
 
   storePasswordCmd = namespace: key: value: comment:
     if pkgs.stdenv.hostPlatform.isDarwin then
@@ -25,7 +25,7 @@ let
   populateSecrets = namespace: variables: sshKeys:
     let
       opGetItem = account: vault: field: item: ''
-        ${pkgs._1password}/bin/op read --account '${account}' 'op://${vault}/${item}/${field}'
+        ${pkgs._1password-cli}/bin/op read --account '${account}' 'op://${vault}/${item}/${field}'
       '';
 
       syncOneVariable = key: item: ''
@@ -48,7 +48,7 @@ let
       set -e
       ${syncAllVariables variables}
       ${syncAllKeys sshKeys}
-      ${pkgs._1password}/bin/op signout --all
+      ${pkgs._1password-cli}/bin/op signout --all
     '';
 in
 {
