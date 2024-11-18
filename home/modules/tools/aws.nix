@@ -20,14 +20,14 @@ let
     options = {
       sso_account_id = mkOption { type = types.str; description = "AWS Account ID"; };
       sso_role_name = mkOption { type = types.str; description = "Role name"; };
-      region = mkOption { type = types.str; description = "AWS Region to use for this profile"; };
+      region = mkOption { type = types.nullOr types.str; description = "AWS Region to use for this profile"; default = null;};
       output = mkOption { type = types.str; default = "json"; };
     };
   };
 
   ssoSessionType = types.submodule {
     options = {
-      sso_startUrl = mkOption { type = types.str; description = "SSO Start URL: https://xxxx.awsapps.com/start"; };
+      sso_start_url = mkOption { type = types.str; description = "SSO Start URL: https://xxxx.awsapps.com/start"; };
       sso_region = mkOption { type = types.str; description = "AWS Region to use for SSO"; };
       sso_registration_scopes = mkOption { type = types.str; default = "sso:account:access"; };
       profiles = mkOption { type = types.attrsOf ssoSessionProfileType; default = {}; };
@@ -51,9 +51,7 @@ in
     enable = mkEnableOption "Enable AWS CLI and profiles";
 
     credentials = mkOption {
-      # type = types.attrsOf (types.oneOf [ plainCredentialsType ssoProfileType] );
       type = types.attrsOf plainCredentialsType;
-      # type = types.attrsOf (ssoProfileType);
       default = { };
     };
 
@@ -81,7 +79,10 @@ in
         let
           rmAttr = name: attrs: lib.attrsets.filterAttrs (n: v: n != name) attrs;
           mkProfile = extra: profile:
-            lib.mapAttrs' (name: value: { name = "profile ${name}"; value = extra // value; }) profile;
+            lib.mapAttrs' (name: value: { 
+              name = "profile ${name}"; 
+              value = extra // lib.filterAttrs (_: v: v != null) value; 
+            }) profile;
 
           toCredProcess = file: { credential_process = ''sh -c "cat ${file} | ${readCredentials}"''; };
 
@@ -92,7 +93,7 @@ in
             let
               header = "sso-session ${name}";
               session = (rmAttr "profiles" value);
-              profiles = mkProfile { sso_session = name; } value.profiles;
+              profiles = mkProfile { sso_session = name; region = value.sso_region; } value.profiles;
             in
               { ${header} = session; } // profiles ) cfg.sessions;
 
