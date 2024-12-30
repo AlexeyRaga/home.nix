@@ -65,7 +65,9 @@ in
 
   home.packages = with pkgs; [
     # fonts
-    (nerdfonts.override { fonts = [ "FiraCode" "FiraMono" "FantasqueSansMono" ]; })
+    nerd-fonts.fira-code
+    nerd-fonts.fira-mono
+    nerd-fonts.fantasque-sans-mono
   ];
 
   programs = {
