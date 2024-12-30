@@ -13,7 +13,7 @@ let
     workbench.colorTheme = "Default Dark Modern";
     workbench.iconTheme = "vscode-icons";
     git.autofetch = true;
-    editor.fontFamily = "'FiraCode Nerd Font', Menlo, Monaco, 'Courier New', monospace";
+    editor.fontFamily = "'FiraCode Nerd Font Mono', Menlo, Monaco, 'Courier New', monospace";
     editor.fontLigatures = true;
     editor.fontSize = 12;
   };
