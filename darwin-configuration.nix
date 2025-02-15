@@ -62,10 +62,6 @@ in
     };
   };
 
-  services = {
-    nix-daemon.enable = true;
-  };
-
   # nixpkgs.config.allowBroken = true;
   nixpkgs.config.allowUnfree = true;
 
