@@ -102,6 +102,7 @@
       "vlc"
       "warp" # AI-enabled terminal
       "zoom"
+      "zed" # code editor
       "mitmproxy"
       "MonitorControl"
     ];
