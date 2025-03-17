@@ -197,9 +197,6 @@ in
       hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" ${magnetConfigPath})
       commands='${jsonCommands}'
 
-      echo "$hconfig" > /tmp/1/orig.json
-      echo "$commands" > /tmp/1/commands.json
-
       jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
         $data1 as $orig |
         $data2 as $cmds |

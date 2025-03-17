@@ -104,7 +104,6 @@
       "zoom"
       "zed" # code editor
       "mitmproxy"
-      "MonitorControl"
     ];
 
     brews = [
