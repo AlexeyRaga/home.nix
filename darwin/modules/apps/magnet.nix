@@ -212,7 +212,7 @@ in
 
         # Add all entries without ids from commands.json
         ($cmds | map(select(.id? | not)))
-    ' > /tmp/1/res.json
+    ' > /tmp/magnet.json
     '';
   };
 }
