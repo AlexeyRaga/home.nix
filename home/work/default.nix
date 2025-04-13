@@ -49,7 +49,7 @@ in
       EP_NPM_TOKEN = {
         account = "educationperfect.1password.com";
         vault = "Dev - Shared";
-        item = "EP_NPM_TOKEN read";
+        item = "NPM readonly token";
         field = "token";
       };
     };
