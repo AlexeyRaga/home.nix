@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 
 with lib;
 
@@ -6,7 +6,7 @@ let
   enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
   cfg = config.darwin.apps.magnet;
 
-  magnetConfigPath = "${config.user.home}/Library/Preferences/com.crowdcafe.windowmagnet.plist";
+  magnetConfigPath = "${userConfig.home}/Library/Preferences/com.crowdcafe.windowmagnet.plist";
 
   carbonKeyCodes = {
     "A" = 0; "S" = 1; "D" = 2; "F" = 3; "H" = 4; "G" = 5; "Z" = 6; "X" = 7; "C" = 8;
@@ -191,7 +191,7 @@ in
       };
     };
 
-    system.activationScripts.postUserActivation.text = 
+    system.activationScripts.postActivation.text = 
       let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
     in ''
       hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" ${magnetConfigPath})

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 
 with lib;
 
@@ -7,7 +7,7 @@ let
   cfg = config.darwin.apps.vscode;
 
   codeBin = ''/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'';
-  settingsFile = ''${config.user.home}/Library/Application Support/Code/User/settings.json'';
+  settingsFile = ''${userConfig.home}/Library/Application Support/Code/User/settings.json'';
 
   defaultSettings = {
     workbench.colorTheme = "Default Dark Modern";
@@ -36,18 +36,26 @@ in
       casks = [ "visual-studio-code" ];
     };
 
-    system.activationScripts.postUserActivation.text =
+    system.activationScripts.postActivation.text =
       let currentBundleContent = builtins.concatStringsSep "\n" (lib.lists.unique (lib.lists.sort (a: b: a < b) cfg.extensions));
       in ''
-        normalColor="$(tput sgr0)"
-        noteColor="$(tput bold)$(tput setaf 6)"
+        # Use tput if available and TERM is set, otherwise use empty colors
+        # Set a default TERM if not set to avoid tput errors
+        export TERM="${TERM:-dumb}"
+        if [ "$TERM" != "dumb" ] && command -v tput >/dev/null 2>&1 && tput sgr0 >/dev/null 2>&1; then
+          normalColor="$(tput sgr0)"
+          noteColor="$(tput bold)$(tput setaf 6)"
+        else
+          normalColor=""
+          noteColor=""
+        fi
 
         if [ ! -e "${settingsFile}" ]; then
           echo "''${noteColor}VSCode: Writing default settings.json''${normalColor}"
           $DRY_RUN_CMD echo '${builtins.replaceStrings ["'"] ["'\"'"] (builtins.toJSON defaultSettings)}' > "${settingsFile}"
         fi
 
-        bundle_file="$HOME/.vscode/extensions/extensions.nix.bundle"
+        bundle_file="${userConfig.home}/.vscode/extensions/extensions.nix.bundle"
 
         # Sort the arrays and remove duplicates
         installed_exts=$(${codeBin} --list-extensions | sort -u)

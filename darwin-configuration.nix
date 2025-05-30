@@ -1,17 +1,11 @@
-/* Global MacOS configuration using nix-darwin (https://github.com/LnL7/nix-darwin).
- * Sets up minimal required system-level configuration, such as
- * Darwin-specific modules, certificates, etc.
- *
- * Also enables Home Manager.
- * Home Manager is used for the rest of user-level configuration.
- * Home Manager configuratio is located in ./home folder.
- */
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, userConfig, ... }:
 let
   modules = import ./lib/modules.nix {inherit lib;};
 in
 {
   documentation.enable = false;
+  nixpkgs.hostPlatform = "aarch64-darwin";
+  system.primaryUser = userConfig.name;
 
   nixpkgs.overlays = [
     # sometimes it is useful to pin a version of some tool or program.
@@ -19,12 +13,10 @@ in
     (import ./overlays/pinned.nix)
   ];
 
-
   imports = [
     ./certificates.nix
-    ./users.nix
-    <home-manager/nix-darwin>
-  ] ++ (modules.importAllModules ./darwin);
+  ] ++ (modules.importAllModules ./darwin) ++ (modules.importAppModules "install" ./brews);
+
 
   programs.zsh.enable = true;
 
@@ -35,11 +27,7 @@ in
 
   environment = {
     shells = [ pkgs.zsh ];
-    systemPackages = [
-      pkgs.nixpkgs-fmt
-      # (import (fetchTarball https://install.devenv.sh/latest)).default
-      # (import (fetchTarball https://github.com/cachix/devenv/archive/v0.5.tar.gz)).default
-    ];
+    systemPackages = [ pkgs.nixpkgs-fmt ];
   };
 
   # Used for backwards compatibility, please read the changelog before changing.
@@ -47,19 +35,9 @@ in
   system.stateVersion = 4;
 
   # set up current user
-  users.users.${config.user.name} = {
-    name = config.user.name;
-    home = config.user.home;
-  };
-
-  # and enable home manager for the current user
-  home-manager = {
-    useUserPackages = true;
-    users.${config.user.name} = import ./home {
-      inherit config;
-      inherit pkgs;
-      inherit lib;
-    };
+  users.users.${userConfig.name} = {
+    name = userConfig.name;
+    home = userConfig.home;
   };
 
   # nixpkgs.config.allowBroken = true;

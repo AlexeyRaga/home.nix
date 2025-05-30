@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  # App configurations are now in brews/shared-config.nix and imported automatically
+
   darwin.apps = {
     raycast.enable = true;
     iterm2.enable = true;

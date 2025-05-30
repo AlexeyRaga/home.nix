@@ -62,4 +62,30 @@ rec {
     map fn paths;
 
   importAllModules = dir: mapModulesRec' dir import;
+  
+  # Import app modules with appMode parameter
+  importAppModules = appMode: dir: 
+    mapModulesRec' dir (path: 
+      { config, lib, pkgs, userConfig ? {}, ... }@args:
+        let
+          # Inline helper functions to avoid path resolution issues
+          appHelpers = {
+            modeSwitchMap = mode: configMap:
+              let
+                validModes = attrNames configMap;
+              in
+              if hasAttr mode configMap then configMap.${mode}
+              else throw "Invalid appMode: ${mode}. Valid modes: ${concatStringsSep ", " validModes}";
+              
+            modeSwitch = mode: installConfig: configureConfig:
+              if mode == "install" then installConfig
+              else if mode == "configure" then configureConfig  
+              else throw "Invalid appMode: ${mode}. Must be 'install' or 'configure'";
+          };
+        in
+        import path (args // { 
+          appMode = appMode; 
+          appHelpers = appHelpers; 
+        })
+    );
 }

@@ -32,7 +32,7 @@ in {
       source ${pkgs.dasel}/share/bash-completion/completions/dasel.bash
     '';
 
-    programs.zsh.initExtra = mkIf cfg.enableZshIntegration ''
+    programs.zsh.initContent = mkIf cfg.enableZshIntegration ''
       source ${pkgs.dasel}/share/zsh/site-functions/_dasel
     '';
 

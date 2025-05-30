@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 {
   system.defaults.dock = {
     # Whether to automatically hide and show the Dock. Default is false.
@@ -33,7 +33,7 @@
     # "Others" section in Dock (the one after the bar, where the Bin sits).
     others = [
       ({ path = "/Applications"; })
-      ({ path = "${config.user.home}/Downloads"; sort = "dateadded"; view = "fan"; })
+      ({ path = "${userConfig.home}/Downloads"; sort = "dateadded"; view = "fan"; })
     ];
   };
 }

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 
 with lib;
 
@@ -7,7 +7,7 @@ let
   cfg = config.darwin.apps.rancher;
 
   # where the Rancher Desktop config is going to be initialised
-  rancherConfigPath = "${config.user.home}/Library/Preferences/rancher-desktop";
+  rancherConfigPath = "${userConfig.home}/Library/Preferences/rancher-desktop";
 
   # Rancher desktop properties that we care about
   rancherInitConfig = cfg: {
@@ -153,7 +153,7 @@ in
     };
 
     # Seed the config file if it doesn't yet exist
-    system.activationScripts.postUserActivation.text = ''
+    system.activationScripts.postActivation.text = ''
       $DRY_RUN_CMD mkdir -p ${rancherConfigPath}
       settingsFile="${rancherConfigPath}/settings.json"
       if [ ! -e "$settingsFile" ]; then

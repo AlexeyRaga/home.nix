@@ -101,7 +101,7 @@ in
   };
 
   config = mkIf enabled {
-    system.activationScripts.postUserActivation.text = ''
+    system.activationScripts.postActivation.text = ''
       $DRY_RUN_CMD defaults import com.apple.dock ${plistFile}
       $DRY_RUN_CMD /usr/bin/killall Dock
     '';

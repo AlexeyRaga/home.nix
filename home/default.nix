@@ -1,8 +1,7 @@
 /* Main user-level configuration */
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 
 let
-  secrets = import ./secrets;
   modules = import ../lib/modules.nix {inherit lib;};
 in
 {
@@ -22,30 +21,29 @@ in
       experimental-features = nix-command flakes
   '';
 
-  imports = [
-    # Programs to install
+  imports = [    
     ./packages.nix
-
-    # everything for work
     ./work
-  ] ++ (modules.importAllModules ./modules);
+  ] ++ (modules.importAllModules ./modules) ++ (modules.importAppModules "configure" ../brews);
 
-  # secureEnv.onePassword = {
-  #   enable = true;
-  #   sessionVariables = {
-  #     GITHUB_TOKEN = {
-  #       vault = "Private";
-  #       item = "Github Token";
-  #       field = "password";
-  #     };
-  #   };
-  # };
+  # App configurations are now in brews/shared-config.nix and imported automatically
+
+  secureEnv.onePassword = {
+    enable = true;
+    
+    sessionVariables = {
+      PRIVATE_GITHUB_TOKEN = {
+        account = "my.1password.com";
+        vault = "Private";
+        item = "Github Token";
+        field = "password";
+      };
+    };
+  };
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
-    username = config.user.name;
-    homeDirectory = config.user.home;
     wallpaper.file = ./config/wallpaper/drwho-macos.jpeg;
 
     sessionVariables = {
@@ -131,9 +129,11 @@ in
 
     git = {
       enable = true;
-      userName = secrets.github.fullName;
-      userEmail = secrets.github.userEmail;
-      githubUser = secrets.github.userName;
+      userName = userConfig.fullName;
+      userEmail = userConfig.email;
+      githubUser = userConfig.githubUser;
+
+      workspaces = userConfig.gitWorkspaces;
     };
   };
 
@@ -147,7 +147,7 @@ in
 
     # this is to workaround zsh syntax highlighting slowness on copy/paste
     # https://github.com/zsh-users/zsh-syntax-highlighting/issues/295#issuecomment-214581607
-    initExtra = ''
+    initContent = ''
       zstyle ':bracketed-paste-magic' active-widgets '.self-*'
     '';
 
