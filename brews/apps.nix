@@ -69,6 +69,10 @@
     enable = true;
   };
 
+  brews.raycast = {
+    enable = true;
+  };
+
   # Add other shared app configurations here as needed
   # brews.someOtherApp = {
   #   enable = true;

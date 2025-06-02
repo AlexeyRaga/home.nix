@@ -4,7 +4,6 @@
   # App configurations are now in brews/shared-config.nix and imported automatically
 
   darwin.apps = {
-    raycast.enable = true;
     magnet = {
       enable = true;
 
