@@ -16,20 +16,12 @@ in
       default = "Hello, World!";
       description = "Custom greeting message";
     };
-
-    # Internal option for homebrew configuration
-    homebrew = mkOption {
-      type = types.attrs;
-      default = {};
-      internal = true;
-      description = "Homebrew configuration for this app";
-    };
   };
 
   config = mkIf cfg.enable (helpers.modeSwitchMap appMode {
     # Install mode: Darwin/homebrew configuration
     install = {
-      brews.hello.homebrew = {
+      homebrew = {
         brews = [ "hello" ];
       };
     };
