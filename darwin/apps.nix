@@ -3,30 +3,6 @@
 {
   # App configurations are now in brews/shared-config.nix and imported automatically
 
-  darwin.apps = {
-    magnet = {
-      enable = true;
-
-      commands = [
-        {
-          name = "Top Left Two Thirds";
-          id = "D902DA03-47FB-40D5-8015-3499A9EB167E";
-          shortcut = [ "Cmd" "CTRL" "." ];
-          targetArea = {
-            area = {
-              segments = [
-                {
-                  id = "5DD6FE34-866B-4127-9219-346433F8AAA1";
-                  frame = [ [0 0] [8 8] ];
-                }
-              ];
-            };
-          };
-        }
-      ];
-    };
-  };
-
   homebrew = {
     enable = true;
 

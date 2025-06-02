@@ -1,12 +1,11 @@
-{ config, lib, pkgs, userConfig, ... }:
+{ config, lib, pkgs, appMode ? "install", appHelpers ? null, ... }:
 
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.magnet;
-
-  magnetConfigPath = "${userConfig.home}/Library/Preferences/com.crowdcafe.windowmagnet.plist";
+  cfg = config.brews.magnet;
+  # Import appHelpers if not provided as parameter
+  helpers = if appHelpers != null then appHelpers else import ../../lib/app-helpers.nix { inherit lib; };
 
   carbonKeyCodes = {
     "A" = 0; "S" = 1; "D" = 2; "F" = 3; "H" = 4; "G" = 5; "Z" = 6; "X" = 7; "C" = 8;
@@ -174,7 +173,7 @@ let
 
 in 
 {
-  options.darwin.apps.magnet = {
+  options.brews.magnet = {
     enable = mkEnableOption "Enable Magnet - window manager for MacOS";
 
     commands = mkOption {
@@ -184,35 +183,52 @@ in
     };
   };
 
-  config = mkIf enabled {
-    homebrew = {
-      masApps = {
-        Magnet = 441258766;
+  config = mkIf cfg.enable (
+    helpers.modeSwitchMap appMode {
+      # Install mode: Darwin/homebrew configuration
+      install = {
+        homebrew = {
+          masApps = {
+            Magnet = 441258766;
+          };
+        };
       };
-    };
 
-    system.activationScripts.postActivation.text = 
-      let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
-    in ''
-      hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" ${magnetConfigPath})
-      commands='${jsonCommands}'
+      # Configure mode: Home-manager configuration  
+      configure = {
+        # Home-manager activation script for magnet configuration
+        home.activation.configureMagnet = lib.hm.dag.entryAfter [ "writeBoundary" ] 
+          (let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
+        in ''
+          CONFIG_PATH="$HOME/Library/Preferences/com.crowdcafe.windowmagnet.plist"
+          DEBUG_FILE="$HOME/.cache/magnet-debug.json"
+          
+          # Create cache directory if it doesn't exist
+          mkdir -p "$HOME/.cache"
+          
+          hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" $CONFIG_PATH)
+          commands='${jsonCommands}'
 
-      jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
-        $data1 as $orig |
-        $data2 as $cmds |
+          jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
+            $data1 as $orig |
+            $data2 as $cmds |
 
-        ($orig | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $orig_by_id |
-        ($cmds | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $commands_by_id |
+            ($orig | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $orig_by_id |
+            ($cmds | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $commands_by_id |
+            
+            # Merge orig.json, replacing entries with the same id with commands.json
+            ($orig | map(if .id? and $commands_by_id[.id] then $commands_by_id[.id] else . end)) +
+            
+            # Add new entries from commands.json with id not in orig.json
+            ($cmds | map(select(.id? and (.id as $id | $orig_by_id[$id] | not)))) +
+
+            # Add all entries without ids from commands.json
+            ($cmds | map(select(.id? | not)))
+        ' > "$DEBUG_FILE"
         
-        # Merge orig.json, replacing entries with the same id with commands.json
-        ($orig | map(if .id? and $commands_by_id[.id] then $commands_by_id[.id] else . end)) +
-        
-        # Add new entries from commands.json with id not in orig.json
-        ($cmds | map(select(.id? and (.id as $id | $orig_by_id[$id] | not)))) +
-
-        # Add all entries without ids from commands.json
-        ($cmds | map(select(.id? | not)))
-    ' > /tmp/magnet.json
-    '';
-  };
+        echo "Magnet configuration written to: $DEBUG_FILE"
+        '');
+      };
+    }
+  );
 }
