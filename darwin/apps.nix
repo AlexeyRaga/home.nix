@@ -5,7 +5,6 @@
 
   darwin.apps = {
     raycast.enable = true;
-    iterm2.enable = true;
     magnet = {
       enable = true;
 
@@ -27,8 +26,6 @@
         }
       ];
     };
-
-    cloudflare-warp.enable = true;
   };
 
   homebrew = {

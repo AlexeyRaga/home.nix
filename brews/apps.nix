@@ -61,6 +61,14 @@
     hostResolver = false;
   };
 
+  brews.cloudflare-warp = {
+    enable = true;
+  };
+
+  brews.iterm2 = {
+    enable = true;
+  };
+
   # Add other shared app configurations here as needed
   # brews.someOtherApp = {
   #   enable = true;

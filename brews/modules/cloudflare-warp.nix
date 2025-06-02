@@ -1,10 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, appMode ? "install", appHelpers ? null, ... }:
 
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.cloudflare-warp;
+  cfg = config.brews.cloudflare-warp;
+  # Import appHelpers if not provided as parameter
+  helpers = if appHelpers != null then appHelpers else import ../../lib/app-helpers.nix { inherit lib; };
 
   writeScriptDir = path: text:
     pkgs.writeTextFile {
@@ -60,22 +61,31 @@ EOF
   '';
 in
 {
-  options.darwin.apps.cloudflare-warp = { enable = mkEnableOption "Enable Cloudflare Warp"; };
-
-  config = mkIf enabled {
-    homebrew = {
-      casks = [ "cloudflare-warp" ];
-    };
-
-    environment.systemPackages = [
-      warpSwitch
-      warpVnetShow
-      warpSwitchCompletion
-      ];
-
-    environment.variables = {
-
-    };
-
+  options.brews.cloudflare-warp = { 
+    enable = mkEnableOption "Enable Cloudflare Warp"; 
   };
+
+  config = mkIf cfg.enable (
+    helpers.modeSwitchMap appMode {
+      # Install mode: Darwin/homebrew configuration
+      install = {
+        homebrew = {
+          casks = [ "cloudflare-warp" ];
+        };
+
+        environment.systemPackages = [
+          warpSwitch
+          warpVnetShow
+          warpSwitchCompletion
+        ];
+
+        environment.variables = {
+
+        };
+      };
+
+      # Configure mode: Home-manager configuration  
+      configure = {};
+    }
+  );
 }
