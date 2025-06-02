@@ -56,6 +56,11 @@
     ];
   };
 
+  brews.rancher = {
+    enable = true;
+    hostResolver = false;
+  };
+
   # Add other shared app configurations here as needed
   # brews.someOtherApp = {
   #   enable = true;

@@ -1,13 +1,11 @@
-{ config, lib, pkgs, userConfig, ... }:
+{ config, lib, pkgs, userConfig ? {}, appMode ? "install", appHelpers ? null, ... }:
 
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.rancher;
-
-  # where the Rancher Desktop config is going to be initialised
-  rancherConfigPath = "${userConfig.home}/Library/Preferences/rancher-desktop";
+  cfg = config.brews.rancher;
+  # Import appHelpers if not provided as parameter
+  helpers = if appHelpers != null then appHelpers else import ../../lib/app-helpers.nix { inherit lib; };
 
   # Rancher desktop properties that we care about
   rancherInitConfig = cfg: {
@@ -98,7 +96,7 @@ let
   };
 in
 {
-  options.darwin.apps.rancher = { 
+  options.brews.rancher = { 
     enable = mkEnableOption "Enable Rancher Desktop (replaces Docker Desktop)"; 
 
     autoStart = mkOption {
@@ -142,24 +140,40 @@ in
     };
   };
 
-  config = mkIf enabled {
-    homebrew = {
-      casks = [ "rancher" ];
-    };
+  config = mkIf cfg.enable (
+    helpers.modeSwitchMap appMode {
+      # Install mode: Darwin/homebrew configuration
+      install = {
+        homebrew = {
+          casks = [ "rancher" ];
+        };
 
-    environment.variables = {
-      # set it so that tools that expect Docker can find it
-      DOCKER_HOST="unix://$HOME/.rd/docker.sock";
-    };
+        environment.variables = {
+          # set it so that tools that expect Docker can find it
+          DOCKER_HOST="unix://$HOME/.rd/docker.sock";
+        };
+      };
 
-    # Seed the config file if it doesn't yet exist
-    system.activationScripts.postActivation.text = ''
-      $DRY_RUN_CMD mkdir -p ${rancherConfigPath}
-      settingsFile="${rancherConfigPath}/settings.json"
-      if [ ! -e "$settingsFile" ]; then
-        # File does not exist, create it
-        $DRY_RUN_CMD echo '${builtins.toJSON (rancherInitConfig cfg)}' > "$settingsFile"
-      fi
-    '';
-  };
+      # Configure mode: Home-manager configuration  
+      configure = {
+        home.sessionVariables = {
+          # set it so that tools that expect Docker can find it
+          DOCKER_HOST = "unix://$HOME/.rd/docker.sock";
+        };
+
+        home.activation.configureRancher = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          # Seed the config file if it doesn't yet exist
+          CONFIG_PATH="$HOME/Library/Preferences/rancher-desktop";
+          settingsFile="$CONFIG_PATH/settings.json"
+          
+          mkdir -p $CONFIG_PATH
+          if [ ! -e "$settingsFile" ]; then
+            # File does not exist, create it
+            echo "Rancher Desktop: Writing initial settings.json"
+            $DRY_RUN_CMD echo '${builtins.toJSON (rancherInitConfig cfg)}' > "$settingsFile"
+          fi
+        '';
+      };
+    }
+  );
 }

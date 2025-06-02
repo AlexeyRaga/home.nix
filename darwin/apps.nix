@@ -6,10 +6,6 @@
   darwin.apps = {
     raycast.enable = true;
     iterm2.enable = true;
-    rancher = {
-      enable = true;
-      hostResolver = false;
-    };
     magnet = {
       enable = true;
 
