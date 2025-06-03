@@ -138,7 +138,7 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       casks = [ "rancher" ];
     };
@@ -149,7 +149,7 @@ in
     };
   };
 
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     home.sessionVariables = {
       # set it so that tools that expect Docker can find it
       DOCKER_HOST = "unix://$HOME/.rd/docker.sock";

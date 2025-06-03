@@ -16,14 +16,14 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       brews = [ "hello" ];
     };
   };
 
     # Configure mode: Home-manager configuration  
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     home.packages = [
       (pkgs.writeShellScriptBin "hello-custom" ''
         echo "${cfg.greeting}"

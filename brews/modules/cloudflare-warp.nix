@@ -63,7 +63,7 @@ in
     enable = mkEnableOption "Enable Cloudflare Warp"; 
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
 
     homebrew = {
       casks = [ "cloudflare-warp" ];

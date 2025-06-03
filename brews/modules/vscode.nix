@@ -28,13 +28,13 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       casks = [ "visual-studio-code" ];
     };
   };
 
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     home.activation.configureVSCode = lib.hm.dag.entryAfter [ "writeBoundary" ] 
       (let currentBundleContent = builtins.concatStringsSep "\n" (lib.lists.unique (lib.lists.sort (a: b: a < b) cfg.extensions));
       in ''

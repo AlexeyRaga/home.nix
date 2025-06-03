@@ -10,7 +10,7 @@ in
     enable = mkEnableOption "Enable Raycast instead of Spotlight"; 
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       casks = [ "raycast" ];
     };
@@ -28,7 +28,7 @@ in
     };
   };
 
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     # Home-manager doesn't handle system keyboard shortcuts or plists
     # These are system-level configurations that only Darwin can manage
   };

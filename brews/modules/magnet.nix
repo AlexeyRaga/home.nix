@@ -181,7 +181,7 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       masApps = {
         Magnet = 441258766;
@@ -189,7 +189,7 @@ in
     };
   };
 
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     # Home-manager activation script for magnet configuration
     home.activation.configureMagnet = lib.hm.dag.entryAfter [ "writeBoundary" ] 
       (let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);

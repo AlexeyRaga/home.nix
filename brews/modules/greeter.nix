@@ -16,13 +16,13 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       brews = [ "hello" ];
     };
   };
 
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     home.file."iamhere.txt".text = "I am here!";
     home.packages = [
       (pkgs.writeShellScriptBin "greeter-custom" ''

@@ -37,7 +37,7 @@ in
     };
   };
 
-  setup = mkIf cfg.enable {
+  systemConfig = mkIf cfg.enable {
       # Install mode: Darwin/homebrew configuration
     homebrew = {
       casks = [ "iterm2" ];
@@ -72,7 +72,7 @@ in
   };
 
       # Configure mode: Home-manager configuration  
-  configure = mkIf cfg.enable {
+  userConfig = mkIf cfg.enable {
     # Shell integration for home-manager
     programs.bash.initExtra = ''
       # Initialise iTerm2 integration
