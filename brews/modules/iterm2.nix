@@ -1,11 +1,9 @@
-{ config, lib, pkgs, userConfig ? {}, appMode ? "install", appHelpers ? null, ... }:
+{ config, lib, pkgs, userConfig ? {}, ... }:
 
 with lib;
 
 let
   cfg = config.brews.iterm2;
-  # Import appHelpers if not provided as parameter
-  helpers = if appHelpers != null then appHelpers else import ../../lib/app-helpers.nix { inherit lib; };
 
   shell_integration = pkgs.fetchFromGitHub {
     name = "iterm2-shell-integration";
@@ -39,61 +37,57 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
-    helpers.modeSwitchMap appMode {
+  setup = mkIf cfg.enable {
       # Install mode: Darwin/homebrew configuration
-      install = {
-        homebrew = {
-          casks = [ "iterm2" ];
-        };
+    homebrew = {
+      casks = [ "iterm2" ];
+    };
 
-        targets.darwin.plists = {
-          "Library/Preferences/com.googlecode.iterm2.plist" = {
-            "New Bookmarks:0:Normal Font" = cfg.font;
-            "New Bookmarks:0:Columns" = toString cfg.columns;
-            "New Bookmarks:0:Rows" = toString cfg.rows;
-            "New Bookmarks:0:Silence Bell" = "1";
-            "New Bookmarks:0:Custom Directory" = "Recycle";
-          };
-        };
-
-        # Initialise Shell Integration
-        programs.bash.interactiveShellInit = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/bash" || true
-          ${aliases}
-        '';
-        programs.fish.interactiveShellInit = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/fish"; or true
-          ${aliases}
-        '';
-        programs.zsh.interactiveShellInit = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/zsh" || true
-          ${aliases}
-        '';
+    targets.darwin.plists = {
+      "Library/Preferences/com.googlecode.iterm2.plist" = {
+        "New Bookmarks:0:Normal Font" = cfg.font;
+        "New Bookmarks:0:Columns" = toString cfg.columns;
+        "New Bookmarks:0:Rows" = toString cfg.rows;
+        "New Bookmarks:0:Silence Bell" = "1";
+        "New Bookmarks:0:Custom Directory" = "Recycle";
       };
+    };
+
+    # Initialise Shell Integration
+    programs.bash.interactiveShellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/bash" || true
+      ${aliases}
+    '';
+    programs.fish.interactiveShellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/fish"; or true
+      ${aliases}
+    '';
+    programs.zsh.interactiveShellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/zsh" || true
+      ${aliases}
+    '';
+  };
 
       # Configure mode: Home-manager configuration  
-      configure = {
-        # Shell integration for home-manager
-        programs.bash.initExtra = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/bash" || true
-          ${aliases}
-        '';
-        programs.fish.shellInit = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/fish"; or true
-          ${aliases}
-        '';
-        programs.zsh.initContent = ''
-          # Initialise iTerm2 integration
-          source "${shell_integration}/shell_integration/zsh" || true
-          ${aliases}
-        '';
-      };
-    }
-  );
+  configure = mkIf cfg.enable {
+    # Shell integration for home-manager
+    programs.bash.initExtra = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/bash" || true
+      ${aliases}
+    '';
+    programs.fish.shellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/fish"; or true
+      ${aliases}
+    '';
+    programs.zsh.initContent = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/zsh" || true
+      ${aliases}
+    '';
+  };
 }

@@ -1,11 +1,9 @@
-{ config, lib, pkgs, userConfig ? {}, appMode ? "install", appHelpers ? null, ... }:
+{ config, lib, pkgs, userConfig ? {}, ... }:
 
 with lib;
 
 let
   cfg = config.brews.greeter;
-  # Import appHelpers if not provided as parameter
-  helpers = if appHelpers != null then appHelpers else import ../lib/app-helpers.nix { inherit lib; };
 in
 {
   options.brews.greeter = {
@@ -18,25 +16,19 @@ in
     };
   };
 
-  config = mkIf cfg.enable (
-    helpers.modeSwitchMap appMode {
-      # Install mode: Darwin/homebrew configuration
-      install = {
-        homebrew = {
-          brews = [ "hello" ];
-        };
-      };
+  setup = mkIf cfg.enable {
+    homebrew = {
+      brews = [ "hello" ];
+    };
+  };
 
-      # Configure mode: Home-manager configuration  
-      configure = {
-        home.file."iamhere.txt".text = "I am here!";
-        home.packages = [
-          (pkgs.writeShellScriptBin "greeter-custom" ''
-            echo "${cfg.greeting}"
-            hello
-          '')
-        ];
-      };
-    }
-  );
+  configure = mkIf cfg.enable {
+    home.file."iamhere.txt".text = "I am here!";
+    home.packages = [
+      (pkgs.writeShellScriptBin "greeter-custom" ''
+        echo "${cfg.greeting}"
+        hello
+      '')
+    ];
+  };
 }

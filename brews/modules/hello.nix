@@ -1,11 +1,9 @@
-{ config, lib, pkgs, userConfig ? {}, appMode ? "install", appHelpers ? null, ... }:
+{ config, lib, pkgs, userConfig ? {}, ... }:
 
 with lib;
 
 let
   cfg = config.brews.hello;
-  # Import appHelpers if not provided as parameter
-  helpers = if appHelpers != null then appHelpers else import ../lib/app-helpers.nix { inherit lib; };
 in
 {
   options.brews.hello = {
@@ -18,22 +16,19 @@ in
     };
   };
 
-  config = mkIf cfg.enable (helpers.modeSwitchMap appMode {
-    # Install mode: Darwin/homebrew configuration
-    install = {
-      homebrew = {
-        brews = [ "hello" ];
-      };
+  setup = mkIf cfg.enable {
+    homebrew = {
+      brews = [ "hello" ];
     };
+  };
 
     # Configure mode: Home-manager configuration  
-    configure = {
-      home.packages = [
-        (pkgs.writeShellScriptBin "hello-custom" ''
-          echo "${cfg.greeting}"
-          hello
-        '')
-      ];
-    };
-  });
+  configure = mkIf cfg.enable {
+    home.packages = [
+      (pkgs.writeShellScriptBin "hello-custom" ''
+        echo "${cfg.greeting}"
+        hello
+      '')
+    ];
+  };
 }

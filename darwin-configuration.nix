@@ -15,7 +15,8 @@ in
 
   imports = [
     ./certificates.nix
-  ] ++ (modules.importAllModules ./darwin) ++ (modules.importAppModules "install" ./brews);
+    ./brews/apps.nix
+  ] ++ (modules.importAllModules ./darwin) ++ (modules.importDarwinModules ./brews);
 
 
   programs.zsh.enable = true;

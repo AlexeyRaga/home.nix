@@ -1,11 +1,9 @@
-{ config, lib, pkgs, appMode ? "install", appHelpers ? null, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.brews.cloudflare-warp;
-  # Import appHelpers if not provided as parameter
-  helpers = if appHelpers != null then appHelpers else import ../../lib/app-helpers.nix { inherit lib; };
 
   writeScriptDir = path: text:
     pkgs.writeTextFile {
@@ -65,27 +63,18 @@ in
     enable = mkEnableOption "Enable Cloudflare Warp"; 
   };
 
-  config = mkIf cfg.enable (
-    helpers.modeSwitchMap appMode {
-      # Install mode: Darwin/homebrew configuration
-      install = {
-        homebrew = {
-          casks = [ "cloudflare-warp" ];
-        };
+  setup = mkIf cfg.enable {
 
-        environment.systemPackages = [
-          warpSwitch
-          warpVnetShow
-          warpSwitchCompletion
-        ];
+    homebrew = {
+      casks = [ "cloudflare-warp" ];
+    };
 
-        environment.variables = {
+    environment.systemPackages = [
+      warpSwitch
+      warpVnetShow
+      warpSwitchCompletion
+    ];
 
-        };
-      };
-
-      # Configure mode: Home-manager configuration  
-      configure = {};
-    }
-  );
+    environment.variables = {};
+  };
 }

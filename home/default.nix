@@ -24,7 +24,8 @@ in
   imports = [    
     ./packages.nix
     ./work
-  ] ++ (modules.importAllModules ./modules) ++ (modules.importAppModules "configure" ../brews);
+    ../brews/apps.nix
+  ] ++ (modules.importAllModules ./modules) ++ (modules.importHomeModules ../brews);
 
   # App configurations are now in brews/shared-config.nix and imported automatically
 

@@ -63,7 +63,7 @@ rec {
 
   importAllModules = dir: mapModulesRec' dir import;
   
-  # Import app modules with appMode parameter
+  # Import app modules with appMode parameter (legacy)
   importAppModules = appMode: dir: 
     mapModulesRec' dir (path: 
       { config, lib, pkgs, userConfig ? {}, ... }@args:
@@ -87,5 +87,32 @@ rec {
           appMode = appMode; 
           appHelpers = appHelpers; 
         })
+    );
+
+  # New dual-context import functions
+  # Import modules for darwin context (uses 'setup' section)
+  importDarwinModules = dir: 
+    mapModulesRec' dir (path: 
+      { config, lib, pkgs, userConfig ? {}, ... }@args:
+        let
+          moduleResult = import path args;
+        in
+        {
+          options = moduleResult.options or {};
+          config = moduleResult.setup or {};
+        }
+    );
+
+  # Import modules for home-manager context (uses 'configure' section)  
+  importHomeModules = dir:
+    mapModulesRec' dir (path:
+      { config, lib, pkgs, userConfig ? {}, ... }@args:
+        let
+          moduleResult = import path args;
+        in
+        {
+          options = moduleResult.options or {};
+          config = moduleResult.configure or {};
+        }
     );
 }
