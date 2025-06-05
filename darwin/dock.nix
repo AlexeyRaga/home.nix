@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig, ... }:
 {
   system.defaults.dock = {
     # Whether to automatically hide and show the Dock. Default is false.
@@ -17,24 +17,18 @@
     static-only = false;
     # Size of the icons in the Dock. Default is 64.
     tilesize = 32;
-  };
 
-  targets.darwin.dock = {
-    # Apps to be added to Dock.
-    apps = [
-      "Brave Browser"
-      "Rider"
-      "Visual Studio Code"
-      "iTerm"
-      "Slack"
-      "Telegram"
+    persistent-apps = [
+      { app = "/Applications/Brave Browser.app"; }
+      { app = "/Applications/Rider.app"; }
+      { app = "/Applications/Visual Studio Code.app"; }
+      { app = "/Applications/iTerm.app"; }
+      { app = "/Applications/Slack.app"; }
+      { app = "/Applications/Telegram.app"; }
+      { app = "/Applications/Discord.app"; }
     ];
 
-    # "Others" section in Dock (the one after the bar, where the Bin sits).
-    others = [
-      ({ path = "/Applications"; })
-      ({ path = "${config.user.home}/Downloads"; sort = "dateadded"; view = "fan"; })
-    ];
+    persistent-others = [ "/Applications" "${userConfig.home}/Downloads" ];
   };
 }
 

@@ -280,6 +280,10 @@ in
         with open(sys.argv[1], 'rb') as f:
           updates = json.load(f)
 
+        # Create AppleSymbolicHotKeys key if it doesn't exist
+        if 'AppleSymbolicHotKeys' not in plist:
+          plist['AppleSymbolicHotKeys'] = {}
+
         plist['AppleSymbolicHotKeys'].update(updates)
 
         with open(path, 'wb') as f:
@@ -290,7 +294,7 @@ in
         text = encodeShortcuts (attrsets.collect (s: s ? id) cfg);
       };
     in {
-      system.activationScripts.postUserActivation.text = lib.optionalString cfg.enable ''
+      system.activationScripts.postActivation.text = lib.optionalString cfg.enable ''
         # Configuring system shortcuts
         "${updateShortcuts}" "${shortcutsSpec}"
       '';

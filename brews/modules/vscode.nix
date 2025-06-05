@@ -1,13 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig ? {}, ... }:
 
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.vscode;
+  cfg = config.brews.vscode;
 
   codeBin = ''/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code'';
-  settingsFile = ''${config.user.home}/Library/Application Support/Code/User/settings.json'';
+  settingsFile = "$HOME/Library/Application Support/Code/User/settings.json";
 
   defaultSettings = {
     workbench.colorTheme = "Default Dark Modern";
@@ -17,10 +16,9 @@ let
     editor.fontLigatures = true;
     editor.fontSize = 12;
   };
-
-in 
+in
 {
-  options.darwin.apps.vscode = {
+  options.brews.vscode = {
     enable = mkEnableOption "Enable VSCode";
 
     extensions = mkOption {
@@ -30,20 +28,22 @@ in
     };
   };
 
-  config = mkIf enabled {
-    # Install VSCode from Homebrew
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       casks = [ "visual-studio-code" ];
     };
+  };
 
-    system.activationScripts.postUserActivation.text =
-      let currentBundleContent = builtins.concatStringsSep "\n" (lib.lists.unique (lib.lists.sort (a: b: a < b) cfg.extensions));
+  userConfig = mkIf cfg.enable {
+    home.activation.configureVSCode = lib.hm.dag.entryAfter [ "writeBoundary" ] 
+      (let currentBundleContent = builtins.concatStringsSep "\n" (lib.lists.unique (lib.lists.sort (a: b: a < b) cfg.extensions));
       in ''
-        normalColor="$(tput sgr0)"
-        noteColor="$(tput bold)$(tput setaf 6)"
+        # Ensure VSCode directories exist for the user
+        mkdir -p "$HOME/Library/Application Support/Code/User"
+        mkdir -p "$HOME/.vscode/extensions"
 
         if [ ! -e "${settingsFile}" ]; then
-          echo "''${noteColor}VSCode: Writing default settings.json''${normalColor}"
+          echo "VSCode: Writing default settings.json"
           $DRY_RUN_CMD echo '${builtins.replaceStrings ["'"] ["'\"'"] (builtins.toJSON defaultSettings)}' > "${settingsFile}"
         fi
 
@@ -60,17 +60,25 @@ in
         # Find elements that are in both stored_exts and installed_exts but not in wanted_exts
         mapfile -t to_remove < <(comm -23 <(echo "$bundled_exts") <(echo "$wanted_exts") | comm -12 <(echo "$installed_exts") -)
 
-        echo "''${noteColor}VSCode: Setting extensions''${normalColor}"
+        echo "VSCode: Setting extensions"
 
         if [ ''${#to_install[@]} -gt 0 ]; then
-          $DRY_RUN_CMD ${codeBin} "''${to_install[*]/#/--install-extension }"
+          install_args=()
+          for ext in "''${to_install[@]}"; do
+            install_args+=(--install-extension "$ext")
+          done
+          $DRY_RUN_CMD ${codeBin} "''${install_args[@]}"
         fi
 
         if [ ''${#to_remove[@]} -gt 0 ]; then
-          $DRY_RUN_CMD ${codeBin} "''${to_remove[*]/#/--uninstall-extension }"
+          remove_args=()
+          for ext in "''${to_remove[@]}"; do
+            remove_args+=(--uninstall-extension "$ext")
+          done
+          $DRY_RUN_CMD ${codeBin} "''${remove_args[@]}"
         fi
 
         echo "${currentBundleContent}" > "$bundle_file"
-      '';
+      '');
   };
 }

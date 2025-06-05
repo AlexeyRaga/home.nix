@@ -3,10 +3,7 @@
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.magnet;
-
-  magnetConfigPath = "${config.user.home}/Library/Preferences/com.crowdcafe.windowmagnet.plist";
+  cfg = config.brews.magnet;
 
   carbonKeyCodes = {
     "A" = 0; "S" = 1; "D" = 2; "F" = 3; "H" = 4; "G" = 5; "Z" = 6; "X" = 7; "C" = 8;
@@ -174,7 +171,7 @@ let
 
 in 
 {
-  options.darwin.apps.magnet = {
+  options.brews.magnet = {
     enable = mkEnableOption "Enable Magnet - window manager for MacOS";
 
     commands = mkOption {
@@ -184,17 +181,26 @@ in
     };
   };
 
-  config = mkIf enabled {
+  systemConfig = mkIf cfg.enable {
     homebrew = {
       masApps = {
         Magnet = 441258766;
       };
     };
+  };
 
-    system.activationScripts.postUserActivation.text = 
-      let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
+  userConfig = mkIf cfg.enable {
+    # Home-manager activation script for magnet configuration
+    home.activation.configureMagnet = lib.hm.dag.entryAfter [ "writeBoundary" ] 
+      (let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
     in ''
-      hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" ${magnetConfigPath})
+      CONFIG_PATH="$HOME/Library/Preferences/com.crowdcafe.windowmagnet.plist"
+      DEBUG_FILE="$HOME/.cache/magnet-debug.json"
+      
+      # Create cache directory if it doesn't exist
+      mkdir -p "$HOME/.cache"
+      
+      hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" $CONFIG_PATH)
       commands='${jsonCommands}'
 
       jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
@@ -212,7 +218,9 @@ in
 
         # Add all entries without ids from commands.json
         ($cmds | map(select(.id? | not)))
-    ' > /tmp/magnet.json
-    '';
+    ' > "$DEBUG_FILE"
+    
+    echo "Magnet configuration written to: $DEBUG_FILE"
+    '');
   };
 }

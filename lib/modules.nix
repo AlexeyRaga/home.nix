@@ -62,4 +62,31 @@ rec {
     map fn paths;
 
   importAllModules = dir: mapModulesRec' dir import;
+  
+  # New dual-context import functions
+  # Import modules for darwin context (uses 'systemConfig' section)
+  importDarwinModules = dir: 
+    mapModulesRec' dir (path: 
+      { config, lib, pkgs, userConfig ? {}, ... }@args:
+        let
+          moduleResult = import path args;
+        in
+        {
+          options = moduleResult.options or {};
+          config = moduleResult.systemConfig or {};
+        }
+    );
+
+  # Import modules for home-manager context (uses 'userConfig' section)  
+  importHomeModules = dir:
+    mapModulesRec' dir (path:
+      { config, lib, pkgs, userConfig ? {}, ... }@args:
+        let
+          moduleResult = import path args;
+        in
+        {
+          options = moduleResult.options or {};
+          config = moduleResult.userConfig or {};
+        }
+    );
 }

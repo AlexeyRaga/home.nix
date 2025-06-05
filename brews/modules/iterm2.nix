@@ -1,10 +1,9 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, userConfig ? {}, ... }:
 
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.iterm2;
+  cfg = config.brews.iterm2;
 
   shell_integration = pkgs.fetchFromGitHub {
     name = "iterm2-shell-integration";
@@ -15,10 +14,9 @@ let
   };
   utilities = builtins.attrNames (builtins.readDir "${shell_integration}/utilities");
   aliases = lib.concatMapStringsSep ";" (x: "alias ${x}='${shell_integration}/utilities/${x}'") utilities;
-
 in
 {
-  options.darwin.apps.iterm2 = {
+  options.brews.iterm2 = {
     enable = mkEnableOption "Enable iTerm2 - the best terminal for MacOS";
 
     font = mkOption {
@@ -39,8 +37,8 @@ in
     };
   };
 
-  config = mkIf enabled {
-    # Install iTerm2 from Homebrew
+  systemConfig = mkIf cfg.enable {
+      # Install mode: Darwin/homebrew configuration
     homebrew = {
       casks = [ "iterm2" ];
     };
@@ -67,6 +65,26 @@ in
       ${aliases}
     '';
     programs.zsh.interactiveShellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/zsh" || true
+      ${aliases}
+    '';
+  };
+
+      # Configure mode: Home-manager configuration  
+  userConfig = mkIf cfg.enable {
+    # Shell integration for home-manager
+    programs.bash.initExtra = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/bash" || true
+      ${aliases}
+    '';
+    programs.fish.shellInit = ''
+      # Initialise iTerm2 integration
+      source "${shell_integration}/shell_integration/fish"; or true
+      ${aliases}
+    '';
+    programs.zsh.initContent = ''
       # Initialise iTerm2 integration
       source "${shell_integration}/shell_integration/zsh" || true
       ${aliases}

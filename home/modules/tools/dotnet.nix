@@ -44,8 +44,6 @@ in
     };
   };
 
-  # 6c64820ffa95db07878b0f4750f4d933d06b52b1
-
   config = mkIf cfg.enable {
     home.packages = [ dotnet-env ];
 

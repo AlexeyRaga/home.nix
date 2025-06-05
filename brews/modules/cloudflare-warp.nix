@@ -3,8 +3,7 @@
 with lib;
 
 let
-  enabled = cfg.enable && pkgs.hostPlatform.isDarwin;
-  cfg = config.darwin.apps.cloudflare-warp;
+  cfg = config.brews.cloudflare-warp;
 
   writeScriptDir = path: text:
     pkgs.writeTextFile {
@@ -60,9 +59,12 @@ EOF
   '';
 in
 {
-  options.darwin.apps.cloudflare-warp = { enable = mkEnableOption "Enable Cloudflare Warp"; };
+  options.brews.cloudflare-warp = { 
+    enable = mkEnableOption "Enable Cloudflare Warp"; 
+  };
 
-  config = mkIf enabled {
+  systemConfig = mkIf cfg.enable {
+
     homebrew = {
       casks = [ "cloudflare-warp" ];
     };
@@ -71,11 +73,8 @@ in
       warpSwitch
       warpVnetShow
       warpSwitchCompletion
-      ];
+    ];
 
-    environment.variables = {
-
-    };
-
+    environment.variables = {};
   };
 }

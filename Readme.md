@@ -3,87 +3,53 @@
 It uses [nix-darwin](https://github.com/LnL7/nix-darwin) and [home-manager](https://github.com/nix-community/home-manager) to set up and manage the user's home environment.
 
 This Readme is currently MacOS-centric.
-However, the configuration itself has been tried on Ubuntu and NixOS and it turns out to be working (not using `darwin-configuration.nix`, obviously, but using the whole `Home Manager` config.).
 
 ## Installation
 
-### Automated installation
-
-Currently MacOS-specific
-
-```bash
-$ bash -i <(curl -fsSL https://raw.githubusercontent.com/AlexeyRaga/home.nix/main/install.sh)
-```
-
-At the end of the successful installation the installer will ask to tune the configuration
-in your `~/.nixpkgs`, re-enter the shell and switch into the new configuration.
-
-Before switching, consider to populate your secrets:
-
-```bash
-~/.nixpkgs/home/secrets/default.nix
-~/.nixpkgs/home/work/secrets/default.nix
-```
-Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
-
-Now issuing the `switch` command should have your system set up:
-
-```bash
-$ darwin-rebuild switch
-```
-
-### Manual installation
-
-0. Install [Nix](https://nixos.org/download.html)
+1. Install [Nix](https://nixos.org/download.html)
    ```bash
     $ sh <(curl -L https://nixos.org/nix/install) --daemon
    ```
 
-1. Install [nix-darwin](https://github.com/LnL7/nix-darwin)
-   ```
-    $ nix-build https://github.com/LnL7/nix-darwin/archive/master.tar.gz -A installer
-    $ ./result/bin/darwin-installer
-   ```
-   Keep `darwin-configuration.nix` default (we are going to replace it later),
-   but `darwin-rebuild switch` command should be now working (reload your shell).
-
-3. Add `home-manager` channel:
-   ```bash
-    $ nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
-    $ nix-channel --update
-   ```
-
-4. (Optionaly, MacOS only) Install [Homebrew](https://brew.sh/)
+2. (MacOS only) Install [Homebrew](https://brew.sh/)
    ```
    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
    ```
 
-4. Clone this repository as your local `~/.nixpkgs` </br>
+3. Clone this repository as your local `~/.nixpkgs` or,better, have your own fork.</br>
     You should have `~/.nixpkgs/darwin-configuration.nix` from this repository, replacing the default one.
 
-5. Set up your secrets:
+4. Edit `flake.nix` and specified your own user details.
+
+5. Add your changes to `git`:
    ```bash
-    $ cp ~/.nixpkgs/home/secrets/default.nix.example ~/.nixpkgs/home/secrets/default.nix
-    $ cp ~/.nixpkgs/home/work/secrets/default.nix.example ~/.nixpkgs/home/work/secrets/default.nix
+    $ git add .
    ```
-   Edit both files. The first one represents "global" secrets, and the second one is for work-related secrets.
+   When working with `Nix` flakes it is essential, 
+   because it annoyingly ignores files that are not tracked by `git`.
 
 6. Switch the profile:
    ```bash
-    $ darwin-rebuild switch
+    $ sudo nix run --extra-experimental-features 'nix-command flakes' nix-darwin/master#darwin-rebuild -- switch --flake .
    ```
 
 At this point everything should be installed and the environment should be ready to rock.
 Restart the shell if you haven't paid attention to the prompt :)
 
+After your first successfful switch, you should be able to use just
+```bash
+$ sudo darwin-rebuild switch --flake .
+```
+
 ## Updating the configuration
 
-Make changes to the configuration files and run `darwin-rebuild switch` to update the configuration.
+Make changes to the configuration files and add them to `git`.
+Then run `sudo darwin-rebuild switch --flake .` to switch to the updated configuration.
 
 ## Note on integration with Homebrew
 
-If `Homebrew` is installed, this configuration will manage `Homebrew` packages via [darwin/apps.nix](./darwin/apps.nix) file.
-Use [darwin/apps.nix](./darwin/apps.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
+This configuration manages some MacOS applications as `Homebrew` packages via [brews/apps.nix](./brews/apps.nix) file.
+Use [brews/apps.nix](./brews/apps.nix) to specify which packages should be installed via `brew` and Nix will handle the rest.
 
 ## Your system configuration
 
@@ -95,7 +61,6 @@ A couple of entry points to tune your config:
 MacOS specific:
 
 - [darwin/preferences.nix](./darwin/preferences.nix) - Global MacOS preferences and settings
-- [darwin/apps.nix](./darwin/apps.nix) - Applications to install via Homebrew
 - [darwin/dock.nix](./darwin/dock.nix) - Configure your dock
 
 ## Modules overview
@@ -190,8 +155,8 @@ Example:
     nugetSources = {
       bigBankGithub = {
         url = "https://nuget.pkg.github.com/BigBank/index.json";
-        userName = secrets.github.userName;
-        password = secrets.github.token;
+        userName = "%GITHUB_USERNAME%";
+        password = "%GITHUB_TOKEN%";
       };
     };
   };
