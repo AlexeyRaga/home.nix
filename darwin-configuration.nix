@@ -33,7 +33,8 @@ in
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
-  system.stateVersion = 4;
+  system.stateVersion = 5;
+  ids.gids.nixbld = 30000;
 
   # set up current user
   users.users.${userConfig.name} = {
