@@ -1,4 +1,4 @@
-{ config, lib, pkgs, userConfig, ... }:
+{ config, lib, pkgs, user, ... }:
 {
   system.defaults.dock = {
     # Whether to automatically hide and show the Dock. Default is false.
@@ -28,7 +28,7 @@
       { app = "/Applications/Discord.app"; }
     ];
 
-    persistent-others = [ "/Applications" "${userConfig.home}/Downloads" ];
+    persistent-others = [ "/Applications" "${user.home}/Downloads" ];
   };
 }
 

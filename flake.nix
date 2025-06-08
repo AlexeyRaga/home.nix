@@ -12,7 +12,7 @@
   outputs = inputs@{ self, nix-darwin, home-manager, nixpkgs }: 
   let
     # User configuration - define your user details here
-    userConfig = {
+    user = {
       name        = "alexey";
       fullName    = "Alexey Raga";
       email       = "alexey.raga@gmail.com";  # Replace with your actual email
@@ -41,14 +41,14 @@
   in
   {
     darwinConfigurations."Alexeys-MacBook-Pro" = nix-darwin.lib.darwinSystem {
-      specialArgs = { inherit inputs userConfig; };
+      specialArgs = { inherit inputs user; };
       modules = [
         ./darwin-configuration.nix
         home-manager.darwinModules.home-manager
         {
           home-manager.useUserPackages = true;
-          home-manager.users.${userConfig.name} = ./home;
-          home-manager.extraSpecialArgs = { inherit inputs userConfig; };
+          home-manager.users.${user.name} = ./home;
+          home-manager.extraSpecialArgs = { inherit inputs user; };
         }
       ];
     };

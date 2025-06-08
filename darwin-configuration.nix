@@ -1,11 +1,11 @@
-{ config, pkgs, lib, userConfig, ... }:
+{ config, pkgs, lib, user, ... }:
 let
   modules = import ./lib/modules.nix {inherit lib;};
 in
 {
   documentation.enable = false;
   nixpkgs.hostPlatform = "aarch64-darwin";
-  system.primaryUser = userConfig.name;
+  system.primaryUser = user.name;
 
   nixpkgs.overlays = [
     # sometimes it is useful to pin a version of some tool or program.
@@ -37,9 +37,9 @@ in
   ids.gids.nixbld = 30000;
 
   # set up current user
-  users.users.${userConfig.name} = {
-    name = userConfig.name;
-    home = userConfig.home;
+  users.users.${user.name} = {
+    name = user.name;
+    home = user.home;
   };
 
   # nixpkgs.config.allowBroken = true;

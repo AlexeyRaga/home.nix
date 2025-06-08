@@ -14,6 +14,7 @@
       "discord"
       "dropbox"
       "google-chrome"
+      "hiddenbar"
       "iina" # modern video player
       "jetbrains-toolbox"
       "intellij-idea"

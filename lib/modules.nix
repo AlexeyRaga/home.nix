@@ -67,7 +67,7 @@ rec {
   # Import modules for darwin context (uses 'systemConfig' section)
   importDarwinModules = dir: 
     mapModulesRec' dir (path: 
-      { config, lib, pkgs, userConfig ? {}, ... }@args:
+      { config, lib, pkgs, user ? {}, ... }@args:
         let
           moduleResult = import path args;
         in
@@ -80,7 +80,7 @@ rec {
   # Import modules for home-manager context (uses 'userConfig' section)  
   importHomeModules = dir:
     mapModulesRec' dir (path:
-      { config, lib, pkgs, userConfig ? {}, ... }@args:
+      { config, lib, pkgs, user ? {}, ... }@args:
         let
           moduleResult = import path args;
         in
