@@ -6,7 +6,7 @@ let
   cfg = config.home.wallpaper;
   setWallpaper = file:
     if pkgs.stdenv.hostPlatform.isDarwin then
-      ''osascript -e 'tell application "Finder" to set desktop picture to POSIX file "${file}"' ''
+      ''/usr/bin/osascript -e 'tell application "Finder" to set desktop picture to POSIX file "${file}"' ''
     else
       ''echo "Unable to set wallpaper on ${pkgs.stdenv.hostPlatform.system}"'';
 in
