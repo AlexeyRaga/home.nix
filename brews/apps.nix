@@ -1,11 +1,6 @@
-{ config, lib, pkgs, userConfig ? {}, ... }:
+{ config, lib, pkgs, ... }:
 
 {
-  brews.hello = {
-    enable = true;
-    greeting = "Hello from HELLO!";
-  };
-
   brews.vscode = {
     enable = true;
     extensions = [

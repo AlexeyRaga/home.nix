@@ -1,4 +1,4 @@
-{ config, lib, pkgs, userConfig, ... }:
+{ config, lib, pkgs, user, ... }:
 
 with lib;
 
@@ -22,7 +22,7 @@ in
         toValue = obj: if isBool obj then boolToString obj else obj;
 
         toCmd = file: path: value: ''
-          $DRY_RUN_CMD /usr/libexec/PlistBuddy -c "Set ${wrapPath path} ${toValue value}" "${userConfig.home}/${file}"
+          $DRY_RUN_CMD /usr/libexec/PlistBuddy -c "Set ${wrapPath path} ${toValue value}" "${user.home}/${file}"
         '';
         toCmds = file: settings: concatStrings (mapAttrsToList (toCmd file) settings);
       in

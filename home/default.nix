@@ -1,5 +1,5 @@
 /* Main user-level configuration */
-{ config, lib, pkgs, userConfig, ... }:
+{ config, lib, pkgs, user, ... }:
 
 let
   modules = import ../lib/modules.nix {inherit lib;};
@@ -130,11 +130,11 @@ in
 
     git = {
       enable = true;
-      userName = userConfig.fullName;
-      userEmail = userConfig.email;
-      githubUser = userConfig.githubUser;
+      userName = user.fullName;
+      userEmail = user.email;
+      githubUser = user.githubUser;
 
-      workspaces = userConfig.gitWorkspaces;
+      workspaces = user.gitWorkspaces;
     };
   };
 
