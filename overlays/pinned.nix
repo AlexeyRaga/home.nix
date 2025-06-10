@@ -19,5 +19,5 @@ in
 
   # pin nix itself to 2.6 because 2.7 fails to build on MacOS.
   # nix26 = (pinned "nix" "fd7729c1451e66c48d3cef89fc8106d6ca2bb978").nixUnstable;
-  # _1password = (pinned "_1password" "466c2e342a6887507fb5e58d8d29350a0c4b7488").nixUnstable;
+  # _1password-cli = (pinned "_1password-cli" "21808d22b1cda1898b71cf1a1beb524a97add2c4").nixUnstable;
 }
