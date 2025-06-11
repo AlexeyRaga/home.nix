@@ -18,7 +18,7 @@ This Readme is currently MacOS-centric.
 
 3. Clone this repository as your local `~/.nixpkgs` or,better, have your own fork.</br>
 
-4. :exclamation: Edit `flake.nix` and specified your own user details.
+4. :exclamation: Edit `flake.nix` and **specify your own user details**.
 
 5. :warning: Work config ([home/work/default.nix](./home/work/default.nix)) requires some passwords to be found in `1Password`. Review the config and update if needed. 
 
