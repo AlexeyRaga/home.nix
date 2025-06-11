@@ -26,7 +26,7 @@
 # After you are done, copy your saved plist back and re-login just in case.
 #
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, user, ... }:
 
 let
   inherit (lib) attrsets lists options types;
@@ -272,7 +272,7 @@ in
         import plistlib
         import sys
 
-        path = expanduser('~/Library/Preferences/com.apple.symbolichotkeys.plist')  
+        path = '${user.home}/Library/Preferences/com.apple.symbolichotkeys.plist'
 
         with open(path, 'rb') as f:
           plist = plistlib.load(f)
