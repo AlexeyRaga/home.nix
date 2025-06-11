@@ -36,14 +36,21 @@ in
   system.stateVersion = 5;
   ids.gids.nixbld = 30000;
 
+  # nixpkgs.config.allowBroken = true;
+  nixpkgs.config.allowUnfree = true;
+
   # set up current user
   users.users.${user.name} = {
     name = user.name;
     home = user.home;
   };
 
-  # nixpkgs.config.allowBroken = true;
-  nixpkgs.config.allowUnfree = true;
+  homebrew = {
+    enable = true;
+
+    global.brewfile = true;
+    onActivation.cleanup = "zap";
+  };
 
   nix = {
     # package = pkgs.nix;
