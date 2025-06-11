@@ -26,8 +26,7 @@ This Readme is currently MacOS-centric.
    ```bash
     $ git add .
    ```
-   When working with `Nix` flakes it is essential, 
-   because it annoyingly ignores files that are not tracked by `git`.
+   Annoyingly Nix flakes only include files tracked by Git, so be sure to add every file you want to be included in your configuration.
 
 7. Switch the profile:
    ```bash
