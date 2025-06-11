@@ -29,18 +29,18 @@ in
 
   # App configurations are now in brews/shared-config.nix and imported automatically
 
-  secureEnv.onePassword = {
-    enable = true;
+  # secureEnv.onePassword = {
+  #   enable = true;
     
-    sessionVariables = {
-      PRIVATE_GITHUB_TOKEN = {
-        account = "my.1password.com";
-        vault = "Private";
-        item = "Github Token";
-        field = "password";
-      };
-    };
-  };
+  #   sessionVariables = {
+  #     PRIVATE_GITHUB_TOKEN = {
+  #       account = "my.1password.com";
+  #       vault = "Private";
+  #       item = "Github Token";
+  #       field = "password";
+  #     };
+  #   };
+  # };
 
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
