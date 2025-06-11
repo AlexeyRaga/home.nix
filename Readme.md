@@ -17,18 +17,19 @@ This Readme is currently MacOS-centric.
    ```
 
 3. Clone this repository as your local `~/.nixpkgs` or,better, have your own fork.</br>
-    You should have `~/.nixpkgs/darwin-configuration.nix` from this repository, replacing the default one.
 
-4. Edit `flake.nix` and specified your own user details.
+4. :exclamation: Edit `flake.nix` and specified your own user details.
 
-5. Add your changes to `git`:
+5. :warning: Work config ([home/work/default.nix](./home/work/default.nix)) requires some passwords to be found in `1Password`. Review the config and update if needed. 
+
+6. Add your changes to `git`:
    ```bash
     $ git add .
    ```
    When working with `Nix` flakes it is essential, 
    because it annoyingly ignores files that are not tracked by `git`.
 
-6. Switch the profile:
+7. Switch the profile:
    ```bash
     $ sudo nix run --extra-experimental-features 'nix-command flakes' nix-darwin/master#darwin-rebuild -- switch --flake .
    ```
