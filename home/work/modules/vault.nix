@@ -18,15 +18,19 @@ echo "Currently connected to: $CURRENT_NETWORK_NAME ($CURRENT_NETWORK)"
 if [[ $CURRENT_NETWORK_NAME =~ ^([^-]+)(-?([^-]+).*)?-vnet$ ]]; then
     if [ "''${BASH_REMATCH[1]}" == "live" ]; then
         BASE_DOMAIN="educationperfect.com"
+        if [ -n "''${BASH_REMATCH[3]}" ]; then
+            BASE_DOMAIN="''${BASH_REMATCH[3]}.''${BASE_DOMAIN}"
+        fi
     else
         BASE_DOMAIN="educationperfect.io"
+
+        if [ -n "''${BASH_REMATCH[3]}" ]; then
+            BASE_DOMAIN="''${BASH_REMATCH[3]}.''${BASE_DOMAIN}"
+        else
+            BASE_DOMAIN="''${BASH_REMATCH[1]}.''${BASE_DOMAIN}"
+        fi
     fi
 
-    if [ -n "''${BASH_REMATCH[3]}" ]; then
-        BASE_DOMAIN="''${BASH_REMATCH[3]}.''${BASE_DOMAIN}"
-    else
-        BASE_DOMAIN="''${BASH_REMATCH[1]}.''${BASE_DOMAIN}"
-    fi
 else
     echo "Unable to determine Vault domain URL for $CURRENT_NETWORK_NAME"
     exit 1
