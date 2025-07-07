@@ -52,7 +52,7 @@ in
     ];
 
     home.sessionVariables = {
-      DOTNET_ROOT="${dotnet-env}";
+      DOTNET_ROOT="${dotnet-env}/share/dotnet";
     };
 
     home.file.".nuget/NuGet/NuGet.Config".source =
