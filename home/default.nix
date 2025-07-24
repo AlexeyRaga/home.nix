@@ -147,6 +147,8 @@ in
       battery.disabled = true;
       dotnet.disabled = true;
       c.disabled = true;
+      package.disabled = true;
+      nodejs.disabled = true;
 
       directory = {
         # format = "[$all_but_last_path]($style)[$separator]($style)[$last_path_segment](bold $style) [$read_only]($read_only_style)";
