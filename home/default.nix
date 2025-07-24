@@ -96,6 +96,7 @@ in
       enable = true;
       enableZshIntegration = true;
       nix-direnv.enable = true;
+      config.global.log_filter = ''^(loading|using nix|error|deny|allow).*$'';
     };
 
     fzf = {
