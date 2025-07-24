@@ -138,6 +138,45 @@ in
     };
   };
 
+  programs.starship = {
+    enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
+    settings = {
+      battery.disabled = true;
+      dotnet.disabled = true;
+      c.disabled = true;
+
+      directory = {
+        # format = "[$all_but_last_path]($style)[$separator]($style)[$last_path_segment](bold $style) [$read_only]($read_only_style)";
+        style = "fg:31";
+        repo_root_style= "bold fg:31";
+        truncation_symbol = "../";
+        truncation_length = 10;
+        truncate_to_repo = false;
+      };
+
+      aws = { 
+        symbol = "☁️ ";
+        region_aliases = {
+          ap-southeast-2 = "au";
+          ca-central-1 = "ca";
+        };
+      };
+
+      nix_shell = {
+        format = "via [$symbol$state]($style) ";
+        symbol = "❄️ ";
+      };
+
+      shlvl = {
+        disabled = false;
+        symbol = "↕️";
+        format = "[$symbol]($style) ";
+      };
+    };
+  };
+
   ### ZSH (TODO: Maybe Mmve to a module?)
   programs.zsh = {
     enable = true;
@@ -155,19 +194,6 @@ in
     shellAliases = {
       whereis = "function _whereis() { which \"$1\" | xargs realpath; }; _whereis";
     };
-
-    plugins = [
-      {
-        name = "powerlevel10k";
-        src = pkgs.zsh-powerlevel10k;
-        file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-      }
-      {
-        name = "powerlevel10k-config";
-        src = lib.cleanSource ./config/p10k;
-        file = "p10k-classic.zsh";
-      }
-    ];
 
     oh-my-zsh = {
       enable = true;
