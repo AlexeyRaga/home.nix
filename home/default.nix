@@ -143,7 +143,9 @@ in
     enable = true;
     enableZshIntegration = true;
     enableBashIntegration = true;
+    enableNushellIntegration = true;
     settings = {
+      format = "$all$shell$shlvl$character";
       battery.disabled = true;
       dotnet.disabled = true;
       c.disabled = true;
@@ -151,7 +153,6 @@ in
       nodejs.disabled = true;
 
       directory = {
-        # format = "[$all_but_last_path]($style)[$separator]($style)[$last_path_segment](bold $style) [$read_only]($read_only_style)";
         style = "fg:31";
         repo_root_style= "bold fg:31";
         truncation_symbol = "../";
@@ -167,6 +168,14 @@ in
         };
       };
 
+      shell = {
+        disabled = false;
+        bash_indicator = "bash";
+        zsh_indicator = "";
+        format = "[$indicator]($style)";
+        style = "white bold";
+      };
+
       nix_shell = {
         format = "via [$symbol$state]($style) ";
         symbol = "❄️ ";
@@ -175,9 +184,17 @@ in
       shlvl = {
         disabled = false;
         symbol = "↕️";
-        format = "[$symbol]($style) ";
+        format = "[\\($shlvl\\)]($style)";
       };
     };
+  };
+
+  programs.nushell = {
+    enable = true;
+  };
+
+  programs.bash = {
+    enable = true;
   };
 
   ### ZSH (TODO: Maybe Mmve to a module?)
