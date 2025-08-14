@@ -153,6 +153,7 @@ in
     home.sessionVariables = {
       # set it so that tools that expect Docker can find it
       DOCKER_HOST = "unix://$HOME/.rd/docker.sock";
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/var/run/docker.sock";
     };
 
     home.activation.configureRancher = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
