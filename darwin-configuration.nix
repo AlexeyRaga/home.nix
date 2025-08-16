@@ -68,6 +68,10 @@ in
         "https://devenv.cachix.org"
       ];
 
+      trusted-users = [
+        user.name
+      ];
+
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
         "nix-tools.cachix.org-1:ebBEBZLogLxcCvipq2MTvuHlP7ZRdkazFSQsbs0Px1A="
