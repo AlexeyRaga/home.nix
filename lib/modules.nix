@@ -12,6 +12,20 @@ let
   mapFilterAttrs = pred: f: attrs: filterAttrs pred (mapAttrs' f attrs);
 in
 rec {
+  # Auto-discover and import shared libraries from lib/shared directory
+  # discoverSharedLibs :: lib -> pkgs -> attrs
+  discoverSharedLibs = lib: pkgs:
+    let
+      sharedLibDir = ./shared;
+    in
+    if pathExists sharedLibDir then
+      {
+        plist = import "${sharedLibDir}/plist.nix" { inherit lib pkgs; };
+        # TODO: Replace with mapModules once we confirm this works
+        # mapModules sharedLibDir (libPath: import libPath { inherit lib pkgs; })
+      }
+    else {};
+
   # Map every module inside dir.
   # mapModules :: path -> (path -> any) -> attrs
   mapModules = dir: fn:
@@ -69,7 +83,12 @@ rec {
     mapModulesRec' dir (path: 
       { config, lib, pkgs, user ? {}, ... }@args:
         let
-          moduleResult = import path args;
+          # Auto-discover shared libraries
+          sharedLibs = discoverSharedLibs lib pkgs;
+          
+          # Add sharedLibs to the module arguments
+          moduleArgs = args // { inherit sharedLibs; };
+          moduleResult = import path moduleArgs;
         in
         {
           options = moduleResult.options or {};
@@ -82,7 +101,12 @@ rec {
     mapModulesRec' dir (path:
       { config, lib, pkgs, user ? {}, ... }@args:
         let
-          moduleResult = import path args;
+          # Auto-discover shared libraries
+          sharedLibs = discoverSharedLibs lib pkgs;
+          
+          # Add sharedLibs to the module arguments
+          moduleArgs = args // { inherit sharedLibs; };
+          moduleResult = import path moduleArgs;
         in
         {
           options = moduleResult.options or {};

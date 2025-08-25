@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, sharedLibs, user ? {}, ... }:
 
 with lib;
 
@@ -55,6 +55,12 @@ in
       default = 40;
       description = "Terminal window size (vertical)";
     };
+
+    theme = mkOption {
+      type = types.nullOr (types.enum (map (theme: theme.name) themes));
+      default = null;
+      description = "iTerm2 color theme to apply. If null, no theme will be set automatically. Available themes: ${lib.concatStringsSep ", " (map (theme: theme.name) themes)}";
+    };
   };
 
   systemConfig = mkIf cfg.enable {
@@ -62,17 +68,6 @@ in
     homebrew = {
       casks = [ "iterm2" ];
     };
-
-    # targets.darwin.plists = {
-    #   "Library/Preferences/com.googlecode.iterm2.plist" = {
-    #     "New Bookmarks:0:Normal Font" = cfg.font;
-    #     "New Bookmarks:0:Columns" = toString cfg.columns;
-    #     "New Bookmarks:0:Rows" = toString cfg.rows;
-    #     "New Bookmarks:0:Silence Bell" = "1";
-    #     "New Bookmarks:0:Custom Directory" = "Recycle";
-		# 		"New Bookmarks:0:Guid" = "nightfox";
-    #   };
-    # };
 
     # Initialise Shell Integration
     programs.bash.interactiveShellInit = ''
@@ -114,15 +109,19 @@ in
     # Dynamic theme configuration
     home.activation.configureIterm = 
       let 
-        plist = "~/Library/Preferences/com.googlecode.iterm2.plist"; 
+        plist = "${user.home or "~"}/Library/Preferences/com.googlecode.iterm2.plist"; 
         
         # Generate commands to install all themes
         themeInstallCommands = lib.concatMapStringsSep "\n" (theme: 
-          ''
-            /usr/libexec/PlistBuddy -c "Add :'Custom Color Presets':'${theme.name}' dict" ${plist} >/dev/null 2>&1 || true
-            /usr/libexec/PlistBuddy -c "Merge '${theme.file}' :'Custom Color Presets':'${theme.name}'" ${plist}
-          ''
+          sharedLibs.plist.mergePlists plist ["Custom Color Presets" theme.name] theme.file
         ) themes;
+
+        # Generate command to apply selected theme if one is specified
+        themeApplyCommand = 
+          let selectedTheme = lib.findFirst (theme: theme.name == cfg.theme) null themes;
+          in lib.optionalString (selectedTheme != null) (
+            sharedLibs.plist.mergePlists plist ["New Bookmarks" 0] selectedTheme.file
+          );
 
       in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
         # Install all available themes
@@ -135,6 +134,9 @@ in
           -c "Set :'New Bookmarks':0:'Silence Bell' 1" \
           -c "Set :'New Bookmarks':0:'Custom Directory' Recycle" \
           ${plist}
+
+        # Apply selected theme if specified
+        ${themeApplyCommand}
       '';
   };
 }
