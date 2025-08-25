@@ -79,11 +79,12 @@ rec {
     mapModulesRec' dir (path: 
       { config, lib, pkgs, user ? {}, ... }@args:
         let
-          # Auto-discover shared libraries
+          # Auto-discover shared libraries and extend lib with them
           sharedLibs = discoverSharedLibs lib pkgs;
+          extendedLib = lib.extend (final: prev: sharedLibs);
           
-          # Add sharedLibs to the module arguments
-          moduleArgs = args // { inherit sharedLibs; };
+          # Use extended lib in module arguments
+          moduleArgs = args // { lib = extendedLib; };
           moduleResult = import path moduleArgs;
         in
         {
@@ -97,11 +98,12 @@ rec {
     mapModulesRec' dir (path:
       { config, lib, pkgs, user ? {}, ... }@args:
         let
-          # Auto-discover shared libraries
+          # Auto-discover shared libraries and extend lib with them
           sharedLibs = discoverSharedLibs lib pkgs;
+          extendedLib = lib.extend (final: prev: sharedLibs);
           
-          # Add sharedLibs to the module arguments
-          moduleArgs = args // { inherit sharedLibs; };
+          # Use extended lib in module arguments
+          moduleArgs = args // { lib = extendedLib; };
           moduleResult = import path moduleArgs;
         in
         {

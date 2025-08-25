@@ -1,4 +1,4 @@
-{ config, lib, pkgs, sharedLibs, user ? {}, ... }:
+{ config, lib, pkgs, user ? {}, ... }:
 
 with lib;
 
@@ -113,14 +113,14 @@ in
         
         # Generate commands to install all themes
         themeInstallCommands = lib.concatMapStringsSep "\n" (theme: 
-          sharedLibs.plist.mergePlists plist ["Custom Color Presets" theme.name] theme.file
+          lib.plists.mergePlists plist ["Custom Color Presets" theme.name] theme.file
         ) themes;
 
         # Generate command to apply selected theme if one is specified
         themeApplyCommand = 
           let selectedTheme = lib.findFirst (theme: theme.name == cfg.theme) null themes;
           in lib.optionalString (selectedTheme != null) (
-            sharedLibs.plist.mergePlists plist ["New Bookmarks" 0] selectedTheme.file
+            lib.plists.mergePlists plist ["New Bookmarks" 0] selectedTheme.file
           );
 
       in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
