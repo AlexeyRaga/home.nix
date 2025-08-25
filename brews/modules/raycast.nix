@@ -19,17 +19,16 @@ in
       enable = true;
       spotlight.search.enable = false;
     };
-
-    targets.darwin.plists = {
-      # Disable Spotlight hotkey
-      "Library/Preferences/com.raycast.macos.plist" = {
-        "raycastGlobalHotkey" = "Command-49";
-      };
-    };
   };
 
   userConfig = mkIf cfg.enable {
-    # Home-manager doesn't handle system keyboard shortcuts or plists
-    # These are system-level configurations that only Darwin can manage
+
+    home.activation.configureRaycast = 
+      let raycastPlist = "~/Library/Preferences/com.raycast.macos.plist";
+      in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      /usr/libexec/PlistBuddy \
+        -c "Set :raycastGlobalHotkey 'Command-49'" \
+        ${raycastPlist}
+    '';
   };
 }
