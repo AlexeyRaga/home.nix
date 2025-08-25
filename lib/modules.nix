@@ -19,11 +19,7 @@ rec {
       sharedLibDir = ./shared;
     in
     if pathExists sharedLibDir then
-      {
-        plist = import "${sharedLibDir}/plist.nix" { inherit lib pkgs; };
-        # TODO: Replace with mapModules once we confirm this works
-        # mapModules sharedLibDir (libPath: import libPath { inherit lib pkgs; })
-      }
+      mapModules sharedLibDir (libPath: import libPath { inherit lib pkgs; })
     else {};
 
   # Map every module inside dir.
