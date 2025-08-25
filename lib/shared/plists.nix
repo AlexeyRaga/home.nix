@@ -60,7 +60,7 @@ EOF
 
 in {
   # Returns a command string for use in scripts
-  mergePlists = target: keyPath: source:
+  merge = target: keyPath: source:
     "${mergePlistTool}/bin/merge-plist ${lib.escapeShellArgs [target (builtins.toJSON keyPath) source]}";
   
   # Expose the tool directly

@@ -109,18 +109,18 @@ in
     # Dynamic theme configuration
     home.activation.configureIterm = 
       let 
-        plist = "${user.home or "~"}/Library/Preferences/com.googlecode.iterm2.plist"; 
+        itermsPlist = "${user.home or "~"}/Library/Preferences/com.googlecode.iterm2.plist"; 
         
         # Generate commands to install all themes
         themeInstallCommands = lib.concatMapStringsSep "\n" (theme: 
-          lib.plists.mergePlists plist ["Custom Color Presets" theme.name] theme.file
+          lib.plists.merge itermsPlist ["Custom Color Presets" theme.name] theme.file
         ) themes;
 
         # Generate command to apply selected theme if one is specified
         themeApplyCommand = 
           let selectedTheme = lib.findFirst (theme: theme.name == cfg.theme) null themes;
           in lib.optionalString (selectedTheme != null) (
-            lib.plists.mergePlists plist ["New Bookmarks" 0] selectedTheme.file
+            lib.plists.merge itermsPlist ["New Bookmarks" 0] selectedTheme.file
           );
 
       in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
@@ -133,7 +133,7 @@ in
           -c "Set :'New Bookmarks':0:'Rows' ${toString cfg.rows}" \
           -c "Set :'New Bookmarks':0:'Silence Bell' 1" \
           -c "Set :'New Bookmarks':0:'Custom Directory' Recycle" \
-          ${plist}
+          ${itermsPlist}
 
         # Apply selected theme if specified
         ${themeApplyCommand}
