@@ -54,7 +54,6 @@
         "GraphQL.vscode-graphql"
         "hashicorp.terraform"
         "haskell.haskell"
-        "Intility.vscode-backstage"
         "Ionide.Ionide-fsharp"
         "jnoortheen.nix-ide"
         "JozefChmelar.compare"
