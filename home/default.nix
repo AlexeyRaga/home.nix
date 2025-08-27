@@ -45,7 +45,7 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home = {
-    wallpaper.file = ./config/wallpaper/drwho-macos.jpeg;
+    wallpaper.file = ./config/wallpaper/drwho-best.jpeg;
 
     sessionVariables = {
       EDITOR = "vim";
