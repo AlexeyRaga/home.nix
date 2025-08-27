@@ -49,18 +49,28 @@ in
 
         bundle_file="$HOME/.vscode/extensions/extensions.nix.bundle"
 
-        # Sort the arrays and remove duplicates
-        installed_exts=$(${codeBin} --list-extensions | sort -u)
-        wanted_exts="${currentBundleContent}"
+        # Get extension lists (these are newline-separated strings, not arrays)
+        installed_exts=$(${codeBin} --list-extensions | tr '[:upper:]' '[:lower:]')
+        wanted_exts=$(echo "${currentBundleContent}" | tr '[:upper:]' '[:lower:]')
+        
+        if [ -f "$bundle_file" ]; then
+          bundled_exts=$(cat "$bundle_file" | tr '[:upper:]' '[:lower:]')
+        else
+          bundled_exts=""
+        fi
 
-        [ -f "$bundle_file" ] && bundled_exts=$(sort -u "$bundle_file") || bundled_exts=""
+        # Find extensions to install (in wanted but not installed)
+        mapfile -t to_install < <(comm -23 <(echo "$wanted_exts" | sort -u) <(echo "$installed_exts" | sort -u))
 
-        mapfile -t to_install < <(comm -23 <(echo "$wanted_exts") <(echo "$installed_exts"))
-
-        # Find elements that are in both stored_exts and installed_exts but not in wanted_exts
-        mapfile -t to_remove < <(comm -23 <(echo "$bundled_exts") <(echo "$wanted_exts") | comm -12 <(echo "$installed_exts") -)
-
-        echo "VSCode: Setting extensions"
+        # Find extensions to remove (in bundled AND installed but NOT wanted)
+        if [ -n "$bundled_exts" ]; then
+          # Step 1: Find extensions in bundled but not in wanted
+          bundled_not_wanted=$(comm -23 <(echo "$bundled_exts" | sort -u) <(echo "$wanted_exts" | sort -u))
+          # Step 2: Find which of those are also installed
+          mapfile -t to_remove < <(comm -12 <(echo "$installed_exts" | sort -u) <(echo "$bundled_not_wanted" | sort -u))
+        else
+          to_remove=()
+        fi
 
         if [ ''${#to_install[@]} -gt 0 ]; then
           install_args=()
