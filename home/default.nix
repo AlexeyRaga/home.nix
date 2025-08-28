@@ -204,6 +204,12 @@ in
 
   programs.nushell = {
     enable = true;
+    plugins = with pkgs.nushellPlugins; [
+      hcl
+      query
+      polars
+      highlight
+    ];
   };
 
   programs.bash = {
