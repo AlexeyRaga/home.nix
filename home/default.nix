@@ -21,6 +21,20 @@ in
       experimental-features = nix-command flakes
   '';
 
+  # Add Nix registry entries
+  nix.registry = {
+    ep = {
+      from = {
+        type = "indirect";
+        id = "ep";
+      };
+      to = {
+        type = "git";
+        url = "ssh://git@github.com/educationperfect/ep-nix";
+      };
+    };
+  };
+
   imports = [    
     ./packages.nix
     ./work
