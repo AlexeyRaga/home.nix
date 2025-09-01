@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, user, ... }:
 
 with lib;
 
@@ -24,7 +24,7 @@ in
   userConfig = mkIf cfg.enable {
 
     home.activation.configureRaycast = 
-      let raycastPlist = "~/Library/Preferences/com.raycast.macos.plist";
+      let raycastPlist = "${user.home or "~"}/Library/Preferences/com.raycast.macos.plist";
       in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       /usr/libexec/PlistBuddy \
         -c "Set :raycastGlobalHotkey 'Command-49'" \
