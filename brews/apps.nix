@@ -39,8 +39,6 @@
   brews.vscode = {
     enable = true;
     extensions = [
-        "AdamCaviness.theme-monokai-dark-soda"
-        "akamud.vscode-theme-onedark"
         "amazonwebservices.aws-toolkit-vscode"
         "arrterian.nix-env-selector"
         "bbenoist.Nix"
