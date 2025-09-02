@@ -7,13 +7,11 @@ NETWORKS=$(warp-cli vnet)
 CURRENT_NETWORK=$(echo "$NETWORKS" | grep 'Currently selected' | awk '{print $NF}')
 
 if [ -z "$CURRENT_NETWORK" ]; then
-    echo "You are currently not connected to any VPN. Please connect to a VPN using your Warp client"
+    echo "❌ You are currently not connected to any VPN. Please connect to a VPN using your Warp client"
     exit 1
 fi
 
 CURRENT_NETWORK_NAME=$(echo "$NETWORKS" | grep -A 1 "ID: $CURRENT_NETWORK" | grep 'Name:' | awk '{print $NF}')
-
-echo "Currently connected to: $CURRENT_NETWORK_NAME ($CURRENT_NETWORK)"
 
 if [[ $CURRENT_NETWORK_NAME =~ ^([^-]+)(-?([^-]+).*)?-vnet$ ]]; then
     if [ "''${BASH_REMATCH[1]}" == "live" ]; then
@@ -32,13 +30,13 @@ if [[ $CURRENT_NETWORK_NAME =~ ^([^-]+)(-?([^-]+).*)?-vnet$ ]]; then
     fi
 
 else
-    echo "Unable to determine Vault domain URL for $CURRENT_NETWORK_NAME"
+    echo "❌ Unable to determine Vault domain URL for $CURRENT_NETWORK_NAME"
     exit 1
 fi
 
 VAULT_DOMAIN="vault.$BASE_DOMAIN"
 
-echo "Logging in to Vault: $VAULT_DOMAIN"
+echo "🔐 Logging in to Vault on $CURRENT_NETWORK_NAME: $VAULT_DOMAIN"
 echo ""
 
 export VAULT_ADDR="https://$VAULT_DOMAIN"

@@ -14,7 +14,7 @@ NETWORKS=$(warp-cli vnet)
 CURRENT_NETWORK=$(echo "$NETWORKS" | grep 'Currently selected' | awk '{print $NF}')
 
 if [ -z "$CURRENT_NETWORK" ]; then
-    echo "You are currently not connected to any VPN. Please connect to a VPN using your Warp client"
+    echo "❌ You are currently not connected to any VPN. Please connect to a VPN using your Warp client"
     exit 1
 fi
 
@@ -26,7 +26,7 @@ export AWS_REGION=$(aws configure get region --profile $AWS_PROFILE)
 
 # Check if logged in to AWS
 if ! aws sts get-caller-identity &> /dev/null; then
-  echo "You are not logged in to AWS."
+  echo "❌ You are not logged in to AWS."
   echo "Please run 'aws sso login --profile $AWS_PROFILE'"
   exit 1
 fi
