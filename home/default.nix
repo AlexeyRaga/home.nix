@@ -8,13 +8,8 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  nixpkgs.config.allowUnfree = true;
-
-  nixpkgs.overlays = [
-    # sometimes it is useful to pin a version of some tool or program.
-    # this can be done in "overlays/pinned.nix"
-    (import ../overlays/pinned.nix)
-  ];
+  # nixpkgs config and overlays are now applied in flake.nix when creating pkgs
+  # This ensures they're available to both darwin and home-manager via useGlobalPkgs
 
   # Flakes are not standard yet, but widely used, enable them.
   xdg.configFile."nix/nix.conf".text = ''
@@ -223,6 +218,7 @@ in
       query
       polars
       highlight
+      secret
     ];
   };
 

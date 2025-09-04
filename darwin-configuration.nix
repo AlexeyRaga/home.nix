@@ -7,11 +7,8 @@ in
   nixpkgs.hostPlatform = "aarch64-darwin";
   system.primaryUser = user.name;
 
-  nixpkgs.overlays = [
-    # sometimes it is useful to pin a version of some tool or program.
-    # this can be done in "overlays/pinned.nix"
-    (import ./overlays/pinned.nix)
-  ];
+  # Overlays are now applied in flake.nix before creating pkgs
+  # This ensures they're available everywhere consistently
 
   imports = [
     ./certificates.nix

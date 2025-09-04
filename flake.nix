@@ -16,6 +16,16 @@
 
   outputs = inputs@{ self, nix-darwin, home-manager, nixpkgs, devenv }: 
   let
+    # Apply overlays to create a customized pkgs
+    pkgs = import nixpkgs {
+      system = "aarch64-darwin";
+      overlays = [
+        (import ./overlays/pinned.nix)
+        (import ./overlays/nushell-plugins.nix)
+      ];
+      config.allowUnfree = true;
+    };
+    
     # User configuration - define your user details here
     user = {
       name        = "alexey";
@@ -46,11 +56,13 @@
   in
   {
     darwinConfigurations."Alexeys-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+      inherit pkgs;
       specialArgs = { inherit inputs user; };
       modules = [
         ./darwin-configuration.nix
         home-manager.darwinModules.home-manager
         {
+          home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.${user.name} = ./home;
           home-manager.extraSpecialArgs = { inherit inputs user; };
