@@ -16,13 +16,21 @@
 
   outputs = inputs@{ self, nix-darwin, home-manager, nixpkgs, devenv }: 
   let
+    # Import modules lib for overlay discovery
+    modules = import ./lib/modules.nix { lib = nixpkgs.lib; };
+    
+    # Create a special overlay that adds flake inputs to pkgs
+    inputsOverlay = final: prev: {
+      inputs = inputs;
+    };
+    
+    # Auto-discover all overlays from the overlays directory
+    overlays = [ inputsOverlay ] ++ (modules.discoverOverlays ./overlays);
+    
     # Apply overlays to create a customized pkgs
     pkgs = import nixpkgs {
       system = "aarch64-darwin";
-      overlays = [
-        (import ./overlays/pinned.nix)
-        (import ./overlays/nushell-plugins.nix)
-      ];
+      inherit overlays;
       config.allowUnfree = true;
     };
     

@@ -73,6 +73,13 @@ rec {
 
   importAllModules = dir: mapModulesRec' dir import;
   
+  # Auto-discover and compose overlays from a directory (recursively)
+  # discoverOverlays :: path -> [overlay]
+  discoverOverlays = dir:
+    if pathExists dir then
+      mapModulesRec' dir (path: import path)
+    else [];
+  
   # New dual-context import functions
   # Import modules for darwin context (uses 'systemConfig' section)
   importDarwinModules = dir: 
