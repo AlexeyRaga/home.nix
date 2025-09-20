@@ -8,9 +8,6 @@ in
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  # nixpkgs config and overlays are now applied in flake.nix when creating pkgs
-  # This ensures they're available to both darwin and home-manager via useGlobalPkgs
-
   # Flakes are not standard yet, but widely used, enable them.
   xdg.configFile."nix/nix.conf".text = ''
       experimental-features = nix-command flakes
@@ -219,6 +216,7 @@ in
       polars
       highlight
       secret
+      semver
     ];
   };
 

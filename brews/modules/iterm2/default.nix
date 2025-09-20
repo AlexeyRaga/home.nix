@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.brews.iterm2;
-  
+   
   # Create a derivation containing all theme files
   themesPackage = pkgs.runCommand "iterm2-themes" {} ''
     mkdir -p $out
@@ -61,12 +61,36 @@ in
       default = null;
       description = "iTerm2 color theme to apply. If null, no theme will be set automatically. Available themes: ${lib.concatStringsSep ", " (map (theme: theme.name) themes)}";
     };
+
+    browserPlugin = mkOption {
+      type = types.submodule {
+        options = {
+          enable = mkOption {
+            type = types.bool;
+            default = false;
+            description = "Install iTerm2 browser plugin to /Applications";
+          };
+          name = mkOption {
+            type = types.str;
+            default = "Browser";
+            description = "Name of the browser profile";
+          };
+          shortcut = mkOption {
+            type = types.strMatching "^[A-Z0-9]$";
+            default = "B";
+            description = "Keyboard shortcut for the browser profile";
+          };
+        };
+      };
+      default = {};
+      description = "Browser plugin configuration";
+    };
   };
 
   systemConfig = mkIf cfg.enable {
       # Install mode: Darwin/homebrew configuration
     homebrew = {
-      casks = [ "iterm2" ];
+      casks = [ "iterm2" ] ++ optionals cfg.browserPlugin.enable [ "itermbrowserplugin" ];
     };
 
     # Initialise Shell Integration
@@ -137,6 +161,45 @@ in
 
         # Apply selected theme if specified
         ${themeApplyCommand}
+
+        # Configure browser plugin profile if enabled
+        ${lib.optionalString cfg.browserPlugin.enable ''
+          echo "Configuring iTerm2 browser plugin profile..."
+          
+          # Search for existing ${cfg.browserPlugin.name} profile
+          PROFILE_INDEX=0
+          while true; do
+            PROFILE_NAME=$(/usr/libexec/PlistBuddy -c "Print :'New Bookmarks':$PROFILE_INDEX:'Name'" ${itermsPlist} 2>/dev/null) || PROFILE_NAME=""
+            if [ -z "$PROFILE_NAME" ]; then
+              # No more profiles exist, break and create new one
+              break
+            elif [ "$PROFILE_NAME" = "${cfg.browserPlugin.name}" ]; then
+              # Found existing profile
+              break
+            fi
+            PROFILE_INDEX=$((PROFILE_INDEX + 1))
+          done
+
+          # Create new profile if we reached the end without finding one
+          if [ -z "$PROFILE_NAME" ] || [ "$PROFILE_NAME" != "${cfg.browserPlugin.name}" ]; then
+            echo "Creating new ${cfg.browserPlugin.name} profile at index $PROFILE_INDEX"
+            /usr/libexec/PlistBuddy \
+              -c "Add :'New Bookmarks':$PROFILE_INDEX dict" \
+              -c "Add :'New Bookmarks':$PROFILE_INDEX:'Name' string" \
+              -c "Add :'New Bookmarks':$PROFILE_INDEX:'Custom Command' string" \
+              -c "Add :'New Bookmarks':$PROFILE_INDEX:'Shortcut' string" \
+              ${itermsPlist} 2>/dev/null || true
+          fi
+
+          # Set profile properties (whether new or existing)
+          /usr/libexec/PlistBuddy \
+              -c "Set :'New Bookmarks':$PROFILE_INDEX:'Name' '${cfg.browserPlugin.name}'" \
+              -c "Set :'New Bookmarks':$PROFILE_INDEX:'Custom Command' 'Browser'" \
+              -c "Set :'New Bookmarks':$PROFILE_INDEX:'Shortcut' '${cfg.browserPlugin.shortcut}'" \
+              ${itermsPlist}
+
+          echo "iTerm2 browser plugin profile configured successfully"
+        ''}
       '';
   };
 }

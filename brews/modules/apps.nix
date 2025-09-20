@@ -32,6 +32,10 @@ in
   systemConfig = {
     homebrew = {
       enable = true;
+      onActivation = {
+        autoUpdate = true;
+        upgrade = false;
+      };
       casks = cfg.casks;
       brews = cfg.brews;
       masApps = cfg.macApps;

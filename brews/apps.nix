@@ -86,6 +86,11 @@
   brews.iterm2 = {
     enable = true;
     theme = "catppuccin-mocha";
+    browserPlugin = {
+      enable = true;
+      name = "Browser"; # optional, defaults to "Browser"
+      shortcut = "B";   # optional, defaults to "Ctrl+Option+B"
+    };
   };
 
   brews.raycast = {
