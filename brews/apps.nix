@@ -5,7 +5,6 @@
     casks = [
       "1password"
       "brave-browser" # better chrome
-      "cheatsheet"
       "cursor"
       "discord"
       "dropbox"
@@ -22,7 +21,6 @@
       "hoppscotch" # postman alternative
       "rider"
       "shottr" # screenshot tool
-      "skype"
       "slack"
       "sublime-text"
       "telegram"
