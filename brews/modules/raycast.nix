@@ -26,6 +26,14 @@ in
     home.activation.configureRaycast = 
       let raycastPlist = "${user.home or "~"}/Library/Preferences/com.raycast.macos.plist";
       in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      # Check if plist file exists, if not initialize it
+      if [[ ! -f "${raycastPlist}" ]]; then
+        echo "Initializing Raycast preferences plist..."
+        /usr/libexec/PlistBuddy \
+          -c "Add :raycastGlobalHotkey string" \
+          "${raycastPlist}" 2>/dev/null || true
+      fi
+
       /usr/libexec/PlistBuddy \
         -c "Set :raycastGlobalHotkey 'Command-49'" \
         ${raycastPlist}

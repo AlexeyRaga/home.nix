@@ -194,33 +194,33 @@ in
     home.activation.configureMagnet = lib.hm.dag.entryAfter [ "writeBoundary" ] 
       (let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
     in ''
-      CONFIG_PATH="$HOME/Library/Preferences/com.crowdcafe.windowmagnet.plist"
-      DEBUG_FILE="$HOME/.cache/magnet-debug.json"
+    #   CONFIG_PATH="$HOME/Library/Preferences/com.crowdcafe.windowmagnet.plist"
+    #   DEBUG_FILE="$HOME/.cache/magnet-debug.json"
       
-      # Create cache directory if it doesn't exist
-      mkdir -p "$HOME/.cache"
+    #   # Create cache directory if it doesn't exist
+    #   mkdir -p "$HOME/.cache"
       
-      hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" $CONFIG_PATH)
-      commands='${jsonCommands}'
+    #   hconfig=$(/usr/libexec/PlistBuddy -c "Print horizontalCommands" $CONFIG_PATH)
+    #   commands='${jsonCommands}'
 
-      jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
-        $data1 as $orig |
-        $data2 as $cmds |
+    #   jq -n --argjson data1 "$hconfig" --argjson data2 "$commands" '
+    #     $data1 as $orig |
+    #     $data2 as $cmds |
 
-        ($orig | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $orig_by_id |
-        ($cmds | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $commands_by_id |
+    #     ($orig | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $orig_by_id |
+    #     ($cmds | map(select(.id?)) | map({key: .id, value: .}) | from_entries) as $commands_by_id |
         
-        # Merge orig.json, replacing entries with the same id with commands.json
-        ($orig | map(if .id? and $commands_by_id[.id] then $commands_by_id[.id] else . end)) +
+    #     # Merge orig.json, replacing entries with the same id with commands.json
+    #     ($orig | map(if .id? and $commands_by_id[.id] then $commands_by_id[.id] else . end)) +
         
-        # Add new entries from commands.json with id not in orig.json
-        ($cmds | map(select(.id? and (.id as $id | $orig_by_id[$id] | not)))) +
+    #     # Add new entries from commands.json with id not in orig.json
+    #     ($cmds | map(select(.id? and (.id as $id | $orig_by_id[$id] | not)))) +
 
-        # Add all entries without ids from commands.json
-        ($cmds | map(select(.id? | not)))
-    ' > "$DEBUG_FILE"
+    #     # Add all entries without ids from commands.json
+    #     ($cmds | map(select(.id? | not)))
+    # ' > "$DEBUG_FILE"
     
-    echo "Magnet configuration written to: $DEBUG_FILE"
+    # echo "Magnet configuration written to: $DEBUG_FILE"
     '');
   };
 }

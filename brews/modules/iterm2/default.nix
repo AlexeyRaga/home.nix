@@ -151,7 +151,23 @@ in
         # Install all available themes
         ${themeInstallCommands}
 
+        # Check if plist file exists, if not initialize it
+        if [[ ! -f "${itermsPlist}" ]]; then
+          echo "Initializing iTerm2 preferences plist..."
+          /usr/libexec/PlistBuddy \
+            -c "Add :'New Bookmarks' array" \
+            -c "Add :'New Bookmarks':0 dict" \
+            -c "Add :'New Bookmarks':0:'Name' string" \
+            -c "Add :'New Bookmarks':0:'Normal Font' string" \
+            -c "Add :'New Bookmarks':0:Columns integer" \
+            -c "Add :'New Bookmarks':0:Rows integer" \
+            -c "Add :'New Bookmarks':0:'Silence Bell' bool" \
+            -c "Add :'New Bookmarks':0:'Custom Directory' string" \
+            "${itermsPlist}" 2>/dev/null || true
+        fi
+
         /usr/libexec/PlistBuddy \
+          -c "Set :'New Bookmarks':0:'Name' 'Default'" \
           -c "Set :'New Bookmarks':0:'Normal Font' '${cfg.font}'" \
           -c "Set :'New Bookmarks':0:'Columns' ${toString cfg.columns}" \
           -c "Set :'New Bookmarks':0:'Rows' ${toString cfg.rows}" \
