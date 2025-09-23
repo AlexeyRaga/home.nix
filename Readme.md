@@ -7,9 +7,13 @@ This Readme is currently MacOS-centric.
 ## Installation
 
 1. Install [Nix](https://nixos.org/download.html)
+   
+   The command line at the time of writing is:
    ```bash
-    $ sh <(curl -L https://nixos.org/nix/install) --daemon
+    $ sh <(curl --proto '=https' --tlsv1.2 -L https://nixos.org/nix/install)
    ```
+   but check the page anyway.
+
 
 2. (MacOS only) Install [Homebrew](https://brew.sh/)
    ```
