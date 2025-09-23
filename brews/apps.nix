@@ -5,7 +5,6 @@
     casks = [
       "1password"
       "brave-browser" # better chrome
-      "cursor"
       "discord"
       "dropbox"
       "google-chrome"
@@ -27,9 +26,7 @@
       "vlc"
       "warp" # AI-enabled terminal
       "zoom"
-      "zed" # code editor
       "mitmproxy"
-      "tor-browser" # privacy-focused browser
       "thebrowsercompany-dia" # web browser with AI
     ];
   };
