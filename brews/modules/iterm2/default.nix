@@ -148,9 +148,6 @@ in
           );
 
       in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-        # Install all available themes
-        ${themeInstallCommands}
-
         # Check if plist file exists, if not initialize it
         if [[ ! -f "${itermsPlist}" ]]; then
           echo "Initializing iTerm2 preferences plist..."
@@ -175,6 +172,9 @@ in
           -c "Set :'New Bookmarks':0:'Custom Directory' Recycle" \
           ${itermsPlist}
 
+        # Install all themes
+        ${themeInstallCommands}
+        
         # Apply selected theme if specified
         ${themeApplyCommand}
 
