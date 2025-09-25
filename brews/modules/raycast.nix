@@ -37,6 +37,9 @@ in
       /usr/libexec/PlistBuddy \
         -c "Set :raycastGlobalHotkey 'Command-49'" \
         ${raycastPlist}
+
+      /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}"
+      /usr/bin/osascript -e 'tell application "Raycast" to launch'
     '';
   };
 }
