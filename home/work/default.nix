@@ -16,6 +16,7 @@ in
 
   home.packages = [
     pkgs.claude-code
+    pkgs.gh-copilot-cli
   ];
 
   tools.dotnet = {
