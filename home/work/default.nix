@@ -37,6 +37,7 @@ in
         vault = "Employee";
         item = "Github Token";
         field = "password";
+        required = true; # Critical for work development
       };
 
       EP_NUGET_SOURCE_USER = {
@@ -44,6 +45,7 @@ in
         vault = "Employee";
         item = "Github Token";
         field = "username";
+        required = true; # Critical for work development
       };
 
       FUSIONAUTH_LICENCE = {
@@ -51,6 +53,7 @@ in
         vault = "Dev - Shared DevOps";
         item = "FusionAuth Licences";
         field = "Non-Production";
+        required = false; # Optional for local dev
       };
 
       EP_NPM_TOKEN = {
@@ -58,6 +61,7 @@ in
         vault = "Dev - Shared";
         item = "NPM readonly token";
         field = "token";
+        required = true; # Needed for package installation
       };
     };
   };

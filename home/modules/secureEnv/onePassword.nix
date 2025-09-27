@@ -24,31 +24,56 @@ let
 
   populateSecrets = nsConfig:
     let
-      opGetItem = account: vault: field: item: ''
-        ${pkgs._1password-cli}/bin/op read --account '${account}' 'op://${vault}/${item}/${field}'
-      '';
+      opGetItem = account: vault: field: item: 
+        "${pkgs._1password-cli}/bin/op read --account '${account}' 'op://${vault}/${item}/${field}'";
 
       syncOneVariable = key: item: ''
         echo >&2 "  Setting ${key} <- ${item.account}/${item.vault}/${item.item}/${item.field}"
-        password=$(${opGetItem item.account item.vault item.field item.item})
-        ${storeSecret "nix-1pwd" key "$password" "Password from ${item.vault}.${item.item}.${item.field}"}
+        if password=$(${opGetItem item.account item.vault item.field item.item} 2>/dev/null); then
+          ${storeSecret "nix-1pwd" key "$password" "Password from ${item.vault}.${item.item}.${item.field}"}
+        else
+          ${if item.required then ''
+            echo >&2 "    ✗ ERROR: Failed to retrieve required secret ${key}"
+            echo >&2 "      This may be due to:"
+            echo >&2 "      - Not signed in to 1Password (run 'op signin')"
+            echo >&2 "      - Missing access to vault '${item.vault}'"
+            echo >&2 "      - Item '${item.item}' or field '${item.field}' doesn't exist"
+            exit 1
+          '' else ''
+            echo >&2 "    ⚠ WARNING: Failed to retrieve optional secret ${key}, skipping"
+          ''}
+        fi
       '';
 
       syncAllVariables = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOneVariable items);
 
       syncOneKey = key: item: ''
         echo >&2 "  Adding ssh-key ${key} <- ${item.account}/${item.vault}/${item.item}/${item.field}"
-        sshKey=$(${opGetItem item.account item.vault item.field item.item})
-        ${storeSshKeyCmd "$sshKey"}
+        if sshKey=$(${opGetItem item.account item.vault item.field item.item} 2>/dev/null); then
+          ${storeSshKeyCmd "$sshKey"}
+        else
+          ${if item.required then ''
+            echo >&2 "    ✗ ERROR: Failed to retrieve required SSH key ${key}"
+            echo >&2 "      This may be due to:"
+            echo >&2 "      - Not signed in to 1Password (run 'op signin')"
+            echo >&2 "      - Missing access to vault '${item.vault}'"
+            echo >&2 "      - Item '${item.item}' or field '${item.field}' doesn't exist"
+            exit 1
+          '' else ''
+            echo >&2 "    ⚠ WARNING: Failed to retrieve optional SSH key ${key}, skipping"
+          ''}
+        fi
       '';
 
       syncAllKeys = items: lib.concatStringsSep "\n" (lib.mapAttrsToList syncOneKey items);
     in
     pkgs.writeShellScript "populateKeys" ''
       set -e
+      echo >&2 "🔐 Syncing secrets from 1Password..."
       ${syncAllVariables nsConfig.sessionVariables}
       ${syncAllKeys nsConfig.sshKeys}
       ${pkgs._1password-cli}/bin/op signout --all
+      echo >&2 "✓ 1Password sync completed"
     '';
 in
 {  options.secureEnv.onePassword = {
@@ -61,6 +86,11 @@ in
           vault = mkOption { type = types.str; };
           item = mkOption { type = types.str; };
           field = mkOption { type = types.str; };
+          required = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Whether missing this secret should fail activation";
+          };
         };
       });
       default = { };
@@ -73,6 +103,11 @@ in
           vault = mkOption { type = types.str; };
           item = mkOption { type = types.str; };
           field = mkOption { type = types.str; };
+          required = mkOption {
+            type = types.bool;
+            default = true;
+            description = "Whether missing this SSH key should fail activation";
+          };
         };
       });
       default = { };
@@ -89,6 +124,10 @@ in
       $DRY_RUN_CMD ${populateSecrets cfg}
     '';
 
-    home.sessionVariables = lib.mapAttrs' (k: v: lib.nameValuePair k ''$(${lookupSecret "nix-1pwd" k})'') cfg.sessionVariables;
+    # Only set up session variables for secrets that exist in keychain
+    # The populateSecrets script only stores secrets it successfully retrieves
+    home.sessionVariables = lib.mapAttrs' 
+      (k: v: lib.nameValuePair k ''$(${lookupSecret "nix-1pwd" k} 2>/dev/null || echo "")'') 
+      cfg.sessionVariables;
   };
 }
