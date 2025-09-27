@@ -69,7 +69,7 @@ let
     in
     pkgs.writeShellScript "populateKeys" ''
       set -e
-      echo >&2 "🔐 Syncing secrets from 1Password..."
+      echo >&2 "Syncing secrets from 1Password..."
       ${syncAllVariables nsConfig.sessionVariables}
       ${syncAllKeys nsConfig.sshKeys}
       ${pkgs._1password-cli}/bin/op signout --all

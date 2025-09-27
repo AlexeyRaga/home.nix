@@ -194,7 +194,6 @@ in
     home.activation.configureMagnet = lib.hm.dag.entryAfter [ "writeBoundary" ] 
       (let jsonCommands = builtins.toJSON (map convertShortcut cfg.commands);
     in ''
-      /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Magnet.app\", hidden:false}"
     
     #   CONFIG_PATH="$HOME/Library/Preferences/com.crowdcafe.windowmagnet.plist"
     #   DEBUG_FILE="$HOME/.cache/magnet-debug.json"
@@ -224,7 +223,10 @@ in
     
     # echo "Magnet configuration written to: $DEBUG_FILE"
 
-    /usr/bin/osascript -e 'tell application "Magnet" to launch'
+    if ! /usr/bin/osascript -e "tell application \"System Events\" to get the path of every login item" | grep -q "/Applications/Magnet.app"; then
+      /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Magnet.app\", hidden:false}"
+      /usr/bin/osascript -e 'tell application "Magnet" to launch'
+    fi
     '');
   };
 }

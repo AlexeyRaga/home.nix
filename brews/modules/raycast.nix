@@ -38,8 +38,11 @@ in
         -c "Set :raycastGlobalHotkey 'Command-49'" \
         ${raycastPlist}
 
-      /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}"
-      /usr/bin/osascript -e 'tell application "Raycast" to launch'
+      # Only add to login items if not already present
+      if ! /usr/bin/osascript -e "tell application \"System Events\" to get the path of every login item" | grep -q "/Applications/Raycast.app"; then
+        /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}"
+        /usr/bin/osascript -e 'tell application "Raycast" to launch'
+      fi
     '';
   };
 }
