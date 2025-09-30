@@ -41,6 +41,7 @@
       email       = "alexey.raga@gmail.com";  # Replace with your actual email
       home        = "/Users/alexey";
       shell       = "zsh";
+      hostname    = "Alexeys-MacBook-Pro";  # System hostname for nix-darwin
       
       # Git-specific configurations
       githubUser  = "AlexeyRaga";
@@ -63,7 +64,7 @@
     };
   in
   {
-    darwinConfigurations."Alexeys-MacBook-Pro" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations.${user.hostname} = nix-darwin.lib.darwinSystem {
       inherit pkgs;
       specialArgs = { inherit inputs user; };
       modules = [

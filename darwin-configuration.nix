@@ -4,7 +4,7 @@ let
 in
 {
   documentation.enable = false;
-  nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.hostPlatform = pkgs.system;
   system.primaryUser = user.name;
 
   # Overlays are now applied in flake.nix before creating pkgs
