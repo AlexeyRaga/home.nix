@@ -36,6 +36,7 @@
     extensions = [
         "amazonwebservices.aws-toolkit-vscode"
         "arrterian.nix-env-selector"
+        "authzed.spicedb-vscode"
         "bbenoist.Nix"
         "bierner.markdown-mermaid"
         "coolbear.systemd-unit-file"
