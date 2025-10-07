@@ -1,16 +1,16 @@
 self: super: {
   gh-copilot-cli = super.buildNpmPackage rec {
     pname = "gh-copilot-cli";
-    version = "0.0.327";
+    version = "0.0.335";
 
     nodejs = super.nodejs_22;
 
     src = super.fetchzip {
       url = "https://registry.npmjs.org/@github/copilot/-/copilot-${version}.tgz";
-      hash = "sha256-BQhYegt4Rqnzd13BCpGD0U0/Ac9WGgryHOt3tptk06s=";
+      hash = "sha256-7r1EC0UMi1w5yxVPIUQjhyyA7E3AQanTyHRU5KM84PI=";
     };
 
-    npmDepsHash = "sha256-GqJlDnTuRYNG3puAFH4DRdUw+NaYS6ZALOVrim0qbhE=";
+    npmDepsHash = "sha256-dYjydDPPrAE7HeddMjaVT+J4uoJJWVioM5YRnEQyPDQ=";
 
     postPatch = ''
       cp ${./package-lock.json} package-lock.json
