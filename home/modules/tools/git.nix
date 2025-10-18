@@ -31,7 +31,7 @@ in
 
       difftastic = {
         enable = true;
-        display = "side-by-side"; # one of "side-by-side", "side-by-side-show-both", "inline"
+        options.display = "side-by-side"; # one of "side-by-side", "side-by-side-show-both", "inline"
       };
 
       extraConfig = {

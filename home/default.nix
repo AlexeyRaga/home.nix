@@ -214,8 +214,7 @@ in
       hcl
       query
       polars
-      highlight
-      secret
+      # highlight
       semver
     ];
   };
