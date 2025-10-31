@@ -23,19 +23,19 @@ in
   config = mkIf cfg.enable {
     home.file = lib.mapAttrs' (k: v: lib.nameValuePair "${k}/.gitconfig" { text = lib.generators.toINI { } v; }) cfg.workspaces;
 
+    programs.difftastic = {
+      enable = true;
+      git.enable = true;
+      options.display = "side-by-side"; # one of "side-by-side", "side-by-side-show-both", "inline"
+    };
+
     programs.git = {
       enable = true;
       lfs.enable = true;
-      userName = cfg.userName;
-      userEmail = cfg.userEmail;
 
-      difftastic = {
-        enable = true;
-        options.display = "side-by-side"; # one of "side-by-side", "side-by-side-show-both", "inline"
-      };
-
-      extraConfig = {
-        # core = { autocrlf = false; };
+      settings = {
+        user.name = cfg.userName;
+        user.email = cfg.userEmail;
         github.user = cfg.githubUser;
         init.defaultBranch = "main";
       };
