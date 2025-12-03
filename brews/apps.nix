@@ -29,6 +29,7 @@
       "mitmproxy"
       "thebrowsercompany-dia" # web browser with AI
       "zed"
+      "dockdoor"
     ];
   };
 
