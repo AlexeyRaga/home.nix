@@ -53,6 +53,11 @@ in
     # package = pkgs.nix;
     package = pkgs.nixVersions.latest;
 
+    gc = {
+      automatic = true;
+      options = "--delete-older-than 60d";
+    };
+
     settings = {
       max-jobs = 12;
 
