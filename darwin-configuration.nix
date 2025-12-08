@@ -59,6 +59,8 @@ in
     };
 
     settings = {
+      experimental-features = ["nix-command" "flakes"];
+      
       max-jobs = 12;
 
       # $ sysctl -n hw.ncpu
