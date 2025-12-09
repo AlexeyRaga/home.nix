@@ -30,7 +30,12 @@
       "thebrowsercompany-dia" # web browser with AI
       "zed"
       "dockdoor"
+      "meetingbar"
     ];
+
+    macApps = {
+      Dropover = 1355679052;
+    };
   };
 
   brews.vscode = {
