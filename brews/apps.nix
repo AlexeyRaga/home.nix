@@ -33,9 +33,9 @@
       "meetingbar"
     ];
 
-    macApps = {
-      Dropover = 1355679052;
-    };
+    brews = [
+      "mas" # Required for masApps installations
+    ];
   };
 
   brews.vscode = {
@@ -94,6 +94,10 @@
       name = "Browser"; # optional, defaults to "Browser"
       shortcut = "B";   # optional, defaults to "Ctrl+Option+B"
     };
+  };
+
+  brews.boring-notch = {
+    enable = true;
   };
 
   brews.raycast = {
