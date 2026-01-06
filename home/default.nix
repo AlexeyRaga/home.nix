@@ -127,15 +127,6 @@ in
     lf.enable = true;
   };
 
-  # services.colima = {
-  #   enable = false;
-
-  #   config = {
-  #     cpu = 4;
-  #     memory = 4;
-  #   };
-  # };
-
   tools = {
     aws.enable = true;
     dotnet.enable = true;
@@ -211,11 +202,11 @@ in
   programs.nushell = {
     enable = true;
     plugins = with pkgs.nushellPlugins; [
-      hcl
+      # hcl
       query
       polars
       # highlight
-      semver
+      # semver
     ];
   };
 
