@@ -82,10 +82,6 @@
     hostResolver = false;
   };
 
-  brews.cloudflare-warp = {
-    enable = true;
-  };
-
   brews.iterm2 = {
     enable = true;
     theme = "catppuccin-mocha";
