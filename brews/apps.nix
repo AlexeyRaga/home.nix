@@ -102,6 +102,7 @@
 
   brews.rectangle = {
     enable = true;
+    gapBetweenWindowsPx = 0;
   };
 
   brews.magnet = {
