@@ -100,8 +100,12 @@
     enable = true;
   };
 
-  brews.magnet = {
+  brews.rectangle = {
     enable = true;
+  };
+
+  brews.magnet = {
+    enable = false;
 
     commands = [
       {
