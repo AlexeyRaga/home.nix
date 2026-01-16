@@ -92,44 +92,9 @@
     };
   };
 
-  brews.boring-notch = {
-    enable = true;
-  };
+  brews.boring-notch.enable = true;
+  brews.raycast.enable = true;
+  brews.rectangle.enable = true;
+  brews.ice.enable = true;
 
-  brews.raycast = {
-    enable = true;
-  };
-
-  brews.rectangle = {
-    enable = true;
-    gapBetweenWindowsPx = 0;
-  };
-
-  brews.magnet = {
-    enable = false;
-
-    commands = [
-      {
-        name = "Top Left Two Thirds";
-        id = "D902DA03-47FB-40D5-8015-3499A9EB167E";
-        shortcut = [ "Cmd" "CTRL" "." ];
-        targetArea = {
-          area = {
-            segments = [
-              {
-                id = "5DD6FE34-866B-4127-9219-346433F8AAA1";
-                frame = [ [0 0] [8 8] ];
-              }
-            ];
-          };
-        };
-      }
-    ];
-  };
-
-  # Add other shared app configurations here as needed
-  # brews.someOtherApp = {
-  #   enable = true;
-  #   someOption = "value";
-  # };
 }
