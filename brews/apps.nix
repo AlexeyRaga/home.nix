@@ -67,6 +67,7 @@
         "ms-dotnettools.vscodeintellicode-csharp"
         "ms-vscode-remote.remote-containers"
         "ms-vscode.makefile-tools"
+        "ms-CopilotStudio.vscode-copilotstudio"
         "PKief.material-icon-theme"
         "redhat.vscode-yaml"
         "streetsidesoftware.avro"
