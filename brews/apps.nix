@@ -30,7 +30,6 @@
       "thebrowsercompany-dia" # web browser with AI
       "zed"
       "dockdoor"
-      "meetingbar"
     ];
 
     brews = [
@@ -97,5 +96,6 @@
   brews.raycast.enable = true;
   brews.rectangle.enable = true;
   brews.ice.enable = true;
+  brews.meetingbar.enable = true;
 
 }
