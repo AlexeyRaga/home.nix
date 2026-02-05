@@ -92,9 +92,17 @@
     };
   };
 
+  brews.rectangle = {
+    enable = true;
+    shortcuts = {
+      maximize = "option+cmd+return";
+      restore = "option+cmd+delete";
+    };
+  };
+
   brews.boring-notch.enable = true;
   brews.raycast.enable = true;
-  brews.rectangle.enable = true;
+  
   brews.ice.enable = true;
   brews.meetingbar.enable = true;
 
