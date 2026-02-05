@@ -41,16 +41,21 @@ in
   };
 
   userConfig = mkIf cfg.enable {
+
+    targets.darwin.defaults = {
+      "com.knollsoft.Rectangle" = {
+        SUEnableAutomaticChecks = cfg.autoUpdate;
+        moveCursorAcrossDisplays = cfg.moveCursorAcrossDisplays;
+        gapSize = cfg.gapBetweenWindowsPx;
+      };
+    };
+
     home.activation.configureRectangle = ''
       # Only add to login items if not already present
       if ! /usr/bin/osascript -e "tell application \"System Events\" to get the path of every login item" | grep -q "/Applications/Rectangle.app"; then
         $DRY_RUN_CMD /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Rectangle.app\", hidden:false}"
         $DRY_RUN_CMD /usr/bin/osascript -e 'tell application "Rectangle" to launch'
       fi
-
-      $DRY_RUN_CMD /usr/bin/defaults write com.knollsoft.Rectangle SUEnableAutomaticChecks -bool ${boolToString cfg.autoUpdate}
-      $DRY_RUN_CMD /usr/bin/defaults write com.knollsoft.Rectangle moveCursorAcrossDisplays -bool ${boolToString cfg.moveCursorAcrossDisplays}
-      $DRY_RUN_CMD /usr/bin/defaults write com.knollsoft.Rectangle gapSize -int ${toString cfg.gapBetweenWindowsPx}
     '';
   };
 }

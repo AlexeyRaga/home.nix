@@ -23,21 +23,13 @@ in
 
   userConfig = mkIf cfg.enable {
 
-    home.activation.configureRaycast = 
-      let raycastPlist = "${user.home or "~"}/Library/Preferences/com.raycast.macos.plist";
-      in lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      # Check if plist file exists, if not initialize it
-      if [[ ! -f "${raycastPlist}" ]]; then
-        echo "Initializing Raycast preferences plist..."
-        /usr/libexec/PlistBuddy \
-          -c "Add :raycastGlobalHotkey string" \
-          "${raycastPlist}" 2>/dev/null || true
-      fi
+    targets.darwin.defaults = {
+      "com.raycast.macos" = {
+        raycastGlobalHotkey = "Command-49";
+      };
+    };
 
-      /usr/libexec/PlistBuddy \
-        -c "Set :raycastGlobalHotkey 'Command-49'" \
-        ${raycastPlist}
-
+    home.activation.configureRaycast = ''
       # Only add to login items if not already present
       if ! /usr/bin/osascript -e "tell application \"System Events\" to get the path of every login item" | grep -q "/Applications/Raycast.app"; then
         /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Raycast.app\", hidden:false}"

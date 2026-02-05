@@ -53,19 +53,23 @@ in
   };
 
   userConfig = mkIf cfg.enable {
+    targets.darwin.defaults = {
+      "com.jordanbaird.Ice" = {
+        SUEnableAutomaticChecks = cfg.autoUpdate;
+        SUAutomaticallyUpdate = cfg.autoUpdate;
+        showOnHover = cfg.showOnHover;
+        HideApplicationMenus = cfg.hideApplicationMenus;
+        ShowAllSectionsOnUserDrag = cfg.showAllSectionsOnUserDrag;
+        EnableAlwaysHiddenSection = cfg.enableAlwaysHiddenSection;
+      };
+    };
+
     home.activation.configureIce = ''
       # Only add to login items if not already present
       if ! /usr/bin/osascript -e "tell application \"System Events\" to get the path of every login item" | grep -q "/Applications/Ice.app"; then
         $DRY_RUN_CMD /usr/bin/osascript -e "tell application \"System Events\" to make login item at end with properties {path:\"/Applications/Ice.app\", hidden:false}"
         $DRY_RUN_CMD /usr/bin/osascript -e 'tell application "Ice" to launch'
       fi
-
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice SUEnableAutomaticChecks -bool ${boolToString cfg.autoUpdate}
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice SUAutomaticallyUpdate -bool ${boolToString cfg.autoUpdate}
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice showOnHover -bool ${boolToString cfg.showOnHover}
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice HideApplicationMenus -bool ${boolToString cfg.hideApplicationMenus}
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice ShowAllSectionsOnUserDrag -bool ${boolToString cfg.showAllSectionsOnUserDrag}
-      $DRY_RUN_CMD /usr/bin/defaults write com.jordanbaird.Ice EnableAlwaysHiddenSection -bool ${boolToString cfg.enableAlwaysHiddenSection}
     '';
   };
 }
