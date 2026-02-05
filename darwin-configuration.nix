@@ -49,6 +49,10 @@ in
     onActivation.cleanup = "zap";
   };
 
+  spotlight.excludePaths = [
+    "${user.home}/src"
+  ];
+
   nix = {
     # package = pkgs.nix;
     package = pkgs.nixVersions.latest;
