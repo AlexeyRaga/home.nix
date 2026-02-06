@@ -74,6 +74,7 @@
         "yzhang.markdown-all-in-one"
         "TheNuProjectContributors.vscode-nushell-lang"
         "DrBlury.protobuf-vsc"
+        "anthropic.claude-code"
     ];
   };
 
