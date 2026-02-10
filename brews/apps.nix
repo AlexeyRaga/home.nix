@@ -111,5 +111,8 @@
   brews.ice.enable = true;
   brews.meetingbar.enable = true;
 
-  brews.claude.enable = true;
+  brews.claude = {
+    enable = true;
+    enableGithubMCP = true;
+  };
 }
