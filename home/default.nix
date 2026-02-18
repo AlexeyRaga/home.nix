@@ -31,7 +31,7 @@ in
     ./packages.nix
     ./work
     ../brews/apps.nix
-  ] ++ (modules.importAllModules ./modules) ++ (modules.importHomeModules ../brews);
+  ] ++ (modules.importHomeModules ./modules) ++ (modules.importHomeModules ../brews);
 
   # App configurations are now in brews/shared-config.nix and imported automatically
 

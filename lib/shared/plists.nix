@@ -1,20 +1,20 @@
 { lib, pkgs }:
 let
-  mergePlistTool = pkgs.writeShellApplication {
-    name = "merge-plist";
+  mergeJsonTool = pkgs.writeShellApplication {
+    name = "merge-plist-json";
     runtimeInputs = [ pkgs.python3 ];
     text = ''
       if [ $# -ne 3 ]; then
-        echo "usage: merge-plist <target.plist> <keyPath-json> <source.plist>" >&2
+        echo "usage: merge-plist-json <target.plist> <keyPath-json> <source-json>" >&2
         exit 2
       fi
       exec ${pkgs.python3.interpreter} - "$@" << 'EOF'
 import sys, json, plistlib
 
-target_path, keypath_json, source_path = sys.argv[1:4]
+target_path, keypath_json, source_json = sys.argv[1:4]
 
 with open(target_path, 'rb') as f: target = plistlib.load(f)
-with open(source_path, 'rb') as f: source = plistlib.load(f)
+source = json.loads(source_json)
 keypath = json.loads(keypath_json)
 
 def ensure_path(obj, path):
@@ -58,11 +58,30 @@ EOF
     '';
   };
 
-in {
-  # Returns a command string for use in scripts
+  # Thin wrapper: converts the source plist to JSON, then delegates to mergeJsonTool
+  mergePlistTool = pkgs.writeShellApplication {
+    name = "merge-plist";
+    runtimeInputs = [ pkgs.python3 ];
+    text = ''
+      if [ $# -ne 3 ]; then
+        echo "usage: merge-plist <target.plist> <keyPath-json> <source.plist>" >&2
+        exit 2
+      fi
+      source_json=$(${pkgs.python3.interpreter} -c 'import sys,json,plistlib;sys.stdout.write(json.dumps(plistlib.load(open(sys.argv[1],"rb"))))' "$3")
+      exec ${mergeJsonTool}/bin/merge-plist-json "$1" "$2" "$source_json"
+    '';
+  };
+
+in rec {
+  # Merge a source plist file into target at the specified keyPath
   merge = target: keyPath: source:
     "${mergePlistTool}/bin/merge-plist ${lib.escapeShellArgs [target (builtins.toJSON keyPath) source]}";
-  
-  # Expose the tool directly
-  # inherit mergePlistTool;
+
+  # Merge a raw JSON string into target at the specified keyPath
+  mergeJson = target: keyPath: jsonString:
+    "${mergeJsonTool}/bin/merge-plist-json ${lib.escapeShellArgs [target (builtins.toJSON keyPath) jsonString]}";
+
+  # Merge a Nix value (attrset, list, string, number, bool) into target at the specified keyPath
+  mergeValue = target: keyPath: value:
+    mergeJson target keyPath (builtins.toJSON value);
 }

@@ -73,75 +73,44 @@ in
 
 
   userConfig = mkIf cfg.enable {
+    # Declarative plist configuration using the new targets.darwin.plists module
+    # (Parent directory is automatically created by lib.plists)
+    targets.darwin.plists.containers."theboringteam.boringnotch" = {
+      SUEnableAutomaticChecks = true;
+      enableSneakPeek = cfg.enableSneakPeek;
+      menubarIcon = false;
+      firstLaunch = false;
+      SUHasLaunchedBefore = true;
+      SUAutomaticallyUpdate = true;
+      showMirror = cfg.showMirror;
+      showBatteryIndicator = cfg.showBatteryIndicator;
+      showBatteryPercentage = cfg.showBatteryPercentage;
+      showPowerStatusIcons = cfg.showPowerStatusIcons;
+      showPowerStatusNotifications = cfg.showPowerStatusNotifications;
+      showCalendar = cfg.showCalendar;
+      autoRemoveShelfItems = cfg.autoRemoveShelfItems;
+      copyOnDrag = cfg.copyOnDrag;
+    };
 
-    home.activation.boring-notch = 
-      let 
-        plist = "${user.home or "~"}/Library/Containers/theboringteam.boringnotch/Data/Library/Preferences/theboringteam.boringnotch.plist";
-        
-        plistContent = lib.generators.toPlist {} {
-          SUEnableAutomaticChecks = true;
-          enableSneakPeek = cfg.enableSneakPeek;
-          menubarIcon = false;
-          firstLaunch = false;
-          SUHasLaunchedBefore = true;
-          SUAutomaticallyUpdate = true;
-          showMirror = cfg.showMirror;
-          showBatteryIndicator = cfg.showBatteryIndicator;
-          showBatteryPercentage = cfg.showBatteryPercentage;
-          showPowerStatusIcons = cfg.showPowerStatusIcons;
-          showPowerStatusNotifications = cfg.showPowerStatusNotifications;
-          showCalendar = cfg.showCalendar;
-          autoRemoveShelfItems = cfg.autoRemoveShelfItems;
-          copyOnDrag = cfg.copyOnDrag;
-        };
-      in
-        lib.hm.dag.entryAfter [ "linkGeneration" ] ''
-          $DRY_RUN_CMD /usr/bin/xattr -rd com.apple.quarantine /Applications/BoringNotch.app 2>/dev/null || true
+    # Setup and launch app after plist is configured
+    home.activation.boring-notch = lib.hm.dag.entryAfter [ "setDarwinPlists" ] ''
+      echo "Activating Boring Notch configuration..."
+      echo "Configuring Boring Notch settings via plists..." > /tmp/boring-notch-activation.log
+      # Remove quarantine attribute from app
+      run /usr/bin/xattr -rd com.apple.quarantine /Applications/BoringNotch.app 2>/dev/null || true
 
+      # Add to login items if not already present
+      if ! /usr/bin/osascript -e 'tell application "System Events" to get the name of every login item' 2>/dev/null | /usr/bin/grep -q "BoringNotch"; then
+        echo "Adding BoringNotch to login items..."
+        run /usr/bin/osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/BoringNotch.app", hidden:false}' 2>/dev/null || true
+      fi
 
-          # Check if plist file exists, if not initialize it
-          if [[ ! -f "${plist}" ]]; then
-            echo "Launching BoringNotch to create container..."
-            $DRY_RUN_CMD /usr/bin/open -a "/Applications/BoringNotch.app"
-
-            [[ -n "$DRY_RUN_CMD" ]] && wait_time=0 || wait_time=10
-            end_time=$((SECONDS + wait_time))
-            while [[ ! -f "${plist}" ]] && ((SECONDS < end_time)); 
-            do 
-              sleep 0.2; 
-            done
-
-            $DRY_RUN_CMD /usr/bin/osascript -e 'quit app "BoringNotch"' 2>/dev/null || true
-          fi
-
-          # Set preferences using defaults (merges with existing settings)
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch SUEnableAutomaticChecks -bool true
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch enableSneakPeek -bool ${boolToString cfg.enableSneakPeek}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch menubarIcon -bool false
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch firstLaunch -bool false
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch SUHasLaunchedBefore -bool true
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch SUAutomaticallyUpdate -bool true
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showMirror -bool ${boolToString cfg.showMirror}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showBatteryIndicator -bool ${boolToString cfg.showBatteryIndicator}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showBatteryPercentage -bool ${boolToString cfg.showBatteryPercentage}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showPowerStatusIcons -bool ${boolToString cfg.showPowerStatusIcons}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showPowerStatusNotifications -bool ${boolToString cfg.showPowerStatusNotifications}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch showCalendar -bool ${boolToString cfg.showCalendar}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch autoRemoveShelfItems -bool ${boolToString cfg.autoRemoveShelfItems}
-          $DRY_RUN_CMD /usr/bin/defaults write theboringteam.boringnotch copyOnDrag -bool ${boolToString cfg.copyOnDrag}
-
-          # Add to login items and launch if not already running
-          if ! /usr/bin/osascript -e 'tell application "System Events" to get the name of every login item' 2>/dev/null | /usr/bin/grep -q "boringNotch"; then
-            echo "Adding boringNotch to login items..."
-            $DRY_RUN_CMD /usr/bin/osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/boringNotch.app", hidden:false}' 2>/dev/null || true
-          fi
-
-          # Launch the app if not already running
-          if ! /usr/bin/pgrep -x "boringNotch" > /dev/null 2>&1; then
-            echo "Launching boringNotch..."
-            $DRY_RUN_CMD /usr/bin/open -a "/Applications/boringNotch.app"
-          fi
-        '';
+      # Launch the app if not already running
+      if ! /usr/bin/pgrep -x "BoringNotch" > /dev/null 2>&1; then
+        echo "Launching BoringNotch..."
+        run /usr/bin/open -a "/Applications/BoringNotch.app"
+      fi
+    '';
   };
 
 }

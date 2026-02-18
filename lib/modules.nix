@@ -70,8 +70,6 @@ rec {
       paths = files ++ concatLists (map (d: mapModulesRec' d id) dirs);
     in
     map fn paths;
-
-  importAllModules = dir: mapModulesRec' dir import;
   
   # Auto-discover and compose overlays from a directory (recursively)
   # discoverOverlays :: path -> [overlay]
@@ -96,7 +94,7 @@ rec {
         in
         {
           options = moduleResult.options or {};
-          config = moduleResult.systemConfig or {};
+          config = moduleResult.systemConfig or moduleResult.config or {};
         }
     );
 
@@ -115,7 +113,7 @@ rec {
         in
         {
           options = moduleResult.options or {};
-          config = moduleResult.userConfig or {};
+          config = moduleResult.userConfig or moduleResult.config or {};
         }
     );
 }

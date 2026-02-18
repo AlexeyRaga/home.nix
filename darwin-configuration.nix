@@ -13,7 +13,7 @@ in
   imports = [
     ./certificates.nix
     ./brews/apps.nix
-  ] ++ (modules.importAllModules ./darwin) ++ (modules.importDarwinModules ./brews);
+  ] ++ (modules.importDarwinModules ./darwin) ++ (modules.importDarwinModules ./brews);
 
 
   programs.zsh.enable = true;

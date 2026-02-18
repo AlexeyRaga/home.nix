@@ -7,7 +7,7 @@ in
 {
   imports = [
     ./aws.nix
-  ] ++ (modules.importAllModules ./modules);
+  ] ++ (modules.importHomeModules ./modules);
 
   home = {
     sessionVariables = {
