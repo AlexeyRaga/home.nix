@@ -24,6 +24,24 @@ let
       file = "${themesPackage}/${filename}";
     }) themeFiles;
 
+  augmentTheme = themeFile:
+    let
+      script = pkgs.writeText "augment-iterm2-theme.py" ''
+        import plistlib, copy, sys
+        with open('${themeFile}', 'rb') as f:
+            theme = plistlib.load(f)
+        augmented = dict(theme)
+        for key in list(theme.keys()):
+            if key.endswith('Color'):
+                augmented[key + ' (Dark)'] = copy.deepcopy(theme[key])
+                augmented[key + ' (Light)'] = copy.deepcopy(theme[key])
+        with open(sys.argv[1], 'wb') as f:
+            plistlib.dump(augmented, f, fmt=plistlib.FMT_XML)
+      '';
+    in pkgs.runCommand "augmented-iterm2-theme" {} ''
+      ${pkgs.python3.interpreter} ${script} "$out"
+    '';
+
   shell_integration = pkgs.fetchFromGitHub {
     name = "iterm2-shell-integration";
     owner = "gnachman";
@@ -141,11 +159,10 @@ in
         ) themes;
 
         # Generate command to apply selected theme if one is specified
-        themeApplyCommand = 
+        themeApplyCommand =
           let selectedTheme = lib.findFirst (theme: theme.name == cfg.theme) null themes;
-          in lib.optionalString (selectedTheme != null) (
-            lib.plists.merge itermsPlist ["New Bookmarks" 0] selectedTheme.file
-          );
+          in lib.optionalString (selectedTheme != null)
+            (lib.plists.merge itermsPlist ["New Bookmarks" 0] "${augmentTheme selectedTheme.file}");
 
       in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
         # Check if plist file exists, if not initialize it
