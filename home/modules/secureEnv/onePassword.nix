@@ -38,6 +38,7 @@ let
             echo >&2 "      - Not signed in to 1Password (run 'op signin')"
             echo >&2 "      - Missing access to vault '${item.vault}'"
             echo >&2 "      - Item '${item.item}' or field '${item.field}' doesn't exist"
+            echo >&2 "    Make sure that 1Password Desktop app is running."
             exit 1
           '' else ''
             echo >&2 "    ⚠ WARNING: Failed to retrieve optional secret ${key}, skipping"
@@ -58,6 +59,7 @@ let
             echo >&2 "      - Not signed in to 1Password (run 'op signin')"
             echo >&2 "      - Missing access to vault '${item.vault}'"
             echo >&2 "      - Item '${item.item}' or field '${item.field}' doesn't exist"
+            echo >&2 "    Make sure that 1Password Desktop app is running."
             exit 1
           '' else ''
             echo >&2 "    ⚠ WARNING: Failed to retrieve optional SSH key ${key}, skipping"

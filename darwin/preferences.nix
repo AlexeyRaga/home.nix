@@ -7,6 +7,7 @@
     # See https://github.com/LnL7/nix-darwin/blob/master/modules/system/defaults/NSGlobalDomain.nix
     NSGlobalDomain = {
       AppleInterfaceStyle = "Dark";
+      AppleIconAppearanceTheme = "RegularAutomatic";
 
       # Configures the trackpad tab behavior. Mode 1 enables tap to click.
       "com.apple.mouse.tapBehavior" = 1;

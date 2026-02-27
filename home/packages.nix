@@ -10,6 +10,7 @@
     nufmt # Nushell formatter
 
     tree
+    tmux
 
     clang
 
@@ -51,6 +52,6 @@
     mediainfo
     libmediainfo
 
-    yt-dlp
+    # yt-dlp
   ];
 }

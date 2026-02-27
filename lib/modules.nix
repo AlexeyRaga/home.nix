@@ -94,7 +94,8 @@ rec {
         in
         {
           options = moduleResult.options or {};
-          config = moduleResult.systemConfig or moduleResult.config or {};
+          config = moduleResult.systemConfig or moduleResult.config
+                   or (if moduleResult ? options then {} else moduleResult);
         }
     );
 
@@ -113,7 +114,8 @@ rec {
         in
         {
           options = moduleResult.options or {};
-          config = moduleResult.userConfig or moduleResult.config or {};
+          config = moduleResult.userConfig or moduleResult.config
+                   or (if moduleResult ? options then {} else moduleResult);
         }
     );
 }
