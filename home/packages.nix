@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, inputs, ... }:
 
 {
   home.sessionPath = [
@@ -7,6 +7,7 @@
 
   home.packages = with pkgs; [
     devenv
+
     nufmt # Nushell formatter
 
     tree

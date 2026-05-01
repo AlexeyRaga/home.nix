@@ -10,7 +10,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    devenv.url = "github:cachix/devenv/v1.8";
+    devenv.url = "github:cachix/devenv/v2.0.4";
     devenv.inputs.nixpkgs.follows = "nixpkgs";
   };
 

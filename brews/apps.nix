@@ -49,8 +49,6 @@
         "donjayamanne.githistory"
         "eamodio.gitlens"
         "giltho.comby-vscode"
-        "GitHub.copilot"
-        "GitHub.copilot-chat"
         "GraphQL.vscode-graphql-syntax"
         "GraphQL.vscode-graphql"
         "hashicorp.terraform"
@@ -75,6 +73,7 @@
         "TheNuProjectContributors.vscode-nushell-lang"
         "DrBlury.protobuf-vsc"
         "anthropic.claude-code"
+        "mechatroner.rainbow-csv"
     ];
   };
 
