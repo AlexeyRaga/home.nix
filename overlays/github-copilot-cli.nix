@@ -6,24 +6,24 @@
 self: super:
 
 let
-  version = "1.0.39";
+  version = "1.0.52";
 
   sources = {
     "x86_64-linux" = {
       name = "copilot-linux-x64";
-      hash = "sha256:66ddea6612a5621adc734d6ea2ce150cb85682a3e32f08bf90695fc29374616a";
+      hash = "sha256:3e32a4d1de31f2cd975d28ca0f79f4868a391478305396263216d3ffd3228f8f";
     };
     "aarch64-linux" = {
       name = "copilot-linux-arm64";
-      hash = "sha256:d128ee5cf7d2e7ec6c87511cfcb11f3e072bb679618ca9a465da30f087bfde86";
+      hash = "sha256:47855ea4db484b62b6fe582d31f12da6f9edf888b16790ec009dac4eced62fb8";
     };
     "x86_64-darwin" = {
       name = "copilot-darwin-x64";
-      hash = "sha256:cbb1f91a8bb7dd7028d2087587715ac4126cab5154396cf4e398f2b759d3a8ef";
+      hash = "sha256:a67362dd56adb514fb69cf76de7875de477824db50307b8be789797677b07ac6";
     };
     "aarch64-darwin" = {
       name = "copilot-darwin-arm64";
-      hash = "sha256:2ab5a564165894103780698a17af9b6016ef5392d6699b0804451f543b0cac54";
+      hash = "sha256:0d1d2af7cc28e887dcc7e943bee1b659a1a4cd36dccf8e47cf2a3953c6788d2b";
     };
   };
 in

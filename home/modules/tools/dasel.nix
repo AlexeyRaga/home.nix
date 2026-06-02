@@ -7,6 +7,18 @@ with lib;
 let
   cfg = config.tools.dasel;
 
+  # dasel ships no completion files, but the binary can generate them.
+  # Override the package to install them via installShellCompletion.
+  dasel = pkgs.dasel.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.installShellFiles ];
+    postInstall = (old.postInstall or "") + ''
+      installShellCompletion --cmd dasel \
+        --bash <($out/bin/dasel completion bash) \
+        --fish <($out/bin/dasel completion fish) \
+        --zsh <($out/bin/dasel completion zsh)
+    '';
+  });
+
 in {
 
   options.tools.dasel = {
@@ -26,18 +38,18 @@ in {
   };
 
   config = mkIf cfg.enable {
-    home.packages = [ pkgs.dasel ];
+    home.packages = [ dasel ];
 
     programs.bash.initExtra = mkIf cfg.enableBashIntegration ''
-      source ${pkgs.dasel}/share/bash-completion/completions/dasel.bash
+      source ${dasel}/share/bash-completion/completions/dasel.bash
     '';
 
     programs.zsh.initContent = mkIf cfg.enableZshIntegration ''
-      source ${pkgs.dasel}/share/zsh/site-functions/_dasel
+      source ${dasel}/share/zsh/site-functions/_dasel
     '';
 
     programs.fish.shellInit = mkIf cfg.enableFishIntegration ''
-      source ${pkgs.dasel}/share/fish/vendor_completions.d/dasel.fish
+      source ${dasel}/share/fish/vendor_completions.d/dasel.fish
     '';
   };
 }

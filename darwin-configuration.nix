@@ -44,6 +44,8 @@ in
 
   homebrew = {
     enable = true;
+    enableZshIntegration = true;
+    enableBashIntegration = true;
 
     global.brewfile = true;
     onActivation.cleanup = "zap";

@@ -112,6 +112,6 @@
 
   brews.claude = {
     enable = true;
-    enableGithubMCP = true;
+    enableGithubMCP = false;
   };
 }

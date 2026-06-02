@@ -19,15 +19,14 @@ in {
 
   systemConfig = mkIf cfg.enable {
     homebrew = {
-      casks = [ "claude" ];
+      casks = [ 
+        "claude" 
+        "claude-code@latest"
+        ];
     };
   };
 
   userConfig = mkIf cfg.enable {
-    home.packages = [
-      pkgs.claude-code
-    ];
-
     home.activation.configureClaude = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       DESKTOP_CONFIG="$HOME/Library/Application Support/Claude/claude_desktop_config.json"
       CLI_CONFIG="$HOME/.claude.json"
