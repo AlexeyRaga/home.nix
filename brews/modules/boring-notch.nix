@@ -66,7 +66,12 @@ in
 
   systemConfig = mkIf cfg.enable {
     homebrew = {
-      taps = [ "theboredteam/boring-notch" ];
+      taps = [ 
+        { 
+          name = "theboredteam/boring-notch";
+          trusted = true;
+        } 
+     ];
       casks = [ "boring-notch" ];
     };
   };
