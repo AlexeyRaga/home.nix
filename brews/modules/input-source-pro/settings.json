@@ -1,0 +1,126 @@
+{
+  "app" : {
+    "buildVersion" : 706,
+    "bundleIdentifier" : "com.runjuu.Input-Source-Pro",
+    "shortVersion" : "2.11.0"
+  },
+  "appRules" : [
+  ],
+  "browserRules" : [
+
+  ],
+  "exportedAt" : "2026-06-24T13:31:38Z",
+  "hotKeyGroups" : [
+    {
+      "createdAt" : "2026-05-29T12:21:13Z",
+      "id" : "5DFCE042-5A1E-4296-9711-B74C39FABCE8",
+      "inputSourceIds" : "com.apple.keylayout.Australian∆com.apple.keylayout.RussianWin"
+    }
+  ],
+  "keyboardConfigs" : [
+    {
+      "bgColorHex" : "000000ff",
+      "id" : "com.apple.keylayout.Australian",
+      "textColorHex" : "ffffffff"
+    },
+    {
+      "bgColorHex" : "000000ff",
+      "id" : "com.apple.keylayout.RussianWin",
+      "textColorHex" : "ffffffff"
+    }
+  ],
+  "keyboardShortcuts" : {
+
+  },
+  "preferences" : {
+    "appearanceMode" : "Dark",
+    "browserAddressDefaultKeyboardId" : "",
+    "cJKVFixStrategy" : "previousInputSourceShortcut",
+    "functionKeysToggleModifierCombo" : [
+
+    ],
+    "functionKeysToggleShortcutMode" : "keyboardShortcut",
+    "functionKeysToggleSingleModifierTrigger" : "singlePress",
+    "indicatorBackground" : {
+      "dark" : "000000ff",
+      "light" : "fffffff2"
+    },
+    "indicatorForgeground" : {
+      "dark" : "ffffffff",
+      "light" : "000000ff"
+    },
+    "indicatorInfo" : {
+      "base" : "iconAndTitle"
+    },
+    "indicatorPosition" : {
+      "base" : "nearMouse"
+    },
+    "indicatorPositionAlignment" : {
+      "base" : 4
+    },
+    "indicatorPositionSpacing" : {
+      "base" : 2
+    },
+    "indicatorSize" : {
+      "base" : 2
+    },
+    "isActiveWhenFocusedElementChanges" : true,
+    "isActiveWhenLongpressLeftMouse" : true,
+    "isActiveWhenSwitchApp" : false,
+    "isActiveWhenSwitchInputSource" : false,
+    "isAutoAppearanceMode" : true,
+    "isCJKVFixEnabled" : false,
+    "isEnableAlwaysOnIndicator" : false,
+    "isEnableURLSwitchForArc" : false,
+    "isEnableURLSwitchForBrave" : false,
+    "isEnableURLSwitchForBraveBeta" : false,
+    "isEnableURLSwitchForBraveNightly" : false,
+    "isEnableURLSwitchForChrome" : false,
+    "isEnableURLSwitchForChromium" : false,
+    "isEnableURLSwitchForDia" : false,
+    "isEnableURLSwitchForEdge" : false,
+    "isEnableURLSwitchForFirefox" : false,
+    "isEnableURLSwitchForFirefoxDeveloperEdition" : false,
+    "isEnableURLSwitchForFirefoxNightly" : false,
+    "isEnableURLSwitchForOpera" : false,
+    "isEnableURLSwitchForSafari" : false,
+    "isEnableURLSwitchForSafariTechnologyPreview" : false,
+    "isEnableURLSwitchForThorium" : false,
+    "isEnableURLSwitchForVivaldi" : false,
+    "isEnableURLSwitchForZen" : false,
+    "isEnhancedModeEnabled" : false,
+    "isFunctionKeysEnabled" : false,
+    "isHideWhenSwitchAppWithForceKeyboard" : false,
+    "isLaunchAtLogin" : true,
+    "isRestorePreviouslyUsedInputSource" : true,
+    "isShowIconInMenuBar" : true,
+    "shortcutModeGroupMapping" : {
+      "5DFCE042-5A1E-4296-9711-B74C39FABCE8" : "singleModifier"
+    },
+    "shortcutModeInputSourceMapping" : {
+      "com.apple.keylayout.Australian" : "keyboardShortcut",
+      "com.apple.keylayout.RussianWin" : "keyboardShortcut"
+    },
+    "shortcutTriggerMode" : "keyboardShortcut",
+    "singleModifierGroupMapping" : {
+      "5DFCE042-5A1E-4296-9711-B74C39FABCE8" : [
+        "leftShift",
+        "leftOption"
+      ]
+    },
+    "singleModifierInputSourceMapping" : {
+
+    },
+    "singleModifierTrigger" : "singlePress",
+    "singleModifierTriggerGroupMapping" : {
+      "5DFCE042-5A1E-4296-9711-B74C39FABCE8" : "singlePress"
+    },
+    "singleModifierTriggerInputSourceMapping" : {
+      "com.apple.keylayout.Australian" : "singlePress",
+      "com.apple.keylayout.RussianWin" : "singlePress"
+    },
+    "systemWideDefaultKeyboardId" : "",
+    "tryToDisplayIndicatorNearCursor" : true
+  },
+  "schemaVersion" : 1
+}

@@ -30,6 +30,7 @@
       "thebrowsercompany-dia" # web browser with AI
       "zed"
       "dockdoor"
+      "obsidian"
     ];
 
     brews = [
@@ -75,6 +76,10 @@
         "anthropic.claude-code"
         "mechatroner.rainbow-csv"
     ];
+  };
+
+  brews.input-source-pro = {
+    enable = true;
   };
 
   brews.rancher = {
