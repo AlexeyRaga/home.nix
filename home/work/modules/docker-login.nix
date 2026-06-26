@@ -33,6 +33,13 @@ let
         echo "❌ Failed to log into AWS ECR"
         exit 1
       fi
+
+      if ${pkgs.awscli2}/bin/aws ecr-public get-login-password --region us-east-1 | ${pkgs.docker}/bin/docker login --username AWS --password-stdin public.ecr.aws >/dev/null; then
+        echo "✅ Successfully logged into AWS ECR Public!"
+      else
+        echo "❌ Failed to log into AWS ECR Public"
+        exit 1
+      fi
   '';
 in {
   home.packages = with pkgs; [
