@@ -147,6 +147,8 @@ in
 
       workspaces = user.gitWorkspaces;
     };
+
+    headroom-ai.enable = true;
   };
 
   programs.starship = {
