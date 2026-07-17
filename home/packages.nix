@@ -53,6 +53,7 @@
     mediainfo
     libmediainfo
 
+    headroom-ai
     # yt-dlp
   ];
 }
