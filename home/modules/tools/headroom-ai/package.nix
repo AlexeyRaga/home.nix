@@ -15,7 +15,7 @@
 
   # Overridable via callPackage's second arg, e.g.
   #   callPackage ./package.nix { version = "0.29.0"; extras = []; }
-  version ? "0.28.0",
+  version ? "0.32.0",
 
   # PyPI extras. [ "all" ] pulls the full ML/RAG stack (torch, opencv,
   # onnxruntime, sentence-transformers, …) — ~140 wheels, several hundred MB.
@@ -39,7 +39,7 @@
   # Nix prints the real hash. For a fully hermetic pin, add a constraints file
   # to the download step.
   wheelHashes ? {
-    aarch64-darwin = "sha256-3UCoX3+Sf4OeLrTwS/r81/0+Iwnsmqscs+0GsBYikaw=";
+    aarch64-darwin = "sha256-q0KX4E1b0FhCo9TDZT0rNhXtbS+aU7YYaWQSHrXVCh8=";
     # x86_64-linux   = "sha256-...="; # build on that system, paste printed hash
     # aarch64-linux  = "sha256-...=";
   },
