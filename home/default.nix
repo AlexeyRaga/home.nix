@@ -149,6 +149,10 @@ in
     };
 
     headroom-ai.enable = true;
+
+    # Semantic code tools over MCP. Works standalone and alongside Headroom —
+    # see the coexistence notes in modules/tools/serena/default.nix.
+    serena.enable = true;
   };
 
   programs.starship = {

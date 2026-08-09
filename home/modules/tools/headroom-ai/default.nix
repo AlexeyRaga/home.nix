@@ -13,6 +13,7 @@ in {
   config = mkIf cfg.enable {
     home.packages = [
       pkgs.rtk
+      pkgs.uv
       (pkgs.callPackage ./package.nix { })
     ];
 
