@@ -15,8 +15,8 @@
   cacert,
 
   # Overridable via callPackage's second arg, e.g.
-  #   callPackage ./package.nix { version = "1.6.0"; }
-  version ? "1.6.1",
+  #   callPackage ./package.nix { version = "1.7.0"; }
+  version ? "1.7.0",
 
   # Dependencies that publish no wheel on PyPI and so must come as an sdist and
   # be built at install time. proxy_tools (via pywebview → the dashboard's
@@ -39,7 +39,7 @@
   # the pin. If it does happen, rebuild and paste the printed hash. First build
   # on a new system: leave it unset and Nix prints the real hash.
   wheelHashes ? {
-    aarch64-darwin = "sha256-nneb1ZKHeycr3URlnyn8E+2LCWjJlKR4umFwHFsBpPU=";
+    aarch64-darwin = "sha256-mZq3z7d+HYXNKuu/URQV2tVSXhmFbwSVRYISmCg8QMs=";
     # x86_64-linux   = "sha256-...="; # build on that system, paste printed hash
     # aarch64-linux  = "sha256-...=";
   },

@@ -6,7 +6,7 @@
 self: super:
 
 let
-  version = "1.0.70";
+  version = "1.0.80";
 
   sources = {
     "x86_64-linux" = {
@@ -19,11 +19,11 @@ let
     };
     "x86_64-darwin" = {
       name = "copilot-darwin-x64";
-      hash = "sha256:ce2d968b68c1a28690544ff638e762a804943992b5496fb7ec2358fe7f1eee87";
+      hash = "sha256:ae2d968b68c1a28690544ff638e762a804943992b5496fb7ec2358fe7f1eee87";
     };
     "aarch64-darwin" = {
       name = "copilot-darwin-arm64";
-      hash = "sha256:5f9791561eefe99b3bed25a02eef37dc434327053af05e6150dad7d6aed05a35";
+      hash = "sha256-I0a7aRmBwpl9ZcHFvDzvGu3cnt033LL5cLkRqll+WfY";
     };
   };
 in
